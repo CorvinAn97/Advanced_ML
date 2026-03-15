@@ -1,9 +1,27 @@
 # PROJECT-Advanced_ML
 
+## ⚠️ WICHTIG: Lernplan gestartet am 15.03.!
+
+**Aktueller Stand:** Sonntag, 15.03.2026, 09:30 Uhr
+**Verbleibend:** 9 Tage bis zur Klausur (24.03.)
+
+### HEUTE (Sonntag 15.03.) - START!
+👉 Fange mit Transformers an (05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md)
+👉 Fokus: Grobes Verständnis, nicht auswendig lernen!
+👉 Notiere Fragen für Dozenten-Termin (Dienstag)
+
+### Dateien sind jetzt nummeriert:
+- 00_PROJECT-Advanced_ML.md (Hauptdokument)
+- 01_VORBEREITUNG-Dienstag.md (Vorbereitung)
+- 02_ZUSAMMENFASSUNG-00... (Inhaltsverzeichnis)
+- 03-10... (Zusammenfassungen in Reihenfolge)
+
+---
+
 ## Klausur-Info
 - **Datum:** 24.03.2026
-- **Zeit bis dahin:** 10 Tage
-- **Stand:** 14.03.2026
+- **Zeit bis dahin:** 9 Tage (aktualisiert)
+- **Stand:** 15.03.2026
 - **Erstellt von:** Sub-Agent David
 
 ---
@@ -43,7 +61,7 @@
 ### 🔴 SEHR WICHTIG (wahrscheinlich in Klausur)
 
 #### 1. Transformers & Self-Attention
-- **Quelle:** ZUSAMMENFASSUNG-03-Transformers-LLMs.md
+- **Quelle:** 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md
 - **Seiten im Original:** ~80 (sehr ausführlich!)
 - **Lernzeit empfohlen:** 3-4h
 - **Kernpunkte:**
@@ -55,7 +73,7 @@
   - Scaled Dot-Product Attention
 
 #### 2. LSTM & RNNs
-- **Quelle:** ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
+- **Quelle:** 04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
 - **Seiten im Original:** ~36
 - **Lernzeit empfohlen:** 2h
 - **Kernpunkte:**
@@ -65,7 +83,7 @@
   - Bahdanau Attention
 
 #### 3. Word Embeddings
-- **Quelle:** ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
+- **Quelle:** 04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
 - **Seiten im Original:** ~20
 - **Lernzeit empfohlen:** 1.5h
 - **Kernpunkte:**
@@ -75,7 +93,7 @@
   - BPE
 
 #### 4. Q-Learning & Double DQN
-- **Quelle:** ZUSAMMENFASSUNG-07-RL-Teil-1.md
+- **Quelle:** 09_ZUSAMMENFASSUNG-07-RL-Teil-1.md
 - **Seiten im Original:** ~90
 - **Lernzeit empfohlen:** 2.5h
 - **Kernpunkte:**
@@ -86,7 +104,7 @@
   - Target Networks
 
 #### 5. GANs (Grundkonzept)
-- **Quelle:** ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
+- **Quelle:** 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
 - **Seiten im Original:** ~40
 - **Lernzeit empfohlen:** 1.5h
 - **Kernpunkte:**
@@ -98,7 +116,7 @@
 ### 🟡 WICHTIG
 
 #### 6. VAEs (Variational Autoencoder)
-- **Quelle:** ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
+- **Quelle:** 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
 - **Seiten im Original:** ~20
 - **Lernzeit empfohlen:** 1.5h
 - **Kernpunkte:**
@@ -108,7 +126,7 @@
   - Encoder-Decoder Struktur
 
 #### 7. Diffusionsmodelle (Grundkonzept)
-- **Quelle:** ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
+- **Quelle:** 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
 - **Seiten im Original:** ~30
 - **Lernzeit empfohlen:** 2h
 - **Kernpunkte:**
@@ -118,7 +136,7 @@
   - Classifier-Free Guidance
 
 #### 8. Exploration in RL (UCB, Thompson Sampling)
-- **Quelle:** ZUSAMMENFASSUNG-08-RL-Teil-2.md
+- **Quelle:** 10_ZUSAMMENFASSUNG-08-RL-Teil-2.md
 - **Seiten im Original:** ~35
 - **Lernzeit empfohlen:** 1.5h
 - **Kernpunkte:**
@@ -128,7 +146,7 @@
   - Pseudo-Counts (Konzept)
 
 #### 9. XAI (LIME, SHAP)
-- **Quelle:** ZUSAMMENFASSUNG-04-XAI.md
+- **Quelle:** 06_ZUSAMMENFASSUNG-04-XAI.md
 - **Seiten im Original:** ~55
 - **Lernzeit empfohlen:** 1.5h
 - **Kernpunkte:**
@@ -137,7 +155,7 @@
   - Permutation Feature Importance
 
 #### 10. Finetuning & PEFT (LoRA)
-- **Quelle:** ZUSAMMENFASSUNG-03-Transformers-LLMs.md
+- **Quelle:** 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md
 - **Seiten im Original:** ~15
 - **Lernzeit empfohlen:** 1h
 - **Kernpunkte:**
@@ -148,7 +166,7 @@
 ### 🟢 GRUNDWISSEN
 
 #### 11. Imitation Learning (DAgger)
-- **Quelle:** ZUSAMMENFASSUNG-06-IL.md
+- **Quelle:** 08_ZUSAMMENFASSUNG-06-IL.md
 - **Seiten im Original:** ~40
 - **Lernzeit empfohlen:** 1h
 - **Kernpunkte:**
@@ -157,7 +175,7 @@
   - DAgger Algorithmus
 
 #### 12. RLHF & DPO
-- **Quelle:** ZUSAMMENFASSUNG-03-Transformers-LLMs.md
+- **Quelle:** 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md
 - **Seiten im Original:** ~10
 - **Lernzeit empfohlen:** 1h
 - **Kernpunkte:**
@@ -166,7 +184,7 @@
   - Reward Hacking
 
 #### 13. Offline RL
-- **Quelle:** ZUSAMMENFASSUNG-08-RL-Teil-2.md
+- **Quelle:** 10_ZUSAMMENFASSUNG-08-RL-Teil-2.md
 - **Seiten im Original:** ~20
 - **Lernzeit empfohlen:** 1h
 - **Kernpunkte:**
@@ -174,7 +192,7 @@
   - Keine Online-Interaktion möglich
 
 #### 14. XAI (Intrinsisch interpretierbare Modelle)
-- **Quelle:** ZUSAMMENFASSUNG-04-XAI.md
+- **Quelle:** 06_ZUSAMMENFASSUNG-04-XAI.md
 - **Seiten im Original:** ~15
 - **Lernzeit empfohlen:** 0.5h
 - **Kernpunkte:**
@@ -183,7 +201,7 @@
   - Feature Importance
 
 #### 15. Grundlagen ML (Backpropagation, Bias/Variance)
-- **Quelle:** ZUSAMMENFASSUNG-01-Wiederholung.md
+- **Quelle:** 03_ZUSAMMENFASSUNG-01-Wiederholung.md
 - **Seiten im Original:** ~28
 - **Lernzeit empfohlen:** 1h
 - **Kernpunkte:**
@@ -193,65 +211,71 @@
 
 ---
 
-## 10-Tage Lernplan
+## 9-Tage Lernplan (aktualisiert)
 
-### Tag 1 (14.03.): Transformers - Grundlagen
-- [ ] Lesen: ZUSAMMENFASSUNG-03-Transformers-LLMs.md (Teil 1)
-- [ ] Original-PDF: AdvancedML-03-Transformers-LLMs.pdf Seiten 1-40
-- [ ] Selbsttest: Was ist Self-Attention? Erklären Sie Q, K, V!
+### Tag 1 - SONNTAG 15.03. (HEUTE!) 🔥
+**Thema:** Transformers & Self-Attention (Priorität 1)
+- [ ] Lesen: 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md
+- [ ] Original-PDF: AdvancedML-03-Transformers-LLMs.pdf (Seiten 1-30)
+- [ ] Fokus: Intuition Self-Attention, Unterschied zu RNNs
+- [ ] Notieren: Offene Fragen für Dozenten-Termin (Dienstag)
+- [ ] Selbsttest: 5 Fragen aus PROJECT-File
 
-### Tag 2 (15.03.): Transformers - Fortgeschritten
-- [ ] Lesen: ZUSAMMENFASSUNG-03-Transformers-LLMs.md (Teil 2)
-- [ ] Original-PDF: Seiten 41-80
-- [ ] Selbsttest: Was ist der Unterschied zwischen Encoder und Decoder?
+### Tag 2 - MONTAG 16.03.
+**Thema:** LSTM & RNNs + Vorbereitung Dozenten-Termin
+- [ ] Lesen: 04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
+- [ ] Fokus: LSTM Gates (forget, input, output), Seq2Seq
+- [ ] Vorbereitung: Fragen für Dienstag notieren
+- [ ] 01_VORBEREITUNG-Dienstag.md durchgehen
 
-### Tag 3 (16.03.): LSTM & Word Embeddings
-- [ ] Lesen: ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md
-- [ ] Original-PDF: AdvancedML-02-WordEmbeddings-RNNs.pdf
-- [ ] Fokus: LSTM Gates, Word2Vec, Bahdanau Attention
-- [ ] Selbsttest: Erklären Sie die 3 LSTM Gates!
+### Tag 3 - DIENSTAG 17.03. 👨‍🏫
+**Thema:** DOZENTEN-TERMIN
+- [ ] Vormittag: Letzte Fragen vorbereiten
+- [ ] Termin: Fragen stellen, Notizen machen
+- [ ] Nachmittag: Notizen einarbeiten, Lernplan anpassen
 
-### Tag 4 (17.03.): Q-Learning & Double DQN
-- [ ] Lesen: ZUSAMMENFASSUNG-07-RL-Teil-1.md
-- [ ] Original-PDF: AdvancedML-07-RL-Teil-1.pdf (Q-Learning Teil)
-- [ ] Fokus: Q-Learning Update, Target Networks, Double DQN
-- [ ] Selbsttest: Was ist das Overestimation Problem?
+### Tag 4 - MITTWOCH 18.03.
+**Thema:** Reinforcement Learning Teil 1
+- [ ] Lesen: 09_ZUSAMMENFASSUNG-07-RL-Teil-1.md
+- [ ] Fokus: Q-Learning, DQN, Double DQN
+- [ ] Original-PDF: AdvancedML-07-RL-Teil-1.pdf
 
-### Tag 5 (18.03.): GANs & VAEs
-- [ ] Lesen: ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md (GANs + VAEs)
-- [ ] Original-PDF: AdvancedML-05-GANs-VAEs-Diffusion.pdf (Teil 1)
-- [ ] Fokus: GAN Training, Reparametrisierungs-Trick, ELBO
-- [ ] Selbsttest: Was ist Mode Collapse?
+### Tag 5 - DONNERSTAG 19.03.
+**Thema:** Reinforcement Learning Teil 2
+- [ ] Lesen: 10_ZUSAMMENFASSUNG-08-RL-Teil-2.md
+- [ ] Fokus: Exploration, Offline RL
+- [ ] Selbsttest: RL-Fragen
 
-### Tag 6 (19.03.): Diffusionsmodelle
-- [ ] Lesen: ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md (Diffusion)
-- [ ] Original-PDF: AdvancedML-05-GANs-VAEs-Diffusion.pdf (Teil 2)
-- [ ] Fokus: Forward/Reverse Process, Classifier-Free Guidance
-- [ ] Selbsttest: Wie funktioniert DDPM Sampling?
+### Tag 6 - FREITAG 20.03.
+**Thema:** GANs, VAEs, Diffusion
+- [ ] Lesen: 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md
+- [ ] Fokus: Unterschiede, wann welches Modell
+- [ ] Original-PDF: AdvancedML-05-GANs-VAEs-Diffusion.pdf
 
-### Tag 7 (20.03.): Exploration & Offline RL
-- [ ] Lesen: ZUSAMMENFASSUNG-08-RL-Teil-2.md
-- [ ] Original-PDF: AdvancedML-08-RL-Teil-2.pdf
-- [ ] Fokus: UCB, Thompson Sampling, Offline RL Problem
-- [ ] Selbsttest: Was ist der Unterschied zwischen UCB und Thompson Sampling?
+### Tag 7 - SAMSTAG 21.03.
+**Thema:** XAI + Imitation Learning
+- [ ] Lesen: 06_ZUSAMMENFASSUNG-04-XAI.md
+- [ ] Lesen: 08_ZUSAMMENFASSUNG-06-IL.md
+- [ ] Fokus: LIME, SHAP (nur Grundideen!)
 
-### Tag 8 (21.03.): XAI & Imitation Learning
-- [ ] Lesen: ZUSAMMENFASSUNG-04-XAI.md (LIME, SHAP)
-- [ ] Lesen: ZUSAMMENFASSUNG-06-IL.md (DAgger)
-- [ ] Fokus: LIME vs SHAP, Distributional Shift
-- [ ] Selbsttest: Wie funktioniert LIME?
+### Tag 8 - SONNTAG 22.03.
+**Thema:** Wiederholung + Quiz
+- [ ] Alle Zusammenfassungen überfliegen
+- [ ] 30 Selbsttest-Fragen aus PROJECT-File
+- [ ] Schwache Themen markieren
 
-### Tag 9 (22.03.): Finetuning & Sonstiges
-- [ ] Lesen: ZUSAMMENFASSUNG-03-Transformers-LLMs.md (PEFT, RLHF)
-- [ ] Lesen: ZUSAMMENFASSUNG-01-Wiederholung.md (Grundlagen)
-- [ ] Fokus: LoRA, DPO, Backpropagation
-- [ ] Selbsttest: Was ist LoRA?
+### Tag 9 - MONTAG 23.03. 🎯
+**Thema:** LETZTE VORBEREITUNG
+- [ ] Schwache Themen nochmal anschauen
+- [ ] Formeln kurz wiederholen
+- [ ] Fragen klären (falls noch offen)
+- [ ] Früh ins Bett!
 
-### Tag 10 (23.03.): Wiederholung & Quiz
-- [ ] Durchsehen aller Zusammenfassungen
-- [ ] Schwache Stellen nochmals anschauen
-- [ ] Quiz durchführen (siehe unten)
-- [ ] Früh schlafen gehen! 🛌
+### Tag 10 - DIENSTAG 24.03. 📝
+**KLAUSURTAG**
+- [ ] Gutes Frühstück
+- [ ] An Klausurteilnahme denken
+- [ ] Erfolg!
 
 ---
 
@@ -259,18 +283,18 @@
 
 | Thema | Hauptquelle | Sekundärquelle |
 |-------|-------------|----------------|
-| Transformers | ZUSAMMENFASSUNG-03 | ZUSAMMENFASSUNG-02 (RNNs als Vergleich) |
-| Word Embeddings | ZUSAMMENFASSUNG-02 | ZUSAMMENFASSUNG-03 (in LLMs verwendet) |
-| LSTM | ZUSAMMENFASSUNG-02 | - |
-| Self-Attention | ZUSAMMENFASSUNG-03 | ZUSAMMENFASSUNG-02 (Bahdanau Attention als Vorläufer) |
-| Q-Learning | ZUSAMMENFASSUNG-07 | - |
-| Double DQN | ZUSAMMENFASSUNG-07 | - |
-| Exploration | ZUSAMMENFASSUNG-08 | ZUSAMMENFASSUNG-07 (ε-greedy) |
-| GANs | ZUSAMMENFASSUNG-05 | - |
-| VAEs | ZUSAMMENFASSUNG-05 | - |
-| Diffusion | ZUSAMMENFASSUNG-05 | - |
-| XAI | ZUSAMMENFASSUNG-04 | - |
-| RLHF | ZUSAMMENFASSUNG-03 | - |
+| Transformers | 05_ZUSAMMENFASSUNG-03 | 04_ZUSAMMENFASSUNG-02 (RNNs als Vergleich) |
+| Word Embeddings | 04_ZUSAMMENFASSUNG-02 | 05_ZUSAMMENFASSUNG-03 (in LLMs verwendet) |
+| LSTM | 04_ZUSAMMENFASSUNG-02 | - |
+| Self-Attention | 05_ZUSAMMENFASSUNG-03 | 04_ZUSAMMENFASSUNG-02 (Bahdanau Attention als Vorläufer) |
+| Q-Learning | 09_ZUSAMMENFASSUNG-07 | - |
+| Double DQN | 09_ZUSAMMENFASSUNG-07 | - |
+| Exploration | 10_ZUSAMMENFASSUNG-08 | 09_ZUSAMMENFASSUNG-07 (ε-greedy) |
+| GANs | 07_ZUSAMMENFASSUNG-05 | - |
+| VAEs | 07_ZUSAMMENFASSUNG-05 | - |
+| Diffusion | 07_ZUSAMMENFASSUNG-05 | - |
+| XAI | 06_ZUSAMMENFASSUNG-04 | - |
+| RLHF | 05_ZUSAMMENFASSUNG-03 | - |
 
 ---
 
@@ -287,15 +311,17 @@
 
 | # | Datei | Thema |
 |---|-------|-------|
-| 00 | [ZUSAMMENFASSUNG-00-Inhaltsverzeichnis-Referenz.md](./ZUSAMMENFASSUNG-00-Inhaltsverzeichnis-Referenz.md) | Inhaltsverzeichnis & Relevanz |
-| 01 | [ZUSAMMENFASSUNG-01-Wiederholung.md](./ZUSAMMENFASSUNG-01-Wiederholung.md) | ML-Grundlagen |
-| 02 | [ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md](./ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md) | Word Embeddings & RNNs |
-| 03 | [ZUSAMMENFASSUNG-03-Transformers-LLMs.md](./ZUSAMMENFASSUNG-03-Transformers-LLMs.md) | Transformers & LLMs |
-| 04 | [ZUSAMMENFASSUNG-04-XAI.md](./ZUSAMMENFASSUNG-04-XAI.md) | Explainable AI |
-| 05 | [ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md](./ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md) | GANs, VAEs, Diffusion |
-| 06 | [ZUSAMMENFASSUNG-06-IL.md](./ZUSAMMENFASSUNG-06-IL.md) | Imitation Learning |
-| 07 | [ZUSAMMENFASSUNG-07-RL-Teil-1.md](./ZUSAMMENFASSUNG-07-RL-Teil-1.md) | RL Teil 1 (Q-Learning, DQN) |
-| 08 | [ZUSAMMENFASSUNG-08-RL-Teil-2.md](./ZUSAMMENFASSUNG-08-RL-Teil-2.md) | RL Teil 2 (Exploration, Offline RL) |
+| 00 | [00_PROJECT-Advanced_ML.md](./00_PROJECT-Advanced_ML.md) | Hauptdokument & Lernplan |
+| 01 | [01_VORBEREITUNG-Dienstag.md](./01_VORBEREITUNG-Dienstag.md) | Vorbereitung Dozenten-Termin |
+| 02 | [02_ZUSAMMENFASSUNG-00-Inhaltsverzeichnis-Referenz.md](./02_ZUSAMMENFASSUNG-00-Inhaltsverzeichnis-Referenz.md) | Inhaltsverzeichnis & Relevanz |
+| 03 | [03_ZUSAMMENFASSUNG-01-Wiederholung.md](./03_ZUSAMMENFASSUNG-01-Wiederholung.md) | ML-Grundlagen |
+| 04 | [04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md](./04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md) | Word Embeddings & RNNs |
+| 05 | [05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md](./05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md) | Transformers & LLMs |
+| 06 | [06_ZUSAMMENFASSUNG-04-XAI.md](./06_ZUSAMMENFASSUNG-04-XAI.md) | Explainable AI |
+| 07 | [07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md](./07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md) | GANs, VAEs, Diffusion |
+| 08 | [08_ZUSAMMENFASSUNG-06-IL.md](./08_ZUSAMMENFASSUNG-06-IL.md) | Imitation Learning |
+| 09 | [09_ZUSAMMENFASSUNG-07-RL-Teil-1.md](./09_ZUSAMMENFASSUNG-07-RL-Teil-1.md) | RL Teil 1 (Q-Learning, DQN) |
+| 10 | [10_ZUSAMMENFASSUNG-08-RL-Teil-2.md](./10_ZUSAMMENFASSUNG-08-RL-Teil-2.md) | RL Teil 2 (Exploration, Offline RL) |
 
 ---
 
@@ -374,3 +400,4 @@
 
 ## Letzte Änderung
 Erstellt: 14.03.2026
+Aktualisiert: 15.03.2026 (Lernplan auf 9 Tage angepasst, Dateien nummeriert)
