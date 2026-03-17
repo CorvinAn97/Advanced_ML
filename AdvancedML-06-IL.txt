@@ -1,0 +1,494 @@
+Imitation Learning
+1
+
+Quellen
+• Adaptiert nach Slides von Sergey Levine
+
+2
+
+Imitation Learning
+
+”behavioral cloning”
+3
+
+Eines der ersten Deep Imitation Learning Systeme
+• ALVINN (1989): Autonomous Land Vehicle In a Neural Network
+
+https://www.youtube.com/watch?v=oHEH2VDDGss
+
+4
+
+Funktioniert das so einfach?
+• Leider nein!
+
+5
+
+Funktioniert das so einfach?
+• Leider nein!
+• Gelernte Policy ist nicht perfekt – macht zumindest kleine Fehler
+• Fehler bringen Agenten in
+Zustände, die nicht in den
+Trainingsdaten enthalten sind
+
+6
+
+Funktioniert das so einfach?
+• Leider nein!
+• Gelernte Policy ist nicht perfekt – macht zumindest kleine Fehler
+• Fehler bringen Agenten in
+Zustände, die nicht in den
+Trainingsdaten enthalten sind
+• Dadurch werden weitere Fehler
+mit jedem Schritt immer größer
+
+Supervised Learning Annahme von
+iid Daten verletzt!
+7
+
+Funktioniert das so einfach?
+• Vielleicht doch?
+
+Bojarski et al 2016 (NVIDIA),
+https://arxiv.org/abs/1604.07316
+
+https://developer.nvidia.com/blog/deep-learning-self-driving-cars/
+https://www.youtube.com/watch?v=NJU9ULQUwng
+8
+
+Warum hat das funktioniert?
+“Training with data from
+only the human driver is
+not sufficient. The
+network must learn how
+to recover from mistakes.
+Otherwise the car will
+slowly drift off the road.
+The training data is
+therefore augmented with
+additional images that
+show the car in different
+shifts from the center of
+the lane and rotations
+from the direction of the
+road.”
+https://arxiv.org/pdf/1604.07316
+
+9
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Learnings
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+10
+
+Warum scheitert Behavioral
+Cloning?
+Ein wenig Theorie
+
+11
+
+Das Distributional Shift Problem
+
+𝑝!! (𝑜" )
+𝑝#$%$ (𝑜" )
+
+Trainieren unter 𝑝#$%$ (𝑜" ):
+max 𝔼'"~)#$%$ '" log 𝜋& 𝑎" 𝑜"
+&
+
+Testen unter 𝑝!! (𝑜" )
+
+𝑝#$%$ 𝑜" ≠ 𝑝!! (𝑜" )
+12
+
+Zielfunktion definieren (“was wir wollen”)
+
+Was macht gelernte Policy 𝜋/ (𝑎0 |𝑜0 ) gut oder schlecht?
+𝑐 𝑠0 , 𝑎0
+
+0 wenn 𝑎0 = 𝜋 ∗ 𝑠0
+=+
+1
+sonst
+
+Ziel: minimiere 𝔼2!~4" $ 𝑐 𝑠0 , 𝑎0
+# !
+
+Minimiere Anzahl der Fehler, die
+die Policy macht.
+13
+
+Worst Case Analyse
+
+𝑐 𝑠" , 𝑎"
+
+0
+=9
+1
+
+wenn 𝑎" = 𝜋 ∗ 𝑠"
+sonst
+
+Annahme: 𝜋& 𝑎 ≠ 𝜋 ∗ 𝑠 𝑠 ≤ 𝜖 ∀𝑠 ∈ 𝒟%+$,(supervised Learning)
+
+𝑝!! (𝑜" )
+𝑝#$%$ (𝑜" )
+
+Fehler ab dem ersten Zeitschritt
+≈ 1(𝜖 ≪ 1)
+
+∀𝑠 ∉ 𝒟%&$'( :
+
+𝔼 " 𝑐 𝑠! , 𝑎!
+!
+
+𝑂 𝜖𝑇 )
+
+≤ 𝜖𝑇 + 1 − 𝜖 𝜖 𝑇 − 1 + 1 − 𝜖 …
+𝑇 Terme, jeder 𝑂 𝜖𝑇
+
+14
+
+Warum ist das zu pessimistisch?
+In Praxis können wir uns
+oft von Fehlern erholen
+
+Imitation Learning hat aber
+keinen eingebauten
+Mechanismus, der das
+garantiert
+
+Paradoxon: Imitation Learning kann besser
+funktionieren, wenn Daten mehr Fehler (und
+dadurch Korrekturen) enthalten
+
+Dies funktioniert, weil auch
+Situationen, die durch Fehler
+entstehen können, Teil der
+Trainingsdaten sind
+
+Allgemein: Brauchen große Breite an Trainingsdaten, die
+auch unerwünschte Situationen enthalten
+15
+
+Imitation Learning in der Praxis
+verbessern
+
+16
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Learnings
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+17
+
+Was macht Behavioral Cloning leicht und was
+macht es schwer?
+• Bewusst Fehler und Korrekturen
+bereitstellen
+• Fehler schaden, aber Korrekturen
+helfen oft mehr als Fehler schaden
+• Fehler unkorreliert mit Zustand und
+mitteln sich beim Training z.T. aus
+
+• Data Augmentation
+• ”Fake” Data, die Korrekturen
+demonstrieren (z.B., seitwärts
+gerichtete Kameras)
+
+18
+
+Beispiel: Autonome Drohne zum Folgen von Pfaden
+in der Natur
+
+Demo: https://www.youtube.com/watch?v=umRdt3zGgpU
+
+19
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Learnings
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+20
+
+Warum macht unsere Policy Fehler?
+1. Experten-Verhalten nicht Markov
+2. Multimodales Verhalten
+
+𝜋, 𝑎- 𝑜Verhalten hängt nur von
+aktueller Beobachtung ab
+
+𝜋, 𝑎- 𝑜., … , 𝑜Verhalten hängt nur von allen
+vergangenen Beobachtungen ab
+
+Wenn wir zweimal dasselbe sehen,
+machen wir zweimal dasselbe, egal
+was davor war
+Oft sehr unnatürlich für Menschen
+21
+
+Wie können wir die gesamte History nutzen?
+
+1. Variable Anzahl an Beobachtungen
+2. Zu viele Gewichte
+
+22
+
+Wie können wir die gesamte History nutzen?
+
+23
+
+Notiz: Kann auch nach hinten losgehen…
+
+“causal confusion”
+siehe: de Haan et al., “Causal Confusion in Imitation Learning”
+
+24
+
+Warum macht unsere Policy Fehler?
+1. Experten-Verhalten nicht Markov
+2. Multimodales Verhalten
+
+1. Ausdrucksstärkere kontinuierliche
+Wahrscheinlichkeitsverteilungen
+2. Diskretisierung von Aktionsräumen
+Problematisch bei einfacher
+Wahrscheinlichkeitsverteilung:
+
+Kein Problem bei diskretem
+Aktionsraum
+
+25
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Learnings
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+26
+
+Ist Multi-Task-Learning leichter?
+𝜋& 𝑎 𝑠
+Policy um 𝑝. zu erreichen
+
+𝜋& 𝑎 𝑠, 𝑝
+Policy um beliebigen 𝑝 zu erreichen
+
+Viel mehr verschiedene Zustände à bessere Generalisierung
+
+27
+
+Goal-conditioned Behavioral Cloning
+
+Training
+.
+• Demo 1: 𝑠.., 𝑎.., … , 𝑠/0.
+, 𝑎./0., 𝑠/.
+1
+• Demo 2: 𝑠.1, 𝑎.1, … , 𝑠/0.
+, 𝑎1/0., 𝑠/1
+2
+• Demo 3: 𝑠.2, 𝑎.2, … , 𝑠/0.
+, 𝑎2/0., 𝑠/2
+
+Erfolgreiche Demo, um 𝑠* zu erreichen
+Lerne 𝜋+ 𝑎 𝑠, 𝑔
+Goal State
+
+Für jede Demo 𝑖 𝑠,- , 𝑎,- , … , 𝑠*.,
+, 𝑎-*., , 𝑠*-
+
+Maximiere log 𝜋+ 𝑎"- 𝑠"- , 𝑔 = 𝑠*-
+
+28
+
+Beispiele
+Learning Latent Plans from Play
+
+https://arxiv.org/pdf/1903.01973
+https://learning-from-play.github.io/
+
+Unsupervised Visuomotor Control
+through Distributional Planning Networks
+
+https://arxiv.org/pdf/1902.05542
+https://www.youtube.com/watch?v=caR7xZkjpKw 29
+
+Learning Latent Plans from Play – Daten sammeln
+
+30
+
+Learning Latent Plans from Play – Goal conditioned
+Policy trainieren
+
+31
+
+Learning Latent Plans from Play – Ziele erreichen
+
+32
+
+Beispiel 2: Datensammel-Prozess automatisieren
+Learning to Reach Goals via Iterated Supervised Learning
+
+https://arxiv.org/abs/1912.06088
+https://www.youtube.com/watch?v=-vMcPk2Uc8g
+
+•
+•
+
+Starte mit Zufallspolicy
+Sammle Daten mit zufälligen Zielen
+
+•
+
+Nutze diese Daten für Behavioral Cloning
+mit den Zielen, die tatsächlich erreicht
+wurden
+
+•
+•
+
+Nutze dies um die Policy zu verbessern
+Wiederhole
+
+33
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Learnings
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+34
+
+Was können wir noch verbessern?
+
+𝑝!! (𝑜" )
+𝑝#$%$ (𝑜" )
+
+Problem: 𝑝G# 𝑜0 ≠ 𝑝HIJI 𝑜0
+Können wir bewerkstelligen,
+dass:
+𝑝HIJI 𝑜0 = 𝑝G# 𝑜0
+???
+35
+
+DAgger
+Können wir bewerkstelligen, dass 𝑝=>?> 𝑜- = 𝑝@! 𝑜- ?
+Idee: Anstelle 𝑝@! 𝑜- anzupassen, versuche 𝑝=>?> 𝑜- anzupassen. D.h.,
+𝑝=>?> 𝑜- soll einen größeren Bereich an Zuständen abdecken, die in 𝑝@! 𝑜enthalten sind (also von 𝜋, 𝑎- |𝑜- besucht werden).
+DAgger: Dataset Aggregation
+Ziel: Sammle Trainingsdaten aus 𝑝@! 𝑜- anstelle aus 𝑝=>?> 𝑜Wie? Einfach 𝜋, 𝑎- 𝑜- ausführen!
+Aber wir brauchen die optimalen Labels 𝑎- !
+1. Trainiere 𝜋& 𝑎" 𝑜" auf Expertendaten 𝒟 = 𝑜. , 𝑎. , … , 𝑜/ , 𝑎/
+2. Führe 𝜋& 𝑎" 𝑜" aus, erhalte Datensatz 𝒟! = 𝑜. , … , 𝑜/
+3. Experte labelt 𝒟! mit korrekten Aktionen 𝑎"
+4. Aggregiere 𝒟 ← 𝒟 ∪ 𝒟!
+Ross et al. PMLR 15:627-635, 2011
+
+36
+
+DAgger Schwachstelle
+1. Trainiere 𝜋, 𝑎- 𝑜- auf Expertendaten 𝒟 = 𝑜., 𝑎., … , 𝑜A , 𝑎A
+2. Führe 𝜋, 𝑎- 𝑜- aus, erhalte Datensatz 𝒟@ = 𝑜., … , 𝑜A
+3. Experte labelt 𝒟@ mit korrekten Aktionen 𝑎4. Aggregiere 𝒟 ← 𝒟 ∪ 𝒟@
+1. Kann aufwendig sein
+2. Kann ”unnatürlich” sein, Daten im Nachhinein zu labeln (und zu anderen
+Labels/Aktionen führen, als der Experte im Live-Betrieb gewählt hätte)
+
+Man kann für DAgger zeigen: 𝑂 𝔼 ∑" 𝑐 𝑠" , 𝑎"
+
+= 𝑂 𝑇 (und nicht 𝑂 𝑇 0 )
+37
+
+• Imitation Learning mittels Behavioral Cloning
+hat keine Garantien
+• Anders als Supervised Learning
+• Grund: i.i.d. Annahmen gelten nicht
+
+Recap
+
+• Man kann die Gründe formalisieren (Theorie)
+• Mögliche Lösungen des Problems
+• Daten auf intelligente Art sammeln (und
+augmentieren)
+• Mächtige Modelle nutzen, die wenige Fehler
+machen
+• Multi-Task-Learning
+• Algorithmus anpassen (z.B. DAgger)
+38
+
+Übung
+
+• https://rail.eecs.berkeley.edu/deeprlcourse/st
+atic/homeworks/hw1.pdf (Homework 1, Deep
+RL Kurs, Berkeley, 2026)
+• https://rail.eecs.berkeley.edu/deeprlcoursefa23/deeprlcoursefa23/static/homeworks/hw1.pdf (Homework
+1, Deep RL Kurs, Berkeley, 2023)
+
+39
+
+Warum ist Imitation Learning nicht genug?
+• Menschen müssen Daten bereitstellen à begrenzte Menge an Daten
+• Deep Learning funktioniert umso besser, je mehr Daten zur Verfügung stehen
+
+• Menschen können nicht für alles passende Aktionen bereitstellen
+
+• Menschen können autonom lernen à können Maschinen das auch? Vorteile:
+• Unbegrenzte Menge an Daten aus eigener Erfahrung
+• Kontinuierliche Selbstverbesserung
+40
+
+

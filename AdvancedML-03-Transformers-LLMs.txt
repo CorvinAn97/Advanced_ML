@@ -1,0 +1,2664 @@
+Transformers und Large Language
+Models
+
+Agenda
+1.
+2.
+3.
+4.
+5.
+
+Transformer
+Finetuning: From pretrained LLM to chatbot
+Benchmarks
+Parameter-efficient Finetuning (PEFT)
+Reinforcement Learning from Human
+Feedback (RLHF)
+6. Interaktion mit externen Datenbanken
+und Anwendungen
+
+2
+
+TRANSFORMER-ARCHITEKTUR
+
+3
+
+Warum über
+Rekurrenz
+hinausgehen?
+
+Die Autoren des Transformer-Modells hatten
+drei Desiderata (Anforderungen) bei der
+Entwicklung dieser Architektur:
+1. Minimierung (oder zumindest keine
+Erhöhung) der Rechenkomplexität pro
+Schicht.
+2. Minimierung der Pfadlänge zwischen
+beliebigen Wortpaaren, um das Erlernen
+von langfristigen Abhängigkeiten zu
+erleichtern.
+3. Maximierung des Anteils der Berechnungen,
+die parallelisiert werden können.
+4
+
+Motivation 1: Komplexität pro Layer
+Wenn Sequenzlänge 𝑛 ≪ Embedding Dimension 𝑑 ist die Komplexität pro
+Layer bei Transformern niedriger als bei rekurrenten Modellen
+
+https://arxiv.org/abs/1706.03762
+
+5
+
+Motivation 2: Minimierung der Pfadlänge
+• RNNs werden von links nach rechts ausgerollt
+• Codiert lineare Lokalität – oft eine nützliche Heuristik
+– Benachbarte Wörter beeinflussen oft ihre Bedeutung gegenseitig
+
+• Problem: RNNs brauchen 𝑶(Sequenzlänge) Schritte bevor
+weit entfernte Wörter interagieren
+
+leckere
+
+Pizza
+
+𝑶(Sequenzlänge)
+
+Der
+
+Koch, der
+
+…
+
+servierte
+
+https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/slides/cs224n-spr2024-lecture08-transformers.pdf
+
+6
+
+Motivation 2: Minimierung der Pfadlänge
+• 𝑶(Sequenzlänge) Schritte bevor weit entfernte Wörter interagieren bedeutet:
+– Schwer weit entfernte Abhängigkeiten zu lernen (vanishing gradient)
+– Lineare Wortordnung ist teil des Modells – wir wissen von Sprache aber, dass dies nicht alles ist
+
+Der
+
+Koch, der
+
+…
+
+servierte
+Information “Koch” ist durch
+𝑶(Sequenzlänge) gegangen!
+7
+
+Motivation 3: Parallelisierbarkeit maximieren
+• Sequenzielle Abhängigkeit: Vorwärts- und Rückwärtspfade enthalten 𝑶(𝒏)
+nicht-parallelisierbare Operationen.
+• Hardware-Ineffizienz: GPUs und TPUs sind für massiv-parallele
+Berechnungen ausgelegt, können ihr Potenzial bei RNNs jedoch nicht voll
+ausschöpfen.
+• Der Flaschenhals: Zukünftige RNN-Zustände (ℎ! ) können erst berechnet
+werden, nachdem die vorangegangenen Zustände vollständig vorliegen.
+• Skalierungsprobleme: Diese Abhängigkeit verhindert effizientes Training
+auf extrem großen Datensätzen.
+• Speicherkonflikt: Mit zunehmender Sequenzlänge wird das Batching
+mehrerer Beispiele aufgrund von Speicherlimitierungen unmöglich, was das
+Training zusätzlich verlangsamt.
+8
+
+Allgemeinere Defintion von Attention
+
+Attention:
+Allgemeinere
+Definition
+und Intuition
+
+• Gegeben eine Menge Vektor-Werten und eine
+Vektor-Query, stellt bietet Attention eine Technik
+um die gewichtete Summe der Werte in
+Abhängigkeit von der Query zu berechnen.
+
+Intuition
+• Die gewichtete Summe ist eine Zusammenfassung
+der Informationen in den Werten. Die Query
+bestimmt, auf welche Werte fokussiert wird.
+• Attention ist eine Methode um eine
+Repräsentation fester Größe aus einer beliebig
+großen Repräsentation (den Werten) zu erhalten.
+9
+
+Transformer und Self Attention
+• Attention behandelt jedes Wort wie eine Query um auf Informationen aus einer Menge
+von Werten zuzugreifen
+• Bei RNN-Seq2Seq: Attention des Decoders zum Encoder
+• Bei Transformer: Self-Attention, also Encoder-Encoder- (oder Decoder-Decoder-)
+Attention, d.h. jedes Wort interagiert mit jedem anderen Wort des Inputs (oder
+Outputs)
+
+AlleWörter richten ihre Attention auf alle Wörter
+des vorigen Layers; Pfeile sind nur für jeweils ein
+Wort pro Schicht dargestellt
+
+10
+
+Berechnungsabhängigkeiten RNN vs. Self-Attention
+Transformer-Vorteile:
+• Zahl der nicht-parallelisierbaren Operationen erhöht
+sich nicht mit Sequenzlänge
+• Jedes Wort interagiert mit jedem anderen –
+maximale Interaktionsdistanz ist 𝑂(1)
+
+https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/slides/cs224n-spr2024-lecture08-transformers.pdf
+
+11
+
+Transformer Architektur
+• Encoder-Decoder Modell
+• Ursprünglich für Machine Translation
+• Wichtigster Teil: Self-Attention
+• Vorteile gegenüber RNNs (LSTM, GRU):
+– “Beliebig” großer Attention-Span
+– Gut parallelisierbar (Training & Inference)
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones,
+L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.
+(2017). Attention is all you need. Advances in Neural
+Information Processing Systems (NIPS), 30, 5998-6008
+https://arxiv.org/abs/1706.03762
+12
+
+Transformer – erste Ergebnisse (Machine Translation)
+
+Trainingszeiten:
+12h (base model)
+3.5d (big model)
+Auf 8 P100 GPUs
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I.
+(2017). Attention is all you need. https://arxiv.org/abs/1706.03762
+
+13
+
+Attention: Intuition
+
+Hashtabelle
+
+• Attention als ungefähre Hashtabelle
+– Value-Lookup erfordert den Vergleich einer Query mit
+einem Key in der Tabelle
+
+• Hashtabelle
+– Jede Query (hash) liefert exakt ein Key-Value-Paar
+
+• (Self-) Attention
+– Jede Query passt unterschiedlich stark zu jedem
+Schlüssel
+– Wir geben die nach Query-Key-Match gewichtete Summe
+der Werte zurück
+
+Aattention
+
+14
+
+Self-Attention
+• Vokabular à Word Embeddings 𝑥 "
+– Word Embeddings werden gelernt
+
+• Input 𝑥 # , … , 𝑥 $ à Self-Attention: Query, Key, Value
+
+𝑞 ! = 𝑊" 𝑥 !
+𝑘 ! = 𝑊# 𝑥 !
+𝑣 ! = 𝑊$ 𝑥 !
+
+https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html
+
+15
+
+SelfAttention
+
+Attention Scores sind spezifisch für
+aktuelles Input-Token (hier: 𝑥 ( )
+Attention wird zwischen allen
+Input-Tokens berechnet!
+
+à selbe Prozedur für 𝑧 ! , 𝑧 " , 𝑧 # , …
+𝑧!
+Attention-Head =
+⋮
+𝑧"
+
+https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html
+
+16
+
+Multi-Head Attention: 𝑘 Köpfe sind besser als 1!
+• Idee: Self-Attention mehrmals
+parallel durchführen und Ergebnisse
+kombinieren
+
+17
+
+Multi-head Attention: Motivation
+• Was, wenn gleichzeitig auf mehrere Wörter fokussiert
+werden soll?
+– Für Wort 𝑖 schaut Attention, wo (für welches 𝑗)
+𝑞(() 𝑘 ) besonders groß ist, aber vielleicht ist es
+sinnvoll je nach Blickwinkel auf unterschiedliche 𝒋
+zu schauen?
+– Aus der Sicht eines Wortes 𝑖 kann es
+unterschiedliche Queries 𝑞 ( geben
+– Entsprechend kann es auch unterschiedliche
+Antworten (und dementsprechend Keys und Values)
+geben
+• Implementieren mehrere Attention-Heads durch
+unterschiedliche 𝑄, 𝐾, 𝑉-Matrizen und konkatenieren
+die Ergebnisse
+18
+
+Multi-Head Attention
+
+Parameter-Matrix 𝑊% von Multi-Head Attention:
+
+MultiHeadAtt = concat(head! | … head$ 𝑊%
+Einzelner Attention-Head:
+
+Multi-Head Attention:
+
+!
+
+𝑧$
+head# =
+⋮
+"
+𝑧$
+
+https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html
+
+Ähnlich zur Verwendung verschiedener Filter in einem CNN-Layer
+
+19
+
+Self-Attention: Dimensionsbetrachtung
+
+𝑂(𝑛& ) Komplexität!
+
+großes context window wird
+ohne weitere Tricks schnell
+teuer/langsam!
+
+https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html
+
+20
+
+Feed Forward Network
+• Wird auf jedes Input-Token separat angewandt,
+hat also 𝑑 Inputs (und nicht 𝑛 x 𝑑)
+– “positionsweises FFN”, keine Interaktion zwischen
+Tokens wie bei Attention
+• typischerweise nur ein hidden Layer der Größe 𝑑11 = 4𝑑
+• ReLU-, GELU- oder SwiGLU-Aktivierung im hidden Layer,
+lineares Output-Layer
+• FFN Output-Größe: 𝒅 (= Embedding-Dim.), um wieder
+als Input des gesamten Attention-Layers dienen zu
+können, denn:
+• Gesamtes Attention-Layer wird mehrfach wiederholt
+(mit jeweils eigenen Matrizzen 𝑊2 , 𝑊3 , 𝑊4 , 𝑊5 )
+21
+
+Feed Forward Network
+
+Innerhalb eines Layers wird dasselbe FNN
+(dieselben Parameter) auf jedes der 𝑛
+Attention-Outputs angewendet.
+Die Größe des FFNs ist unabhängig von
+der Sequenzlänge 𝑛!
+
+22
+
+Transformer-Layer: Parameterzahl
+Self-Attention:
+•
+
+ℎ: Anzahl der Attention-Heads
+
+•
+
+häufig: 𝑑! = 𝑑" = 𝑑# = 𝑑/ℎ, damit:
+
+•
+
+𝑊! , 𝑊" , 𝑊# : jeweils 𝑑 x + 𝑑/ℎ (Bias!) Parameter pro Head
+
+$
+%
+
+à 𝑑 x 𝑑 + 𝑑 Parameter
+•
+
+𝑊& : 𝑑 x 𝑑 + 𝑑 (Bias) Parameter
+
+•
+
+Embeddings: #vocab_size x 𝑑 Parameter
+
+Feed-Forward-Network (nicht in Abb.):
+•
+
+Hidden Layer: 𝑑 + 1 ⋅ 𝑑'' (𝑑'' : hidden layer size)
+
+•
+
+Output Layer: 𝑑'' + 1 ⋅ 𝑑
+
+•
+
+häufig: 𝑑'' = 4𝑑
+
+Gesamte Parameterzahl pro Transformer-Layer (MHA + FFN):
+4𝑑& + 4𝑑 + 𝑑 + 1 𝑑'' + 𝑑'' + 1 𝑑 = 4𝑑& + 2𝑑'' 𝑑 + 𝑑'' + 5𝑑
+
+23
+
+GELU: Gaussian Error Linear Units
+Näherung an ReLU, aber “softer” Cutoff von Inputs 𝑥 < 0 à besserer Gradientenfluss in
+tiefen Netzen
+Empirisch: Kürzere Trainingszeiten und bessere Ergebnisse als ReLU oder Leaky ReLU; eine
+Zeit lang Standard bei LLMs
+GELU 𝑥 = 𝑥 ) Φ(𝑥)
+Φ 𝑥 : kumulative Verteilungsfunktion (CDF) einer Standardnormalverteilung
+Φ 𝑥 =
+
+!
+"
+
+1 + erf
+
+#
+"
+
+, erf 𝑥 =
+
+" # '( !
+∫ 𝑒 𝑑𝑡
+% &
+
+In GPT-2/3 wird eine Näherung verwendet (“gelu_new”), die schneller zu berechnen ist:
+1
+GELU()* 𝑥 = 𝑥 1 + tanh
+2
+
+2
+𝑥 + 0.044715𝑥 +
+𝜋
+
+https://arxiv.org/abs/1606.08415
+
+24
+
+SwiGLU / GeGLU / GLU Varianten — “State-of-the-Art” bei LLMs
+• GLU: Gated Linear Unit, GLU 𝑥 = 𝜙 𝑥𝑊 ⨂ 𝑥𝑉
+– 𝜙: Sigmoid, GELU (“GeGLU”) (à Gate)
+
+• SwiGLU 𝑥 = Swish 𝑥𝑊 + 𝑏 ⨂ 𝑥𝑉 + 𝑐
+– Swish 𝑧 = SiLU 𝑧 = 𝑧 ⋅ 𝜎(𝑧) (à Gate)
+– SwiGLU ist GLU mit Swish (aka SiLU) statt Sigmoid
+
+• Das Netzwerk kann nun lernen einzelne Features
+situationsabhängig nicht durchzulassen
+• Empirisch besser bei großen LLMs
+25
+
+SwiGLU / GeGLU / GLU Varianten — “State-of-the-Art” bei LLMs
+• FFN mit GELU (oder ReLU):
+FFN 𝑥 = 𝑊( GELU 𝑥𝑊# + 𝑏# + 𝑏(
+• FFN mit SwiGLU
+FFN 𝑥 = 𝑊1 Swish 𝑥𝑊 + 𝑏 ⨂ 𝑥𝑉 + 𝑐
+• SwiGLU hat 2 Projektionen im hidden Layer (𝑊 & 𝑉) im Vergleich zu einer
+bei klassischer “ungated” Aktivierungsfunktion (wie GELU)
+– Daher reduziert man die Dimension des Hidden Layers im Vergleich zu GELU, typisch:
+– GELU: 𝑑11 = 4𝑑 (#Params: 2𝑑𝑑11 = 8𝑑;)
+;
+<
+
+=
+<
+
+– SwiGLU: 𝑑11 ≈ 4𝑑 = 𝑑 (#Params: 3𝑑𝑑11 ≈ 8𝑑;)
+26
+
+Attention is not all you need…
+• Problem: Keine Information über die Reihenfolge der Wörter!
+– Berechnung von Attention für jedes Wort mit jedem anderen Wort
+– Kein Einfluss der Reihenfolge auf Attention Output!
+
+• Wir wissen aber, dass Reihenfolge in Sprache eine wichtige Rolle spiel:
+Ein Mann isst einen kleinen Dinosaurie != Ein Dinosaurier isst einen kleinen Mann
+
+Aber Attention-Weights (und Outputs)
+sind in beiden Fällen identisch!
+
+27
+
+Lösung: Informationen über Reihenfolge hinzufügen
+• Rekurrente Netze verarbeiten Input sequentiell und haben somit ein
+“Zeitverständnis”
+• Ohne Rekurrenz brauchen wir eine andere Lösung à Positional Encoding
+
+28
+
+Positional Encoding
+• Embedding für Position des Wortes an Position 𝑝𝑜𝑠: PE(𝑝𝑜𝑠) ∈ ℝ2
+• Positional Embedding wird zu Word Embedding addiert:
+
+𝑥%&' = 𝑒%&' + PE(𝑝𝑜𝑠)
+Konkatenieren wäre auch möglich,
+aber in ursprünglicher
+Transformer-Architektur wurde
+einfach addiert.
+
+29
+
+Positional Encoding
+• Positional Encoding 𝑃𝐸(𝑝𝑜𝑠) muss dieselbe Dimension haben wie Embedding
+𝑥!"#
+• Wahl:
+𝑝𝑜𝑠
+𝑃𝐸 𝑝𝑜𝑠, 2𝑖 = sin
+$%
+10.000 &
+𝑃𝐸 𝑝𝑜𝑠, 2𝑖 + 1 = cos
+• Mit
+
+𝑝𝑜𝑠
+$%
+10.000 &
+
+– pos: Position des Wortes in Sequenz (0, 1, 2, …)
+– 𝑖: Index der Dimension des Positional Encodings
+– 𝑑: Modell-Dimension (und des Word Embeddings)
+– Gerade Dimensionen à Sinus, Ungerade Dimensionen à Cosinus
+– ”10.000”: Beeinflusst Gesamtperiodenlänge (hier: 2 𝜋 ⋅ 10.000) (bevor sich PE wiederholen)
+30
+
+Eindeutigkeit von Positional Encodings
+• Sinus ist periodisch
+• à Positional-Encoding-Werte
+in einer einzelnen Dimension
+wiederholen sich und
+nehmen dieselben Werte für
+unterschiedliche Positionen
+𝑝𝑜𝑠 in der Sequenz an
+
+https://www.youtube.com/watch?v=dichIcUZfOw
+
+31
+
+Eindeutigkeit von Positional Encodings
+𝑃𝐸 𝑝𝑜𝑠, 2𝑖 = sin
+
+𝑝𝑜𝑠
+;(
+10.000 >
+
+• Das ”𝑖” in der PE-Formel
+sorgt dafür, dass die
+Frequenzen in jeder PEDimension unterschiedlich
+sind
+• Daher: Selbst wenn eine PEKomponente zweier
+Vektoren identisch ist, sind
+die anderen unterschiedlich
+
+https://www.youtube.com/watch
+?v=dichIcUZfOw
+
+32
+
+Positional Encodings - Illustration
+sin
+cos
+𝑃𝐸 𝑝𝑜𝑠, 2𝑖 =
+
+sin
+cos
+
+𝑝𝑜𝑠
+(∗4
+10.000 2
+
+𝑝𝑜𝑠
+
+(∗4
+10.000 2
+
+⋮
+𝑝𝑜𝑠
+
+(2
+(
+10.000 2
+
+𝑝𝑜𝑠
+
+(2
+(
+10.000 2
+33
+
+Positional Encodings – Details aus dem Paper
+
+Vaswani et al (2017). Attention is all you need. https://arxiv.org/abs/1706.03762
+
+34
+
+Positional Encodings – Alternativen
+• Mittlerweile bessere Positional Encodings bekannt
+• Erhoffte Extrapolation des Sinus-/Cosinus-Encodings zu längeren Sequenzen als in den
+Trainingsdaten hat sich nicht materialisiert
+• Encodings wie oben definiert sind nicht lernbar
+• Positionen sind absolut codiert, nicht relativ zueinander
+• à RoPE: Rotary Positional Embeddings
+– Codierung der Position von Tokens durch Rotation von 𝑞B und 𝑘C
+– Dadurch Dot-Product-Attention nur von relativer Position 𝑖 − 𝑗 abhängig
+– Gute Extrapolation zu längeren Sequenzen
+– Viele aktuelle (2025) LLMs nutzen RoPE und dessen Erweiterungen
+– Es gibt auch viele andere Positional Encodings (z.B. ALiBi)
+Jianlin Su, Yu Lu, Shengfeng Pan, Bo Wen, Yunfeng Liu (2021). RoFormer: Enhanced
+Transformer with Rotary Position Embedding, https://arxiv.org/abs/2104.09864
+
+35
+
+Transformer: Decoder
+•
+•
+•
+
+Ursprüngliche Transformer-Aufgabe: Machine
+Translation
+Encoder liest zu übersetzenden Text ein und
+transformiert diesen in Embeddings gleicher Länge
+Decoder generiert Token für Token
+– Daher “masked” (auch: “causal”) attention
+
+•
+•
+•
+
+erhält bisher generierte Tokens als Input
+Self-attention wie bei Encoder
+Cross-attention zwischen Encoder Output und
+Decoder-Input
+– 𝐾 & 𝑉 kommen aus Encoder-Output
+– 𝑄 kommt aus (generiertem) Decoder-Input
+
+•
+
+Wiederholung des gesamten Attention-Layers im
+Decoder wie im Encoder
+36
+
+Decoder
+• Bei Self-Attention kommen Queries, Keys und Values
+aus derselben Quelle
+• Im Decoder gibt es zwei Attention-Blöcke
+– Self-Attention für vom Decoder generierten Text
+– Cross-Attention zwischen Decoder-Text und dem Output des
+Encoders
+
+• Mit ℎ?, … , ℎ @? die Output-Vektoren des Encoders
+und
+• 𝑧?, … , 𝑧@; die Input-Vektoren des Decoders
+• Dann kommen die Keys und Values vom Encoder:
+– 𝑘B = 𝐾ℎB , 𝑣B = 𝑉ℎB
+
+• Und Queries kommen vom Decoder:
+
+Vergleichbar mit AttentionMechanismus von letzter Woche
+
+– 𝑞B = 𝑄𝑧B
+37
+
+Attention Masking
+• Beim Training muss der Decoder die Target-Sequenz
+vorhersagen (z.B. übersetzten Text)
+• Vorhersage erfolgt dabei autoregressiv, d.h. Wort für
+Wort basierend auf dem, was bisher vorhergesagt wurde
+• Die Trainingsbatches enthalten jedoch auch die
+zukünftigen Wörter – auf diese darf der Decoder nicht
+schauen (er hat sie ja später auch nicht zur Verfügung)
+• Dies wird technisch mittels Attention Masking gelöst –
+vor der Softmax im Attention-Layer werden die
+Attention-Werte auf “ − ∞” gesetzt
+38
+
+Attention Masking
+• Um Self-Attention im Decoder beim
+Training zu nutzen muss man
+sicherstellen, dass dieser nicht in die
+Zukunft schauen kann
+• Man könnte bei jedem Zeitschritt die
+Keys und Queries anpassen, damit
+nur vergangene enthalten sind
+(ineffizient)
+• Stattdessen werden Attention-Werte
+von zukünftigen Worten maskiert,
+indem sie auf −∞ gesetzt werden
+
+Auf die nicht ausgegrauten Wörter
+kann der Decoder schauen…
+
+… um diese
+Wörter zu
+codieren
+
+39
+
+Decoder
+• Nach den Attention-Layern
+benötigt der Decoder noch ein
+Layer zur Wort- (oder Token-)
+Vorhersage
+• Linear (mit Output-Größe = Größe
+des Vokabulars) + Softmax zur
+Umwandlung in
+Wahrscheinlichkeiten
+
+40
+
+Transformer – Weitere Details
+Es gibt noch Details, die wir bei der Transformer-Architektur bisher
+nicht behandelt haben:
+1. Residual Connections
+2. Layer Norm
+?
+3. Scaled Dot Product Attention ( >
+in Attention-Formel)
+!"#$%
+
+1. & 2. existierten schon vor Transformer, Nr. 3 (der Skalierungsfaktor)
+ist mit dem Transformer eingeführt worden.
+41
+
+1. Residual Connections
+• Einfache, aber sehr effektive Technik aus Vision-Modellen (ResNet)
+• Tiefe neuronale Netzwerke haben Schwierigkeiten, die Identitätsabbildung 𝑓 𝑥 = 𝑥 zu
+lernen
+• Daher kann es sehr hilfreich sein dem übernächsten Layer direkt die Outputs des
+aktuellen Layers zur Verfügung zu stellen:
+𝑎A = 𝐹 𝑎AB? + 𝑎AB?
+• Hilft beim Informations- und Gradientenfluss durch das Netzwerk und macht sehr tiefe
+Netzwerke leichter trainierbar
+Residual Connections führen
+glätten die Loss-Landschaft und
+erleichtern dadurch das Training.
+
+Visualizing the Loss Landscape of Neural Nets (Li et al., 2018)
+
+42
+
+2. Layer Normalization (Ba et al., 2016) (1/3)
+• Problem: Das Training tiefer neuronaler Netzwerke ist schwierig, u. a.
+aufgrund wechselnder Aktivierungsskalen während des Trainings
+• Idee: Reduziere diese Variation, indem die Aktivierungen innerhalb eines
+Layers normalisiert werden.
+• Lösung (Layer Normalization): Für jeden Datenpunkt werden die
+Aktivierungen jedes Layers auf Mittelwert 0 und Standardabweichung 1
+normiert:
+A
+A
+𝑎
+−
+𝜇
+𝑎V A = A
+𝜎 +𝜀
+
+𝑙: Layer-Index
+𝜀 verhindert Division durch Null
+
+Normalisierung erfolgt über alle Feature-Dimensionen hinweg für jeden Datenpunkt separat!
+à Unabhängig von Batchgröße und anderen Trainingsdaten.
+43
+
+2. Layer Normalization (Ba et al., 2016) (2/3)
+A
+A
+𝑎
+−
+𝜇
+𝑎V A = A
+𝜎 +𝜀
+𝑙: Layer-Index
+𝜀 verhindert Division durch Null
+Normalisierung erfolgt über alle FeatureDimensionen hinweg für jeden Datenpunkt
+separat!
+à Unabhängig von Batchgröße und anderen
+Trainingsdaten.
+https://www.pinecone.io/learn/batch-layer-normalization/
+
+44
+
+2. Layer Normalization (Ba et al., 2016) (3/3)
+E & FG &
+
+• Nach der Standardisierung 𝑎V A = & folgt eine affine Transformation mit
+H IJ
+lernbaren Parametern:
+𝑦 A = 𝛾 A ⨀𝑎V A + 𝛽 A
+• 𝛾 A , 𝛽 A sind (Layer-Norm-) Parameter-Vektoren von Layer 𝑙
+– Initialisierung mit 𝛾 A = 𝟏, 𝛽A = 𝟎
+
+• Durch lernbare Parameter kann das Modell
+– die Normierung teilweise oder vollständig rückgängig machen
+– geeignete Skalen und Offsets selbst lernen
+– Normierung schränkt die Modellkapazität nicht ein
+Layer Normalization normalisiert die Aktivierungen eines Layers pro Datenpunkt und bleibt
+durch lernbare Skalierungs- und Verschiebungsparameter ausdrucksstark.
+45
+
+3. Scaled Dot-Product Attention
+• Attention-Weights berechnen sich aus Skalarprodukt zwischen Query und
+2'
+K
+Key: 𝑞 ⋅ 𝑘 = ∑"L# 𝑞" 𝑘"
+• Die Varianz des Skalarprodukts ist proportional zu 𝑑M (Annahme:
+unabhängige, standardisierte Komponenten):
+– Mittelwert einer Summe = Summer der Mittelwerte = 𝑑3 ∗ 0 = 0
+– Varianz der Summe = Summe der Varianzen = 𝑑3 ∗ 1 = 𝑑3
+
+• Dadurch nehmen einzelne Inputs der Softmax große Werte an, diese geht
+in Sättigung und wird schwer trainierbar (kleine Gradienten)
+• Um das auszugleichen, wird Skalarprodukt durch 𝑑M geteilt:
+𝑄𝐾 K
+Output = Softmax
+𝑉
+𝑑M
+46
+
+TransformerArchitektur –
+Übersicht
+47
+
+• LLMs verarbeiten keine Wörter, sondern
+Tokens
+• Tokens können sein:
+
+Von Text zu
+Tokens:
+Tokenisierung
+
+– ganze Wörter
+– Wortteile (Subwords sowie einzelne
+Buchstaben)
+– Satzzeichen / Leerzeichen, Sonderzeichen, …
+
+• Moderne LLMs nutzen SubwordTokenisierung
+• Ziel: offener Wortschatz bei begrenzter
+Vokabulargröße
+• Tokenisierung findet vor dem ModellTraining statt
+48
+
+Subword-Tokenisierung: Methoden & Trade-offs
+• Byte Pair Encoding (BPE)
+– häufige Zeichenfolgen werden iterativ zusammengeführt
+
+• WordPiece
+– wählt Subwords nach Modellwahrscheinlichkeit
+
+• Unigram LM
+– startet groß, entfernt unwahrscheinliche Tokens
+
+• SentencePiece
+– Framework (BPE oder Unigram), arbeitet auf Rohtext
+
+• Vokabulargröße: typisch 30k – 100k Tokens, Trade-off:
+– Kleines |V| à längere Sequenzen (schwerer zu lernen)
+– Großes |V| à große Embedding-Matrix (1 Embedding-Vektor pro Token)
+49
+
+Von Tokens zu Vektoren: Embedding Layer
+• Jedes Token ist eine ID ∈ 1, … , 𝑉
+• Embedding-Matrix (trainierbare Parameter):
+𝐸 ∈ ℝ N ×2()*+,
+• Embedding für Token 𝑖: 𝐸"
+• Vokabulargröße |V| bestimmt direkt die Größe der Embedding-Matrix (für
+jedes Token muss ein Embedding gelernt werden, das sind jeweils 𝑑PQRST
+zusätzliche Parameter pro Token)
+à Tokenisierung beeinflusst Speicherbedarf, Laufzeit und Modellkapazität
+Für die Verwendung eines vortrainierten Modells muss derselbe Tokenizer (mit denselben
+Parametern) verwendet werden, mit dem das Modell trainiert wurde!
+50
+
+Encoder-only Transformer
+• Self-Attention funktioniert auch ohne Decoder
+• Encoder-only Modelle: z.B. BERT (“Bidirectional Encoder Representations from
+Transformers”, https://arxiv.org/abs/1810.04805)
+• Erzeugt kontextbezogene Token-Repräsentationen
+• Keine Textgenerierung, sondern Textverständnis für nachgelagerte Aufgaben wie
+– Textklassifikation
+– Named Entity Recognition
+– Question Answering
+– Text Similarity
+
+• Weitere Encoder-only Modelle: RoBERTa, DistilBERT, ALBERT, …
+Encoder-only-Modelle wie BERT lesen Text bidirektional, um möglichst gute
+Bedeutungsrepräsentationen zu lernen – sie sind ideal für Verständnisaufgaben, aber
+nicht für freie Textgenerierung.
+51
+
+BERT Pretraining
+1. Masked Language Model (Cloze prediction)
+Berlin is the [MASK] of Germany.
+capital
+2. Next sentence prediction
+– Input: Zwei Sätze
+– Target: Boolean isNextSentence
+52
+
+• BERT ist ein reiner Encoder
+– Das Pretraining sorgt dafür, dass gute
+Token-Repräsentationen gelernt werden
+
+BERT FineTuning
+
+• Gelernte Repräsentationen können
+mittels Fine-Tuning für viele
+Downstream-Tasks genutzt werden,
+z.B.
+– Textklassifikation
+– Named Entity Recognition
+– Question Answering
+– Text Similarity
+– Natural Language Inference
+53
+
+Wo stecken die Parameter?
+Praxisbeispiel: BERT-Base
+(Encoder-only)
+Eigenschaft
+
+Symbol
+
+Wert
+
+Vocabulary Size
+
+𝑠
+
+30522
+
+Embedding Size
+
+𝑑
+
+768
+
+Anzahl Heads
+
+ℎ
+
+12
+
+Dimension pro Head
+
+𝑑/ℎ
+
+64
+
+FFN Hidden Size
+
+𝑑))
+
+3072
+
+Anzahl Transformer-Layer
+
+𝐿
+
+12
+
+• Token-Embeddings:
+𝑠 ⋅ 𝑑 = 30.522 ⋅ 768 = 23.440.896
+• Transformer-Layer
+– Self-Attention:
+4 𝑑 " + 𝑑 = 4 768" + 768 = 2.362.368
+– FFN:
+𝑑 + 1 ⋅ 𝑑DD + 𝑑DD + 1 ⋅ 𝑑 = 4.722.432
+– Gesamt (pro Trf-Layer): 7.084.800
+
+• 12 Transformer-Layer à
+𝐿 ⋅ 7.084.800 = 85.017.600
+• Embeddings + Transformer:
+23.440.896 + 85.017.600 = 108.458.496
+
+Hinweis:
+Weitere ca. 1-2 Mio. Parameter in LayerNorm,
+Segment Embeddings und Positional Embeddings
+
+BERT-paper: https://arxiv.org/abs/1810.04805
+
+54
+
+Decoder-only Transformer
+• Self-Attention funktioniert auch ohne Encoder
+• Decoder-only Modelle: z.B. GPT (“Generative Pre-trained Transformer”)
+– Keine Cross-Attention (da kein Input von Encoder)
+
+• Training: Next-Token prediction („left-to-right“ attention)
+• Standard für Textgenerierung, insbesondere Chatbots
+– „Full Transformer“ (Encoder-Decoder) unnötig aufwendig für Chatbots (gesamte
+Chathistory müsste bei jeder Anfrage durch den Encoder)
+
+GPT-1 Paper: https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf
+Review-Article on GPT: https://arxiv.org/abs/2305.10435 (Generative Pre-trained Transformer: A Comprehensive Review on Enabling Technologies,
+Potential Applications, Emerging Challenges, and Future Directions)
+
+55
+
+Decoder-only Transformer
+• Spezialisierung des Transformers auf autoregressive Textgenerierung
+• Modelliert direkt die Wahrscheinlichkeitsverteilung von Sprache
+𝑝 𝑥+ , … , 𝑥,
+• Ohne Cross-Attention sieht der Decoder aus wie der Encoder
+• Hauptunterschied ist die Art des Trainings
+– Aufgabe: Next-Token-Prediction
+– Daher kausale Mask in Self-Attention (nicht “in die Zukunft sehen”) beim
+Training
+– Kausale Mask sorgt für autoregressive Struktur 𝑝 𝑥' 𝑥( , … , 𝑥')(
+56
+
+Decoder-only: Training & Inference
+• Target: Next-Token-Prediction
+ℒ = − Y log 𝑝 𝑥F 𝑥?, … , 𝑥FB?
+F
+
+• Teacher Forcing
+– Unabhängig von Vorhersagen werden echte vorherige Tokens genutzt
+• Loss: Cross-Entropy (Klassifikation)
+• Alle Positionen eines Satzes können parallelisiert werden (mit Masked Attention)
+• Inference
+– Tokens werden sequentiell generiert
+– Vorherige Ausgaben werden wieder als Input verwendet
+57
+
+Decoder-only und Encoder-only im Vergleich
+Aspekt
+
+Encoder-only (z.B. BERT)
+
+Decoder-only (z.B. GPT)
+
+Attention
+
+Bidirektional
+
+Kausal
+
+Training
+
+Masked ML & isNextSentence
+
+Next-Token-Prediction
+
+Ziel
+
+Sprachrepräsentationen
+
+Textgenerierung
+
+Output
+
+Embeddings
+
+Token-Wahrscheinlichkeiten
+
+Typische Tasks
+
+Klassifikation, QA, NER
+
+Text, Code generieren, Dialog
+
+58
+
+Quadratische Komplexität
+• Self-Attention hat eine Zeit- und Speicherkomplexität von 𝑂 𝑁 (
+– 𝑁: Sequenzlänge
+
+• Verarbeitung sehr langer Sequenzen teuer
+• Grund für Begrenzung des “Kontextfensters” bei Chatbots (Input für
+Vorhersage jedes Tokens ist der gesamte bisherige Chatverlauf)
+
+59
+
+Quadratische Komplexität: Maßnahmen
+• Quadratische Zeitkomplexität wird meist nicht algorithmisch angegangen
+
+– Algorithmische Alternativen (z.B. sparse / linear Attention) sind Näherungen mit Verlust an
+Modellqualität
+
+• Caching bei Decoder-only Modellen während Inferenz
+
+– Keys & Values früherer Tokens werden gespeichert
+– Bei Token 𝑡: nur eine neue Query, Attention gegen cached K & V
+– Senkt Inferenzkosten pro Token auf 𝑂(𝑁) statt 𝑂 𝑁 "
+– Gesamtkomplexität für Sequenz der Länge 𝑁: 𝑂 𝑁 " (statt 𝑂 𝑁 # ohne Caching)
+– Nur für Inference, nicht beim Training
+
+• FlashAttention – beschleunigt die Berechnung technisch
+
+– 𝑂(𝑁 " ) Operationen werden Blockweise im schnellen SRAM der GPU berechnet und
+Auslagerung in langsameren Speicher wird vermieden
+
+• Grouped Query Attention
+
+– 1 Key-/Value-Head pro mehrere Query-Heads (reduziert KV-Speicherverbrauch)
+60
+
+From pre-trained LLM to chatbot
+
+FINETUNING
+
+61
+
+Was ist Finetuning?
+Allgemeine Modelle
+•GPT-3
+•GPT-4
+•…
+
+Spezialisierte
+Modelle
+•ChatGPT
+•GitHub Copilot
+•Kardiologin,
+Dermatologe, …
+62
+
+Grenzen vortrainierter Basis-Modelle
+
+Trainingsdaten des Basis-Modells
+Trainingsziel: Next-Token Vorhersage
+
+https://learn.deeplearning.ai/courses/finetuning-large-language-models
+
+63
+
+In-context learning
+• Zero-shot inference: Aufgabe im Prompt ohne Lösungsbeispiel
+Kann funktionieren:
+
+Kann fehlschlagen:
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+64
+
+In-context learning
+• One/few-shot inference enthält Lösungsbeispiele im Prompt
+
+• Experimentieren mit Anzahl an Beispielen, typischerweise wenige
+Beispiele
+65
+
+Grenzen von in-context Learning
+• Funktioniert nicht immer,
+besonders für kleine LLM
+• Beispiele verbrauchen Platz im
+Kontextfenster
+• àFinetuning!
+
+66
+
+Finetuning
+
+“Unstrukturierter” Text,
+riesige Datenmenge
+
+“Gelabelter” Text für
+bestimmte Aufgabe(n),
+kleinere Datenmenge
+
+In der Regel Paare aus Prompt und Completion:
+
+”Instruction-Finetuning”
+Jeder Prompt beinhaltet eine ”Instruktion” ans LLM
+https://www.coursera.org/learn/generative-ai-with-llms
+
+67
+
+Instruction-Finetuning
+
+Gewichte des Modells werden angepasst
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+68
+
+Instruction-Finetuning
+• “Full Finetuning” vs “Parameter-efficient Finetuning” (PEFT)
+• Viele bestehende Datensätze können mit Prompt-TemplateBibliotheken in Instruction-Completion-Form konvertiert und für
+Instruction-Finetuning genutzt werden
+• Single-Task und Multi-Task Finetuning möglich
+
+69
+
+Beispiel für Prompt-Instruction Templates
+• Für Amazon-Reviews Dataset:
+
+https://github.com/bigscience-workshop/promptsource/
+
+70
+
+Catastrophic forgetting
+• Finetuning kann Performance für spezifische Aufgabe deutlich
+erhöhen…
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+71
+
+Catastrophic forgetting
+• … aber die Performance bei anderen Aufgaben verringern:
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+72
+
+“Catastrophic
+forgetting”
+vermeiden
+
+• Evtl. unwichtig für Ihren
+Use-Case!
+• Multi-Task Finetuning
+• Parameter Efficient Fine
+Tuning (PEFT)
+
+73
+
+Chatbots
+• Architektur: meist Decoder-only Transformer
+• Inputs
+– Neuer Chat: User-Anfrage
+– Langer Chat: Gesamte Chathistory + aktuelle User-Anfrage
+
+• Limit: Context window
+Modell
+
+Jahr
+
+Context window [#Tokens]
+
+GPT-1
+
+2018
+
+512
+
+GPT-2
+
+2019
+
+1024
+
+GPT-3
+
+2020
+
+2048
+
+GPT-3.5
+
+2022
+
+4K (ChatGPT zu Beginn)
+
+GPT-4
+
+2023
+
+8K (initial) - 128K (später)
+
+DeepSeek-V2
+
+2024
+
+128K
+
+GPT-4o
+
+2024
+
+128K
+
+Gemini 1.5
+
+2024
+
+1M
+
+Viele technische Optimierungen abseits von lediglich größeren
+Modellen, um die Kontextlänge zu erreichen (TransformerAttention hat 𝑂(𝑁 & ) Zeit- und Speicherkomplexität!)
+
+74
+
+Übungen
+
+fine-tuning_example1.ipynb
+fine-tuning_example2.ipynb
+fine-tuning_example3_instruct-finetuningwith-SFTTrainer.ipynb
+
+• Hugging Face (www.huggingface.co)
+– Sehr viele vortrainierte Open-Source Modelle – für verschiedenste
+Anwendungsfelder (nicht nur LLMs)
+– Viele weitere Ressourcen: Bibliotheken, Tutorials, Datasets
+– Tutorials:
+• https://huggingface.co/course
+• https://colab.research.google.com/drive/13r94i6Fh4oYfeJRSi7S_y_cen5NYkBm#scrollTo=OTsW-Wwi-X81
+– zugehöriges Video: https://www.youtube.com/watch?v=b80by3Xk_A8
+
+• Viele Cloud-Services, die Modelle hosten und per Mausklick konfigurieren und
+starten lassen, inkl. benötigter Hardware
+– MS Azure, GCP, AWS – aber auch spezialisierte Services
+75
+
+Evaluation von LLMs
+
+METRIKEN & BENCHMARKS
+
+76
+
+Metriken zur Modell-Evaluation
+• Bei Klassifikation konnten wir eine einfache Metrik wie Accuracy
+nutzen:
+korrekte Vorhersagen
+accuracy =
+Alle Vorhersagen
+
+77
+
+Herausforderung bei LLM-Evaluation
+
+• Sehr unterschiedlicher Text kann dieselbe Bedeutung haben
+• Sehr ähnlicher Text kann entgegengesetzte Bedeutung haben
+78
+
+ROUGE und BLEU
+ROUGE
+• “Recall-Oriented Understudy for
+Gisting Evaluation”
+• Für Textzusammenfassung
+• Vergleicht eine generierte
+Zusammenfassung mit einer oder
+mehreren ReferenzZusammenfassungen
+• Genaugenommen 3 Scores, die alle
+separat berichtet werden
+
+BLEU
+• “Bilingual Evaluation Understudy”
+• Für Maschinelle Übersetzung
+• Vergleicht mit Referenz-Übersetzungen
+
+79
+
+Unigrams, bigrams, n-grams
+
+80
+
+ROUGE-1
+
+81
+
+ROUGE-1
+
+82
+
+ROUGE-2
+
+83
+
+ROUGE-L
+
+84
+
+ROUGE-L
+
+85
+
+ROUGE clipping
+
+86
+
+BLEU
+
+87
+
+BLEU: Beispiel
+
+88
+
+BLEU Beispiel
+
+89
+
+Benchmarks zur LLM-Evaluation
+
+90
+
+Enthaltene Tasks im GLUE-Benchmark:
+
+Leaderboard: https://gluebenchmark.com/leaderboard/
+
+91
+
+Enthaltene Tasks im SuperGLUE-Benchmark:
+
+Leaderboard: https://super.gluebenchmark.com/leaderboard
+
+92
+
+Benchmarks für große Modelle
+
+93
+
+HELM: Holistic Evaluation of Language Models
+
+Leaderboard: https://crfm.stanford.edu/helm/classic/latest/#/leaderboard
+
+94
+
+PARAMETER-EFFICIENT FINETUNING (PEFT)
+
+95
+
+GPU RAM Bedarf für Modell mit 1B* Parametern
+• Speicherbedarf 1 Param: 4 bytes (32-bit Float)
+• 1 B Params = 4 ⋅ 10e bytes ≈ 4 GB
+• Brauchen aber viel mehr für Modell-Training, z.B.:
+
+– Optimizer States: 2-8 bytes/param (z.B. AdamW: 8 bytes/param)
+– Gradienten: 4 bytes/param
+– 4 x batch_size bytes/param Forward Aktivierungen (für Backprop)
+
+• Daumenregel: 20 bytes/param (bei batch_size = 1): 24 GB
+– Das ist eher eine untere Schranke als eine gute Schätzung
+
+• Heutzutage oft Training mit 16bit Präzision (BF16) oder “mixed precision”
+Weitere Infos: https://huggingface.co/docs/transformers/v4.20.1/en/perf_train_gpu_one#anatomy-ofmodels-memory
+* Hinweis: 1B = 10( = 1 Milliarde (engl.: 1 billion)
+
+96
+
+Parameter efficient finetuning (PEFT)
+• Alle Parameter im Training anpassen erfordert
+– Hohen Speicherbedarf
+– Hohe Rechenleistung bzw. Training dauert länger
+• PEFT: Sammelbegriff für Methoden, die die Anzahl der trainierten Parameter
+reduzieren, z.B.
+– einfriereren der Params aller Layer bis auf einige der letzten Layer
+– Hinzufügen von Task-spezifischen “PEFT-Layern”
+• PEFT ist weniger anfällig für “catastrophic forgetting”
+
+97
+
+Full Finetuning benötigt volle Kopie des
+Originalmodells pro Aufgabe
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+98
+
+PEFT spart Speicherplatz und ist flexibel
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+99
+
+PEFT Trade-offs
+
+100
+
+PEFT Methoden
+
+Selektiv
+Wähle Teilmenge der
+LLM-Parameter fürs
+Finetuning
+
+Reparametrisierung
+
+Additiv
+
+Reparametrisierung mit
+Repräsentation kleineren
+Rangs
+à LoRA
+
+Hinzufügen trainierbarer
+Layer oder Parameter
+
+Wir werden im Folgenden LoRA und Prompt Tuning behandeln.
+
+Adapter
+Prompt Tuning
+
+101
+
+LoRA
+
+LOW-RANK ADAPTATION OF LARGE
+LANGUAGE MODELS
+102
+
+LoRA: Low-Rank Adaptation of Large Language Models
+• Attention: 𝑄 = 𝑊2 𝑋, 𝐾 = 𝑊3 𝑋, 𝑉 = 𝑊4 𝑋
+• 𝑋: Input (Embeddings), 𝑊2,3,4 : 𝑑×𝑘 Attention-Matrizzen
+LoRA:
+1. Einfriereren von 𝑊2 , 𝑊3 , 𝑊4
+2. Zerlegung: 𝑊2 = 𝐵2 ×𝐴2 , 𝑊3 = 𝐵3 ×𝐴3 , 𝑊4 = 𝐵4 ×𝐴4 ,
+mit 𝐵E ∈ 𝑅F×H , 𝐴E ∈ 𝑅H×I (→ dim 𝑊E = dim 𝐵E ×𝐴E , … )
+(Rang 𝑟 ist kleiner als 𝑑 und 𝑘)
+
+3. Addiere zu den (eingefrorenen) Originalgewichten und trainiere
+nur die Parameter der Matrizzen𝐵2,3,4 und 𝐴2,3,4
+https://arxiv.org/abs/2106.09685
+
+103
+
+Konkretes Beispiel
+Original-Transformer (“Attention is all you need”, Vaswani et al):
+• 𝑑×𝑘 = 512×64 = 32.768 Parameter
+LoRA mit Rang 𝑟 = 8:
+• dim 𝐵 = 𝑑×𝑟 = 512×8 = 4.096 Parameter
+4.608 Parameter
+• dim 𝐴 = 𝑟×𝑘 = 8×64 = 512 Parameter
+• 4.608/32.768 ≈ 14% der ursprünglichen Modellparameter oder
+• 86 % Reduktion der zu trainierenden Parameter
+104
+
+LoRA: Separate Tasks
+1. Trainiere verschiedene
+Rangzerlegungsmatrizzen für
+unterschiedliche Tasks
+2. Addiere Gewichte während Inference
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+105
+
+LoRA: Separate Tasks
+1. Trainiere verschiedene
+Rangzerlegungsmatrizzen für
+unterschiedliche Tasks
+2. Addiere Gewichte während Inference
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+106
+
+LoRA: Separate Tasks
+1. Trainiere verschiedene
+Rangzerlegungsmatrizzen für
+unterschiedliche Tasks
+2. Addiere Gewichte während Inference
+
+https://www.coursera.org/learn/generative-ai-with-llms
+
+107
+
+LoRA Performance
+Kann sogar Full Tinetuning schlagen, bei deutlich geringerer Zahl an trainierbaren
+Parametern:
+
+https://arxiv.org/abs/2106.09685
+
+108
+
+QLoRA: Quantized LoRA
+“We present QLoRA, an efficient finetuning approach that reduces memory usage enough to finetune a 65B parameter
+model on a single 48GB GPU while preserving full 16-bit finetuning task performance. […] Our best model family, which
+we name Guanaco, outperforms all previous openly released models on the Vicuna benchmark, reaching 99.3% of the
+performance level of ChatGPT while only requiring 24 hours of finetuning on a single GPU.”,
+(QLoRA: Efficient Finetuning of Quantized LLMs, https://arxiv.org/abs/2305.14314)
+
+• “quantized”: 4-bit statt 16-bit (LoRA) (manche Strukturen weiterhin 16-bit)
+• Gradienten und Optimizer States werden in CPU-RAM zwischengespeichert zwischen
+einzelnen Backprop Läufen
+• Gesamtspeicherbedarf ca. 2-3x geringer als LoRA (bei großen Modellen nimmt relativer
+Benefit zu!)
+• Dadurch lassen sich sehr große Modelle auf einer einzelnen GPU trainieren, s.o.
+109
+
+QLoRA Performance
+Auf akademischen Benchmarks haben die Authoren dieselbe Performance erreicht wie Full
+Finetuning und 16-bit LoRA:
+
+”Summary Our results consistently show that 4-bit QLORA with NF4 data type matches 16- bit full finetuning
+and 16-bit LoRA finetuning performance on academic benchmarks with wellestablished evaluation setups.
+We have also shown that NF4 is more effective than FP4 and that double quantization does not degrade
+performance. Combined, this forms compelling evidence that 4-bit QLORA tuning reliably yields results
+matching 16-bit methods.” (https://arxiv.org/pdf/2305.14314)
+
+110
+
+Soft Prompts durch Prompt Tuning
+
+PROMPT TUNING
+
+111
+
+Prompt Tuning ist nicht Prompt Engineering
+
+Prompt Engineering:
+Anpassungs des Prompts um gewünschtes Ergebnis zu erhalten, auch
+One-shot / Few-shot inference
+112
+
+Prompt Tuning fügt trainierbare “soft prompts” zu
+Inputs hinzu
+Soft Prompt
+𝒔𝟏
+Selbe Länge wie Word
+Embeddings
+
+𝒔𝟐
+
+𝒔𝒏
+
+𝒙𝟏
+
+𝒙𝟐
+
+𝒙𝟏
+
+𝒙𝟑
+
+𝒙𝟒
+
+𝒙𝟓
+
+…
+
+20-100 Trainierbare
+Tokens
+
+https://arxiv.org/abs/2104.08691
+
+”Gewöhnlicher” Prompt
+
+Welche Pizza würde eine KI bestellen?
+
+113
+
+Full Finetuning vs Pompt Tuning
+Modellgewichte werden während
+des Trainings modifiziert
+
+Modellgewichte werden eingefroren
+und nur Soft Prompts werden trainiert
+
+Millionen oder Milliarden
+trainierbarer Parameter
+
+10K - 100K trainierbarer Parameter
+
+114
+
+Prompt Tuning für verschiedene Aufgaben
+Training: Separate Soft
+Prompts pro Aufgabe
+
+Inference: Nutze Soft Prompts für jeweilige Aufgabe
+
+z.B. Task B:
+
+115
+
+Prompt Tuning Performance
+
+Prompt Tuning kann bei großen
+Modellen die Performance von Full
+Finetuning erreichen.
+
+https://arxiv.org/abs/2104.08691
+
+116
+
+LoRA vs Prompt Tuning
+LoRA
+• Erreicht Performance von Full Finetuning mit nur 0,1% der trainierbaren Parameter
+• Funktioniert gut bei jeder Größe des Base-LLMs
+• Kein Inference Overhead
+Prompt Tuning
+• Potentiell noch viel weniger Parameter als LoRA
+• Erreicht nur bei Modellen mit 10B+ Paremetern die Performance von Full Finetuning
+• Inference Overhead durch zusätzliche Input-Token
+Vergleiche verschiedener PEFT-Methoden: https://arxiv.org/pdf/2303.15647v2, https://arxiv.org/pdf/2403.14608117
+
+Übung: PEFT-Beispiel
+• Hugging Face hat auch PEFT-Methoden
+• LoRA-Beispiel: fine-tuning_example4_PEFT_LoRA.ipynb
+
+118
+
+REINFORCEMENT LEARNING
+FROM HUMAN FEEDBACK
+(RLHF)
+119
+
+Beschränkungen von Instruction Finetuning
+• Es ist teuer Daten für viele Aufgaben zu sammeln
+• Aufgaben wie offene, kreative Generierung haben keine richtige Antwort (“Schreibe ein
+Geschichte über…”)
+• Language Modeling (LM) bestraft alle Fehler auf Tokenebene gleich – aber manche
+Fehler sind schlimmer als andere
+• Menschen generieren suboptimale Antworten
+à Sogar mit Instruction Finetuning gibt es einen Mismatch zwischen der LM Zielfunktion
+und menschlicher Präferenzen.
+à Würden gern explizit auf menschliche Präferenzen optimieren.
+120
+
+RLHF Intro
+
+• LLMs trainiert auf in großen Teilen
+unbekannten Texten aus dem Internet
+– Beinhaltet auch unerwünschte Texte und
+Formulierungen
+– Diese werden ebenfalls vom LLM gelernt
+und generiert
+• Mittels RLHF kann Modelloutput an
+Bedürfnisse angepasst werden
+– Z.B. verhindern oder reduzieren von
+schädlichen Inhalten oder toxischer
+Sprache
+
+121
+
+Beispiele für
+“unerwünschtes
+Modellverhalten”
+
+• Toxische Sprache
+• Aggressive Antworten
+• Gefährliche Informationen
+
+122
+
+Unerwünschtes Modellverhalten
+
+https://www.coursera.org/learn/generative-ai-with-llms/lecture/yV8WP/aligning-models-with-human-values
+
+123
+
+Finetuning mit menschlichem Feedback
+
+124
+
+Reinforcement learning from human feedback (RLHF)
+Instruction
+fine-tuned
+LLM
+
+RLHF
+
+RLHF finetuned LLM
+
+Mögliche Ziele:
+• Maximiere Relevanz (hilfreiche Antworten)
+• Minimiere schädliche Antworten
+• Vermeide gefährliche Themen
+125
+
+Reinforcement Learning (RL)
+Agent
+
+Ziel: Maximierung der kumulativen zukünftigen Rewards
+
+Environment
+
+126
+
+Reinforcement Learning (RL): Brettspiel
+Ziel: Gewinne das Spiel!
+
+Zustand (state) 𝑠/
+
+Agent: RL Policy, z.B.
+neuronales Netzwerk
+
++1 (Sieg)
+Reward 𝑟( = <−1 (Niederlage)
+0 (sonst)
+
+Aktion 𝑎/ : Spielzug
+
+Environment
+
+127
+
+Reinforcement Learning: Finetuning von LLMs
+Ziel: Generiere “guten” Text!
+
+Zustand (state) 𝑠/
+(aktueller Kontext)
+
+Agent:
+RL-Policy: LLM
+
+Reward 𝑟( ∈ [−1; +1]
+
+Reward
+Model
+
+Aktion 𝑎/ : nächstes Token,
+Satz, Text, …
+
+Environment:
+LLM-Kontext
+Reward kann z.B. -1 sein für toxischen Text, +1 für ”guten, nicht toxischen” Text
+128
+
+Sammeln von menschlichem Feedback
+
+129
+
+Sammeln von menschlichem Feedback
+•
+•
+•
+•
+
+Definiere Ziel
+Menschliche Bewertung generierter Modellantworten (Ranking)
+Mehrere Labeler pro Datenpunkt
+Genaue Anweisungen an Labeler wichtig
+
+130
+
+Datenvorverarbeitung für LLM-Training
+Von Menschen gelabelte Rankings à paarweise Trainingsdaten für Rewardmodell (besser
+vs schlechter)
+
+Stiennon et al. 2020, “Learning to summarize from human feedback”, https://arxiv.org/abs/2009.01325
+131
+
+Training des Rewardmodells
+• Trainiere Modell vorherzusagen, was der
+bessere Output ist für gegebenen Prompt
+𝑥
+• Modell sagt Rewards 𝑟n , 𝑟M vorher
+• Aber Vorzeichen von 𝑟n − 𝑟M bestimmt,
+welchen Output das Rewardmodell für
+besser hält; dies begründet die Wahl des
+Loss
+Stiennon et al. 2020, “Learning to summarize from human feedback”,
+https://arxiv.org/abs/2009.01325
+
+132
+
+Training des LLM mit Hilfe des Rewardmodells
+• Die Policy 𝜋 des RL-Agenten ist das LLM
+• LLM führt Aufgabe aus (im Beispiel rechts:
+Zusammenfassung generieren)
+• Rewardmodell vergibt für diese einen Reward 𝑟
+• Reward 𝑟 wird genutzt um die Policy des Agenten (also
+das LLM) zu updaten
+• Für den Update-Mechanismus können verschiedene
+RL-Algorithmen genutzt werden, z.B. PPO (Proximal
+Policy Optimization)
+• Hinweis: Zusätzlich (zum Reward) wird die Entropie des
+Modells zur Zielfunktion hinzugefügt, damit nicht
+immer derselbe Text generiert wird (“Kreativität”)
+Stiennon et al. 2020, “Learning to summarize from human feedback”,
+https://arxiv.org/abs/2009.01325
+
+133
+
+Beispiel: Finetuning des LLM mit RL
+
+134
+
+Beispiel: Finetuning des LLM mit RL
+
+135
+
+Beispiel: Finetuning des LLM mit RL
+
+136
+
+Beispiel: Finetuning des LLM mit RL
+
+137
+
+Beispiel: Finetuning des LLM mit RL
+
+138
+
+Beispiel: Finetuning des LLM mit RL
+
+139
+
+RLHF Herausforderung: Reward Hacking
+• LLM wird optimiert um Reward zu maximieren
+• Kann dazu führen, dass Wörter oder Phrasen generiert werden, die zu besonders
+hohem Score durch das Rewardmodell führen, auch wenn sie die sprachliche
+Qualität des generierten Textes senken (z.B. kein guter Stil, grammatisch
+inkorrekt)
+• Bekanntes Problem in Reinforcement Learning
+• Kann auftreten, wenn die Rewards keine exakte Beschreibung des eigentlichen
+Ziels sind (“Reward shaping”)
+140
+
+Reward Hacking Beispiel: Toxische Sprache
+
+141
+
+RLHF Herausforderung: Reward Hacking
+
+142
+
+RLHF Herausforderung: Reward Hacking
+
+143
+
+RLHF Herausforderung: Reward Hacking
+
+144
+
+Reward Hacking vermeiden
+
+Kullback-Leibler (KL) Divergenz: Misst Unterschied zweier Wahrscheinlichkeitsverteilungen
+(LLM-Output ist eine Wahrscheinlichkeitsverteilung über Token)
+
+145
+
+RLHF: Kurzübersicht
+
+https://www.coursera.org/learn/generative-ai-with-llms/supplement/JESIK/kl-divergence
+
+146
+
+RLHF: Evaluierung des ”human-aligned” LLM
+Auswertung der Rewards auf gesamtem Datensatz mit Rewardmodell (hier:
+Toxicity Score) und Vergleich mit Modell vor RLHF
+Datensatz von
+Interesse
+
+147
+
+Feedback für RL skalieren: Constitutional AI
+• Idee: LLM soll sich selbst bzgl. bestimmter Regeln beaufsichtigen
+• Aufstellen einer Constitution (helpful, harmless, …)
+• Base-Model provozierende Fragen stellen, gegebene Antwort durch selbiges anhand
+der Constitution reflektieren lassen und dann verbesserte Antwort generieren
+• Verbesserte Antworten für supervised Finetuning nutzen (à erhalten Finetuned SLCAI Modell)
+• SL-CAI generiert mehrere Antworten für provozierende Prompts und bewertet diese
+gemäß Constitution (analog zu human labeling bei RLHF)
+– à Datensatz für Training eines “Preference Models (PM)” (= Reward Modell)
+
+• Das Preference Model kann nun für Reinforcement Learning genutzt werden (“RL
+from AI Feedback”, RLAIF)
+• Keine menschliche Intervention
+148
+
+Constitutional AI Reflexion: Beispiel
+
+149
+
+Mögliche Prinzipien einer Constitution
+• Separate Prinzipien für Supervised Learning Phase und RL Phase (aufgrund
+unterschiedlicher Aufgaben)
+• Bsp. SL-CAI:
+CritiqueRequest: Identify specific ways in which the assistant’s last response is
+harmful, unethical, racist, sexist, toxic, dangerous, or illegal.
+RevisionRequest: Please rewrite the assistant response to remove any and all harmful,
+unethical, racist, sexist, toxic, dangerous, or illegal content.
+
+• Bsp. RL-CAI:
+Compare the degree of harmfulness in the assistant responses and choose the one that’s
+less harmful. However, try to avoid choosing responses that are too preachy,
+obnoxious, or overly-reactive.
+
+• Prinzipien sind beliebig und können dem Ziel angepasst werden
+150
+
+Feedback für RL skalieren: Constitutional AI
+
+Bai et al, Constitutional AI: Harmlessness from AI Feedback, https://arxiv.org/pdf/2212.08073 (Anthropic)
+
+151
+
+Kann man RLHF vereinfachen? Direct
+Preference Optimization (DPO)
+• RLHF Pipeline
+– Trainiere Rewardmodell 𝑅𝑀N 𝑥, 𝑦 auf einem Datensatz menschlicher Präferenzen,
+um LLM-Outputs zu bewerten
+– Optimiere pre-trained LLM 𝑝OPQ 𝑦 𝑥 à 𝑝ORS 𝑦 𝑥
+• Können wir aus den Präferenzen direkt das LLM optimieren und 𝑝RS 𝑦 𝑥 erhalten?
+– Drücke 𝑅𝑀O 𝑥, 𝑦 durch 𝑝ORS 𝑦 𝑥 aus
+– Optimiere 𝑅𝑀O 𝑥, 𝑦 über die Parameter 𝜃 à 𝑝ORS 𝑦 𝑥
+
+152
+
+Direct Preference Optimization (DPO)
+𝑝QUV 𝑦 𝑥
+max 𝔼R~T'( 𝑦 𝑥 𝑅𝑀 𝑥, 𝑦 − 𝛽 log P@
+&
+Q
+𝑝 𝑦𝑥
+
+• RLHF Zielfunktion:
+
+KL-Divergence
+
+• Hat geschlossene Lösung:
+𝑝∗ 𝑦 𝑥
+
+1 P@
+1
+=
+𝑝 𝑦 𝑥 exp
+𝑅𝑀 𝑥, 𝑦
+𝑍 𝑥
+𝛽
+
+• Logarithmieren und umstellen:
+
+𝑝∗ 𝑦 𝑥
+𝑅𝑀 𝑥, 𝑦 = 𝛽 log P@
+𝑝 𝑦𝑥
+
++ 𝛽 log 𝑍 𝑥
+
+Rafailov, R., Sharma, A., Mitchell, E., Ermon, S., Manning, C. D., & Finn, C. (2023). Direct Preference
+Optimization: Your Language Model is Secretly a Reward Model.
+
+153
+
+Direct Preference Optimization (DPO)
+Rang(𝑦 0 ) > Rang(𝑦 1 )
+
+• Loss des Reward-Modells:
+
+𝐽UW 𝜙 = −𝔼 X,R) ,R* ~𝒟 log 𝜎 𝑅𝑀Z 𝑥, 𝑦 [ − 𝑅𝑀Z 𝑥, 𝑦 B
+• à Brauchen nur eine konsistente Differenz zwischen den Rewards für 𝑦 [ und 𝑦 B:
+𝑅𝑀J 𝑥, 𝑦 K − 𝑅𝑀J 𝑥, 𝑦 L
+
+𝑝JMNO 𝑦 K 𝑥
+= 𝛽 log
+𝑝PQ 𝑦 K 𝑥
+
+𝑝JMNO 𝑦 L 𝑥
+− 𝛽 log
+𝑝PQ 𝑦 L 𝑥
+
+• Das ergibt den finalen DPO Loss:
+•
+
+𝐽RPS 𝜃 = −𝔼 T,U* ,U+ ~𝒟 zlog 𝜎 }𝛽 •log 𝑝JMNO 𝑦 K 𝑥
+log 𝑝PQ 𝑦 L 𝑥 ‚€~{
+
+− log 𝑝PQ 𝑦 K 𝑥
+
+− •log 𝑝JMNO 𝑦 L 𝑥
+
+−
+
+à Mit DPO können wir 𝑝JMNO(𝑦, 𝑥) (unser LLM) direkt aus den
+Präferenzdaten 𝒟 optimieren (kein Umweg über ein
+Rewardmodell nötig).
+
+154
+
+DPO und RLHF im Vergleich
+•
+•
+•
+•
+•
+•
+•
+
+RLHF
+Trainiert Reward-Modell aus Präferenzen
+Optimiert LM via Reinforcement Learning
+(z.B. PPO)
+Explizite KL-Regularisierung zur
+Referenzpolicy
+On-policy, explorativ – kann (theoretisch)
+beliebige Modellantworten bewerten
+Hoher Engineering- und Compute-Aufwand
+Anfällig für Reward Hacking
+Theoretisch sehr ausdrucksstark
+
+•
+•
+•
+•
+•
+•
+
+•
+
+DPO
+Direktes supervised Learning auf
+Präferenzpaaren
+KL-Regularisierung implizit in der Zielfunktion
+Off-policy, stabil
+Deutlich einfachere Pipeline
+Hohe Daten- und Compute-Effizienz
+Trainiert nur auf vorhandenen Antworten –
+keine Rollouts, keine Suche nach neuen
+Antworten
+à Optimiert Präferenzen lokal um die
+Referenzpolicy
+155
+
+REASONING IN SPRACHMODELLEN
+
+156
+
+LLMs haben Schwierigkeiten mit
+komplexen Aufgaben und Logik
+
+157
+
+Menschen lösen komplexe
+Aufgaben Schritt-für-Schritt
+
+158
+
+Chain-of-thought (CoT) Prompting kann LLMs
+helfen zu ”denken”
+
+Wei et al. 2023, “Chain-of-Thought Prompting Elicits Reasoning in Large Language Models”, https://arxiv.org/abs/2201.11903
+
+Es ist wichtig, dass ein LLM die notwendigen Schritte identifizieren kann um eine Useranfrage zu beantworten.
+Chain-of-thought prompting kann hier helfen.
+
+159
+
+Zero-shot CoT prompting
+
+”[…] we show that LLMs
+are decent zero-shot
+reasoners by simply
+adding ‘Let’s think step by
+step’ before each
+answer.”
+
+Kojim et al. 2023, “Large Language Models are Zero-Shot Reasoners”, https://arxiv.org/abs/2205.11916
+
+160
+
+CoT mit “self-consistency”
+
+”[…], we propose a new
+decoding strategy, selfconsistency, to replace
+the naive greedy
+decoding used in chainof-thought prompting. It
+first samples a diverse set
+of reasoning paths
+instead of only taking the
+greedy one, and then
+selects the most
+consistent answer […]”
+Wang et al. 2023, “Self-Consistency Improves Chain of Thought Reasoning in Language Models”, https://arxiv.org/abs/2203.11171
+
+161
+
+CoT mit “self-consistency”
+“self-consistency”
+verbessert Ergebnisse von
+einfachem CoT auf vielen
+Benchmarks
+
+Verbesserung erhöht sich
+mit Anzahl gesampelter
+Reasoning-Pfade
+Wang et al. 2023, “Self-Consistency Improves Chain of Thought Reasoning in Language Models”, https://arxiv.org/abs/2203.11171
+
+162
+
+CoT mit “self-consistency”
+
+“self-consistency” ist nicht einfach nur eine Ensemble-Methode
+
+Wang et al. 2023, “Self-Consistency Improves Chain of Thought Reasoning in Language Models”, https://arxiv.org/abs/2203.11171
+
+163
+
+CoT und “problem decomposition with leastto-most prompting”
+
+“The key idea in this strategy is to break
+down a complex problem into a series of
+simpler subproblems and then solve
+them in sequence.”
+
+Zhou et al. 2023, “Least-to-Most Prompting Enables Complex Reasoning in Large Language Models”, https://arxiv.org/abs/2205.10625
+
+164
+
+CoT und “problem decomposition with leastto-most prompting”
+Standard CoT Prompting
+
+Lest-to-most Prompting
+
+Zhou et al. 2023, “Least-to-Most Prompting Enables Complex Reasoning in Large Language Models”, https://arxiv.org/abs/2205.10625
+
+165
+
+CoT und “problem decomposition with leastto-most prompting”
+Vorteile insbesondere bei
+vielschrittigem Reasoning
+
+Mit Task-spezifischem Prompt-Engineering:
+CoT ≈ Least-to-Most
+
+Zhou et al. 2023, “Least-to-Most Prompting Enables Complex Reasoning in Large Language Models”, https://arxiv.org/abs/2205.10625
+
+166
+
+Reasoning in Large Language Models via Distillation
+Bisher:
+Modelle mit >100B Parametern für Reasoning
+Idee:
+Reasoning-Verhalten kleineren Modellen beibringen mittels Training auf dem
+Output von größeren Modellen
+
+167
+
+Reasoning in Large Language Models via Distillation
+1. Viele Instruktionen sammeln (FLAN-v2)
+
+Mukherjee et al. 2023, “Orca: Progressive Learning from Complex Explanation Traces of GPT-4”, https://arxiv.org/abs/2306.02707
+
+168
+
+Reasoning in Large Language Models via Distillation
+1. Viele Instruktionen sammeln (FLAN-v2)
+2. GPT4 und ChatGPT mit Instruktionen sowie einer Systemnachricht prompten
+
+Mukherjee et al. 2023, “Orca: Progressive Learning from
+Complex Explanation Traces of GPT-4”,
+https://arxiv.org/abs/2306.02707
+
+169
+
+Reasoning in Large Language Models via Distillation
+1. Viele Instruktionen sammeln (FLAN-v2)
+2. GPT4 und ChatGPT mit Instruktionen sowie einer Systemnachricht prompten
+3. Finetuning von Llama-13b auf den Outputs von ChatGPT und GPT4
+
+Evaluation:
+BigBench-hard (u.a.). Sammlung von 23 Big-Bench Tasks mit Fokus auf
+Multi-Step Reasoning
+
+Mukherjee et al. 2023, “Orca: Progressive Learning from Complex Explanation Traces of GPT-4”, https://arxiv.org/abs/2306.02707
+
+170
+
+Reasoning in Large Language Models via Distillation
+
+• Besser als Vicuna-13B (instructionfinetuned Llama model)
+• Besser als ChatGPT!
+• GPT-4 hat potentiell BigBench-hard Daten
+beim Training gesehen
+
+Mukherjee et al. 2023, “Orca: Progressive
+Learning from Complex Explanation Traces of
+GPT-4”, https://arxiv.org/abs/2306.02707
+171
+
+Einschub: Wie ”Contamination” verhindern?
+“Contamination” der Trainingsdaten = Testdaten leaken in Trainingsdaten
+Besonders schwer zu verhindern, wenn Trainingsdaten aus dem gesamten Internet gescraped werden
+Öffentliche Tests à Testdaten sind öffentlich zugänglich
+“Unbedachtes” Scraping à Testdaten können Teil der Trainingsdaten werden
+Ergebnisse auf Testdaten nicht mehr zuverlässig – zeigen keine Generalisierung an, sondern nur Memorisierung
+Viele öffentliche Tests haben eine “Canary GUID” als Teil aller Testdaten
+Man sollte aus den Trainingsdaten alle Dokumente herausfiltern, die diese ID enthalten – sonst sind Ergebnisse
+auf den entsprechenden Tests nicht aussagekräftig
+• Wie findet man heraus, ob ein Modell vielleicht doch die Testdaten gesehen hat (wenn man selbst keinen Zugriff
+auf die Trainingsdaten hat)?
+• Kann Modell die Canary ID reproduzieren?
+• Kann Modell Testdaten (z.B. Wording der Aufgaben) reproduzieren?
+• Wie gut performt das Modell, wenn man die Aufgaben abwandelt?
+• …
+•
+•
+•
+•
+•
+•
+•
+
+https://www.alignmentforum.org/posts/kSmHMoaLKGcGgyWzs/big-bench-canary-contamination-in-gpt-4
+
+172
+
+Can Language Models Reason?
+
+“We investigate hypotheses for how CoT
+reasoning may be unfaithful, by examining
+how the model predictions change when we
+intervene on the CoT (e.g., by adding mistakes
+or paraphrasing it).”
+
+Lanham et al. 2023, “Measuring Faithfulness in Chain-of-Thought Reasoning”,
+https://arxiv.org/abs/2307.13702
+173
+
+Can Language Models Reason?
+
+Modelle brauchen nicht immer die volle
+Begründung – ist Begründung post-hoc?
+
+Manchmal antworten Modelle korrekt trotz falscher
+Begründung.
+
+Lanham et al. 2023, “Measuring Faithfulness in Chain-of-Thought Reasoning”, https://arxiv.org/abs/2307.13702
+
+174
+
+Von Retrieval (RAG) zu Tool-Use (PAL & ReAct)
+
+INTERAKTION MIT EXTERNEN DATENBANKEN
+UND ANWENDUNGEN
+175
+
+Externe APIs: Wofür?
+• LLMs sind keine Datenbank
+• Knowledge Cutoff à neue Informationen nach Trainingsabschluss nicht verfügbar, dafür
+ggf. veraltete Informationen noch enthalten (“Angela Merkel ist Bundeskanzlerin von
+Deutschland”)
+• Domänenspezifische oder firmeninterne Informationen nutzbar machen
+• LLMs sind auch keine Taschenrechner:
+“Was ist 40366 / 439?” à 92.549 (falsch, korrekt: 91.950)
+• LLMs wissen nicht, was sie nicht wissen; erfinden Antworten, die sich plausibel anhören
+(“Halluzination”):
+“What is a Martian Dunetree?” à “A type of extraterrestrial plant found on Mars.”
+• LLMs Reasoning Engine, die andere Tools aufrufen können
+– Websearch, Taschenrechner, …
+176
+
+LLM-powered Applications
+
+177
+
+Retrieval
+Augmented
+Generation (RAG)
+
+• Knowledge Cutoff überwinden ohne
+Retraining
+• Zugang zu Informationen, die nicht Teil der
+Trainingsdaten waren, z.B.
+• Neue Informationen
+• proprietäre, firmeninterne Informationen
+• verschiedene RAG Implementierungen
+
+178
+
+Retrieval Augmented Generation (RAG)
+User-Query
+
+Passende Information
+LLM-Prompt:
+Info + User-Query
+
+179
+
+Beispiel: Suche in Rechtsdokumenten
+
+https://www.coursera.org/learn/generative-ai-with-llms/lecture/j2lTW/using-the-llm-in-applications
+
+180
+
+RAG integrierbar mit verschiedenen Datenquellen
+Externe Informationsquellen
+• Dokumente
+• Wikis
+• Expertensysteme
+• Webseiten
+• Datenbanken
+• Vector Store
+Typischer Datenspeicher für RAG
+
+181
+
+Vector Store
+• Indizierung der Informationen (einmaliger Prozess):
+– Zerlegung von Dokumenten in Chunks (256 – 1024 Tokens)
+– Erzeugung von Dokument-Embeddings für jeden Chunk
+– Speichern in einem Vector Store, oft mit zusätzlichen
+Informationen (z.B. Quelle)
+
+• Retrieval:
+– Vorverarbeitung der User-Query
+– Embedding-Erzeugung für Query
+– Suche in Vector Store nach ähnlichsten Vektoren (z.B. über „cosine
+similarity“, euklidische Distanz, Skalarprodukt)
+– Output der top-k Chunks (z.B. top-5)
+– Laden der zugehörigen Dokumente und Verwendung als Kontext
+im LLM (zusammen mit User-Query)
+182
+
+Interaktion mit weiteren Anwendungen
+
+183
+
+Interaktion mit weiteren Anwendungen
+Bestellnr.-Lookup mit RAG
+
+API Aufruf
+
+184
+
+Interaktion mit weiteren Anwendungen
+
+Weiterer API Aufruf
+(Versanddienstleister)
+
+185
+
+LLM-basierte Anwendungen
+
+APIs aufrufen
+Berechnungen durchführen
+…
+
+186
+
+Anforderungen an LLMs für komplexe Anwendungen
+
+Aktionen planen
+
+Outputs formatieren
+
+Aktionen validieren
+
+Bsp: Retoure:
+
+Bsp: SQL Query:
+
+Schritt 1: Bestellnr. Prüfen
+
+SELECT * FROM orders
+WHERE order_id = 21104
+
+Extrahiere benötigte
+Nutzerinformationen
+
+Schritt 2: Versandlabel anfragen
+
+Bsp: Kundenemail
+
+Schritt 3: Kundenemail verifizieren
+Schritt 4: Versandlabel mailen
+
+187
+
+LLMs sind keine Taschenrechner
+
+Auch Chain-of-thought-Prompting hilft hier nicht weiter.
+Schön wäre, wenn das LLM externe Anwendungen wie einen
+Taschenrechner für bestimmte Aufgaben nutzen könnte.
+
+188
+
+PAL: Program-aided Language Models
+Idee: LLM generiert Code, der ausgeführt wird
+
+LLM
+
+Code
+interpreter
+
+189
+
+PAL: Program-aided Language Models
+
+Gao et al., 2022, “PAL: Program-aided Language Models”,
+https://arxiv.org/pdf/2211.10435
+
+190
+
+PAL Beispiel
+
+191
+
+PAL in Kürze
+
+Prompts, die
+• LLM anweisen, (Python-) Code zur
+Lösung des Problems zu generieren
+• Beispiele zur Lösung anderer
+Probleme mittels Python-Code
+enthalten
+PAL ist also wie few-shot-learning, aber
+mit dem Ziel, Code zu generieren.
+Kein Finetuning notwendig! Reines
+Prompting + Execution Framework!
+Kann auch mit Chain-of-Thought
+Prompting kombiniert werden.
+192
+
+PAL Workflow
+
+“Basic” PAL endet hier
+https://www.coursera.org/learn/generative-ai-with-llms/lecture/6jh5Z/program-aided-language-models-pal
+
+193
+
+PAL Workflow
+
+“The program returned
+74. Respond naturally to
+the user.”
+
+194
+
+PAL Workflow
+
+“The program returned
+74. Respond naturally to
+the user.”
+
+195
+
+PAL-Architektur
+
+196
+
+LLM-basierte Anwendungen
+
+197
+
+ReAct
+• Idee: LLM soll in mehrstufigem Prozess schlussfolgern und handeln (“reason and
+act”) und kann Resultate seiner Aktionen beobachten
+• Prompting-Technik ähnlich wie PAL
+• Handeln = externes Tool nutzen (z.B. Websuche oder Taschenrechner)
+• Kombiniert “chain-of-thought”-Prompting mit externen APIs
+• LLM wird mittels few-shot-learning angewiesen, entweder Gedanken
+wiederzugeben (“thoughts”) oder eine Aktion auszuführen
+• Aktionen à Basis für Interaktion mit Umwelt à “AI Agents”
+Yao et al. 2022, REACT: SYNERGIZING REASONING AND ACTING IN LANGUAGE MODELS, https://arxiv.org/abs/2210.03629
+
+198
+
+ReAct: Anwendungs-Beispiel
+
+199
+
+ReAct: Anwendungs-Beispiel
+
+200
+
+ReAct: Anwendungs-Beispiel
+
+201
+
+ReAct: Anwendungs-Beispiel
+
+202
+
+ReAct: Anwendungs-Beispiel
+
+203
+
+ReAct: Anwendungs-Beispiel
+
+204
+
+ReAct in Action
+
+205
+
+ReAct in Action
+
+206
+
+ReAct: Instruktionen definieren valide Aktionen
+
+…
+207
+
+Aufbau eines ReAct-Prompts
+Question What is the elevation range for the area that the eastern sector of the Colorado orogeny extends into?
+Thought 1 I need to search Colorado orogeny, find the area that the eastern sector of the Colorado orogeny extends into,
+then find the elevation range of the area.
+Action 1 Search[Colorado orogeny]
+Observation 1 The Colorado orogeny was an episode of mountain building (an orogeny) in Colorado and surrounding areas.
+Thought 2 It does not mention the eastern sector. So I need to look up eastern sector.
+Action 2 Lookup[eastern sector]
+Observation 2 (Result 1 / 1) The eastern sector extends into the High Plains and is called the Central Plains orogeny.
+Thought 3 The eastern sector of Colorado orogeny extends into the High Plains. So I need to search High Plains and find its
+elevation range.
+Action 3 Search[High Plains]
+Observation 3 High Plains refers to one of two distinct land regions
+Thought 4 I need to instead search High Plains (United States).
+Action 4 Search[High Plains (United States)]
+Observation 4 The High Plains are a subregion of the Great Plains. From east to west, the High Plains rise in elevation from
+around 1,800 to 7,000 ft (550 to 2,130 m).[3]
+Thought 5 High Plains rise in elevation from around 1,800 to 7,000 ft, so the answer is 1,800 to 7,000 ft.
+Action 5 Finish[1,800 to 7,000 ft]
+...
+https://www.promptingguide.ai/techniques/react#react-prompting
+
+208
+
+Aufbau eines ReAct-Prompts
+
+209
+
+Grundgerüst
+einer ReActSchleife
+
+210
+
+Grundgerüst einer ReAct-Schleife
+
+211
+
+ReAct:
+Weitere
+Infos
+
+• ReAct und ähnliche Konzepte lassen
+sich auch mit Finetuning kombinieren
+• Funktioniert besser mit größeren
+LLMs (besonders ohne Finetuning)
+• Es gibt die Möglichkeit für “human-inthe-loop”: Ein Mensch könnte falsche
+Gedanken editieren oder Hinweise
+geben
+• Frameworks: siehe nächste Folie
+212
+
+Beliebte ”AI Agent” Frameworks
+HuggingFace:
+smolagents
+
+HuggingFace:
+LlamaIndex
+
+HuggingFace:
+LangGraph
+
+AutoGPT
+
+HuggingFace:
+LangChain
+
+AutoGen
+
+CrewAI
+
+DSPy
+
+…
+213
+
+LM-Agenten Benchmarks
+MiniWoB++
+Environment für grundlegende Browserinteraktionen
+mit verschiedenen Anwendungen (Social Media, E-Mail)
+Evaluitiert funktionale Korrektheit
+Limitierte Funktionalität (nicht Real-World)
+Relativ kurzer Planungshorizont
+Zero-Shot Performance dennoch niedrig!
+
+https://github.com/Farama-Foundation/miniwob-plusplus
+214
+
+LM-Agenten Benchmarks
+WebArena
+Environment mit Nachbau von realen Websites
+(E-Commerce, Social Media, …)
+Tools: Karten, Taschenrechner, Wikipedia, …
+Multi-tab browsing
+Aufgaben mit langem Planungshorizont
+https://webarena.dev/
+
+Evaluiert funktionale Korrektheit
+
+215
+
+LM-Agenten Benchmarks
+WebLINX
+Interaktionen mit realen Websites
+Conversational: “Say” Action zur Kommunikation mit
+Menschen um Informationen zu sammeln
+Multi-tab browsing
+Keine Umgebung, sondern eine Sammlung von
+Interaktionen, die für Training und Evaluation von
+Agenten genutzt werden kann
+
+https://mcgill-nlp.github.io/weblinx/
+
+216
+
+LM-Agenten Benchmarks
+• Viele weitere Benchmarks
+• LM-Agenten sind ein aktives Forschungsfeld
+• Es bleibt noch viel zu tun…
+
+217
+
+Übungen
+HuggingFace-Kurse:
+• SFT, RLHF, DPO: https://huggingface.co/docs/trl/
+• Agents: https://huggingface.co/learn/agents-course/
+
+218
+
+Ressourcen
+• Build a Large Language Model from Scratch,
+Sebastian Raschka
+• HuggingFace – praxisorientierte Tutorials zu
+vielen Themen
+• Coursera:
+https://www.coursera.org/learn/generativeai-with-llms
+• https://www.deeplearning.ai/shortcourses/finetuning-large-language-models/
+
+219
+
+
