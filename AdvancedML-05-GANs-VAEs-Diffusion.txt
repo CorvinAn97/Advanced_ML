@@ -1,0 +1,2225 @@
+Generative Adversarial Networks
+(GANs)
+
+Ausblick: GAN-Einführung
+Lernziele
+• Eigenes GAN erstellen
+• Intuition hinter GANs und ihren Komponenten entwickeln
+• GAN-Anwendungen kennenlernen
+
+GANs Einführung
+MNIST Datensatz
+
+Ziffer-Klassifizierung
+Label: 4
+
+Modell
+
+Ziffer-Generierung
+Ziffer:
+
+Modell
+
+Ziffer:
+
+“discriminative model”
+
+“generative model”
+
+GANs Einführung
+• Idee ursprünglich von Ian Goodfellow (2014)
+• Später viele Erweiterungen
+
+GAN Schlüsselkonzepte
+• zwei Netzwerke: Generator und
+Discriminator
+• Generator: realistische Daten (z.B.
+Bilder) erzeugen
+• Discriminator: erkennen, ob es sich
+um echte oder vom Generator
+erzeugte Daten (Bilder) handelt
+• Adversarial training: Updates der
+Gewichte von Generator und
+Discriminator erfolgen abwechselnd
+• Feedbacksignal: in beiden Fällen die
+Ausgabe des Discriminators
+
+Das Training ist wie ein ”Adversarial Game”:
+Generator und Discriminator spielen gegeneinander
+und versuchen sich gegenseitig auszutricksen.
+
+GAN Training
+Parameter des Discriminators
+werden so optimiert, dass der
+Output bei realen Daten “real“
+und bei gefälschten Daten
+„fake“ ist
+Parameter des Generators
+werden so optimiert, dass der
+Output des Discriminators bei
+generierten Bildern „real“ ist
+Abwechselnde Optimierung wird so lange durchgeführt, bis der
+Discriminator die Bilder des Generators nicht mehr erkennen kann
+
+GAN Training
+
+repeat
+
+Generator-Training:
+1. Generiere Bild mit Generator
+2. lasse Discriminator Bild in real/fake
+klassifizieren
+3. Nutze Loss zum Update der GeneratorParameter
+
+Discriminator-Training:
+1. Generiere Bild mit Generator
+2. lasse Discriminator Bild in real/fake
+klassifizieren
+3. Nutze Loss zum Update der
+Discriminator-Parameter
+4. Wiederhole Schritte 1-3 mit echtem Bild
+
+Zusammenfassung
+Ziel des Generators: den
+Discriminator auszutricksen
+Ziel des Discriminators: zwischen
+echt und fake unterscheiden
+Beide lernen aus dem
+Wettbewerb miteinander
+Am Ende sehen die Fälschungen
+echt aus
+
+Quiz
+Was ist die Rolle des Generators?
+Was ist die Rolle des Diskriminators?
+
+GAN ANWENDUNGEN
+Eine (sehr kleine) Auswahl
+
+GANs im Laufe der Zeit
+2014
+niedrige Auflösung, schwarz-weiß
+
+2018
+farbig, hohe Auflösung,
+fotorealistisch mit vielen Details
+
+GANs im Laufe der Zeit
+StyleGAN2
+
+Das sind keine real
+existierenden Personen!
+
+Weitere Beispiele: https://www.thispersondoesnotexist.com/
+
+GANs im Laufe der Zeit
+StyleGAN2
+Kann nicht nur Gesichter
+generieren...
+
+GANs im Laufe der Zeit
+StyleGAN2
+Nicht fehlerfrei, teilweise
+unrealistische Artefakte...
+
+GANs im Laufe der Zeit
+StyleGAN2
+Auf manchen Bildern Text
+- lernt Verteilung der
+Trainingsdaten:
+
+GANs Anwendung: Image Translation (1)
+• CycleGAN
+• Domäne A zu Domäne B
+Übersetzung
+• keine Beispiele von Pferden
+und Zebras, die dasselbe
+machen!
+
+https://www.youtube.com/watch?v=9reHvktowLY
+Jun-Yan Zhu*, Taesung Park*, Phillip Isola, and Alexei A. Efros. "Unpaired Image-to-Image Translation using
+Cycle-Consistent Adversarial Networks", in IEEE International Conference on Computer Vision (ICCV), 2017.
+
+GANs Anwendung: Image Translation (2)
+• GauGAN
+• Gekritzel à fotorealistisches
+Bild
+
+https://www.youtube.com/watch?v=p5U4NgVGAwg
+
+GANs Anwendung: Kopfmodell aus Foto
+
+Foto eines Gesichts à
+Video mit bewegtem Kopf
+
+https://www.youtube.com/watch?v=p1b5aiTrGzY
+https://arxiv.org/abs/1905.08233
+
+GANs Anwendung: Super-Resolution
+niedrige Auflösung à
+hohe Auflösung
+nicht lediglich
+“hochskaliert”, sondern
+neue Details erkennbar,
+die nicht im
+niedrigaufgelösten Bild
+enthalten waren
+https://arxiv.org/abs/1609.04802 (und viele weitere)
+
+Discriminator ist Klassifikator
+• Klassifikator, d.h. unterscheidet zwei oder mehr Klassen
+
+• Mathematisch: 𝑃(𝑌|𝑋) (𝑌: Label, 𝑋: Features)
+– d.h., Wahrscheinlichkeit für Klasse 𝑌, gegeben Input 𝑋
+• Input X kann alles Mögliche sein – Bildpixel, aber auch andere Eigenschaften mit
+verschiedenen Datentypen (“miaut”, “schnurrt”, “spielt mit Wolle”)
+
+Discriminator als Klassifikator
+Als ML-Modell hinter Discriminator im Prinzip jedes mögliche KlassifikationsModell möglich (z.B. auch logistische Regression, SVM), aber typischerweise
+neuronales Netzwerk:
+Output 𝑌
+Input 𝑋
+
+• Parameter 𝜃 des Netzwerks bestimmen Output 𝑌 zu gegebenem Input 𝑋
+• Parameter 𝜃 werden angepasst, damit zu gegebenem Input 𝑋 gewünschter
+Output 𝑌 produziert wird (“Training des ML-Modells”)
+
+Discriminator ist Klassifikator
+• Im Falle von GANs: Discriminator unterscheidet zwischen den zwei Klassen “real”
+und “fake”
+• Trainingsdaten des Discriminators:
+– Vom Generator erstellte Daten (z.B. Bilder) à Klasse “fake”
+– echte Daten (z.B. Bilder) à Klasse “real”
+• Trainiert wird durch Optimierung einer Loss-Funktion (Kostenfunktion)
+• Output des Discriminators ist das Feedback-Signal für den Generator
+
+Quiz: Discriminator
+• Was ist der Input X, was der Output Y für den Diskriminator?
+• Warum ist Output des Discriminators auch Feedback für den Generator?
+• Welche statistische Größe versucht der Diskriminator zu schätzen?
+A. Die bedingte Wahrscheinlichkeit 𝑃 𝑦 𝑥
+B. Die Wahrscheinlichkeit von 𝑥 und 𝑦: 𝑃 𝑥 ∩ 𝑦
+C. Die Wahrscheinlichkeit der Features/Inputs 𝑥: 𝑃 𝑥
+D. Die Wahrscheinlichkeit der Klasse 𝑦: 𝑃 𝑦 𝑥
+
+Generator
+• Herz eines GANs
+• das, woran wir eigentlich interessiert sind
+• generiert Beispiele einer bestimmten Klasse:
+
+Generator
+Damit Generator nicht jedes Mal dasselbe Bild produziert: “random noise” als
+Input:
+
+Bsp.:
+
+0.9
+0.5
+noise = 0.3
+0.7
+0.3
+0.1
+
+“Noise vector” ist einfach ein Array mit Zufallszahlen
+
+Generator Trainings-Schleife
+Parameter
+𝜃*
+𝑥!
+
+Noise
+0.9
+0.7
+0.1
+
+⋮
+
+𝑎!"
+
+𝑎!#
+
+𝑎""
+
+𝑎"
+
+"
+
+𝑎#
+𝑥$
+
+"
+𝑎%
+
+%
+
+𝑎!
+
+#
+%
+𝑎"
+
+#
+
+𝑎#
+
+%
+
+𝑎#
+
+Features
+𝑋
+
+𝑥!
+⋮
+𝑥$
+
+#
+
+𝑎!"
+
+𝑎!
+
+𝑎"
+
+"
+
+𝑎"
+
+"
+𝑎#
+
+𝑎#
+
+"
+
+𝑎%
+
+𝑎%
+
+#
+
+𝑎"%
+#
+
+#
+
+Output
+𝑌
+
+real, fake
+
+#
+𝑎%
+
+Generator
+
+Discriminator
+
+Parameter 𝜃! des Generators werden optimiert um den Loss des
+Discriminators zu maximieren
+Generator sieht nie die echten Bilder!
+
+Loss(𝑌)
+
+Generator: Sampling
+• Nach Training des Generators kann ”gesampelt” werden
+• um verschiedene Outputs zu generieren müssen verschiedene
+Noise-Inputs verwendet werden
+
+Noise
+0.2
+0.2
+0.6
+
+Noise
+0.9
+0.7
+0.1
+
+𝜃*
+"
+
+𝑥!
+⋮
+𝑥$
+
+Noise
+0.1
+0.3
+0.6
+
+#
+
+𝑎!
+
+𝑎!
+
+𝑎"
+
+"
+
+𝑎"
+
+𝑎#"
+
+𝑎#
+
+"
+
+𝑎%
+
+𝑎%
+
+%
+
+𝑎!
+
+#
+%
+
+𝑎"
+
+#
+%
+
+𝑎#
+
+#
+
+Trainierter Generator
+
+Generator
+• Mathematisch: Generator lernt 𝑃(𝑋|𝑌) (𝑋: Features, 𝑌: Klasse)
+– bei nur einer Klasse einfach 𝑃 𝑋
+• häufig vorkommende Katzenrassen werden häufig generiert
+• selten vorkommende Katzenrassen werden selten generiert
+• häufig und selten bezieht sich auf die Verteilung in den Trainingsdaten
+
+Zusammenfassung: Generator
+• Generator produziert unechte,
+erfundene Daten
+• Lernt die Wahrscheinlichkeitsverteilung
+𝑷(𝑿) der Features 𝑋
+• Feedback-Signal ist der Loss des
+Discriminators, den der Generator zu
+maximieren versucht
+• Input des Generators ist random noise
+
+Quiz: Generator
+Welche statistische Größe versucht der Generator zu modellieren?
+A. Die Vereinigungs-Wahrscheinlichkeit von 𝑥 und 𝑦: 𝑃 𝑥 ∪ 𝑦
+B. Die Wahrscheinlichkeit von 𝑥 und 𝑦: 𝑃 𝑥 ∩ 𝑦
+C. Die Wahrscheinlichkeit der Features 𝑥 gegeben Klasse 𝑦: 𝑃 𝑥 𝑦
+D. Die Wahrscheinlichkeit der Klasse 𝑦: 𝑃 𝑦
+
+Binary Cross Entropy: Kostenfunktion für GANs
+
+𝒚𝒊
+
+𝒉(𝒙 𝒊 , 𝜽)
+
+(𝟏 − 𝒚 𝒊 ) 𝐥𝐨𝐠 𝟏 − 𝒉 𝒙 𝒊 , 𝜽
+
+0
+
+1
+
+egal
+
+0
+
+~1
+
+~0
+
+0
+
+~0
+
+~0
+
+~0
+
+−inf
+
+0
+
+~1
+
+−inf
+
+𝒊
+
+𝒉(𝒙 , 𝜽)
+
+0
+
+egal
+
+1
+1
+
+𝒚
+
+𝒊
+
+𝒚
+
+𝒊
+
+𝒊
+
+𝐥𝐨𝐠 𝒉(𝒙 , 𝜽)
+
+Relevant, wenn
+Label = 1
+
+Relevant, wenn
+Label = 0
+
+Zusammenfassung: GAN Training
+• Discriminator: Klassifikations-Netzwerk
+• Discriminator erhält sowohl Bilder vom Generator als auch echte Bilder
+– d.h. Trainingsdaten für Discriminator bestehen aus generierten und echten Bildern
+• Discriminator wird trainiert generierte von echten Bildern zu unterscheiden
+– durch Anpassung der Parameter des Discriminators mittels stochastic gradient
+descent
+• Generator generiert verschiedene Bilder durch „random noise“ Input
+• Generator wird trainiert mit Loss des Discriminators, mit Ziel, diesen zu maximieren
+– d.h., Parameter des Generators werden mittels SGD angepasst, sodass der Loss des
+Discriminators maximiert wird
+• Generator „sieht“ die echten Daten nie
+
+Fragen: GAN Training
+• Wie lernt der Diskriminator?
+A. Durch Vergleich der Bilder mit Bildern aus dem Internet
+B. Durch Feedback vom Generator
+C. Durch Feedback, ob die Klassifikation korrekt war
+D. Durch User-Input
+• Wie lernt der Generator?
+A. Durch Vergleich von fake und real Bildern
+B. Durch Generierung diverserer Bilder
+C. Durch Feedback vom Diskriminator
+D. Durch User-Feedback
+
+GAN Training Details
+Sowohl Discriminator als auch Generator müssen vergleichbar stark sein:
+Discriminator
+Output:
+Discriminator stark
+überlegen
+
+erkennt
+GeneratorFälschungen mit
+100% Sicherheit
+
+Kein gutes
+Feedback-Signal
+(”vanishing
+gradients”)
+
+Keine Möglichkeit
+zur Verbesserung
+des Generators
+
+Insbesondere Discriminator kann leicht viel besser als der Generator werden, weil die
+Aufgabe des Discriminators leichter ist
+
+GANs trainieren abwechselnd
+Generator und Discriminator sollten vergleichbar stark sein
+
+Quiz: GAN Training
+• Wie sollten die Fähighkeiten von Diskriminator und Generator sein?
+A. Zufällig
+B. Generator sollte möglichst gut sein
+C. Diskriminator sollte möglichst gut sein
+D. Beide sollten vergleichbar stark sein
+
+Übung: GAN Training
+• PyTorch Einführung: Ex00_Intro_to_PyTorch.ipynb
+• Bearbeiten Sie die Aufgabe in Ex01_Your_First_GAN.ipynb
+• Entweder lokal oder auf Google Colab: https://colab.research.google.com/
+– Auf Colab Laufzeit auf GPU oder TPU
+– Bei GPU device = ‚cuda‘ im Notebook setzen, sonst ‚CPU‘
+
+Alle Deep Learning Verbesserungen lassen sich auch
+für GANs nutzen, insbesondere
+
+Deep Learning
+Tricks für GANs
+
+• Activation Functions: ReLU, LeakyReLU
+• Convolutions (bzw. Transpose Convolutions für den
+Generator)
+• Batch Normalization
+
+Leaky ReLU
+
+Verhindert Abschalten eines Neurons für 𝑧 ≤ 0 (Gradient weiterhin vorhanden, auch für 𝑧 ≤ 0).
+
+Transposed Convolutions mit Stride 1
+
+https://d2l.ai/chapter_computer-vision/transposed-conv.html
+
+Transposed Convolutions mit Stride 2
+
+https://d2l.ai/chapter_computer-vision/transposed-conv.html
+
+Transposed Convolutions
+
+[deeplearning.ai]
+
+Filter hat lernbare Parameter (im Gegensatz zum einfachen Upsampling)
+
+Transposed Convolutions
+
+Problem von Transposed Convolutions: Schachbrett-Muster
+Mögliche Lösung: Upsampling, dann Convolution
+
+Übung: Deep Convolutional GAN Training
+• Bearbeiten Sie die Aufgabe in Ex02_DCGAN.ipynb
+
+GAN Issues & How to solve them
+
+WASSERSTEIN GAN
+
+Ausblick: GAN Schwierigkeiten & Lösungen
+Lernziele
+• Ursachen und Auswirkungen von Mode Collapse
+• Motivation und die Voraussetzungen für den Wasserstein-Loss
+• Implementierung eines Wasserstein GAN mit Gradient Penalty
+
+Modus (auch: Modalwert; engl.: “mode”)
+Zwei Modi
+Ein Modus
+
+Jegliches lokale Maximum einer
+Dichtefunktion ist ein Modus
+
+Modi bei mehrdimensionalen Verteilungen
+Bsp.: Bilder von Ziffern (MNIST)
+à 10 unterschiedliche Modi, je 1 pro Ziffer
+
+𝑥#
+
+𝑥$
+
+Keine validen Bilder von Ziffern
+
+Intuition hinter Mode Collapse bei GANs
+Generator produziert folgende Bilder:
+
+Generator
+
+Intuition hinter Mode Collapse bei GANs
+Discriminator erkennt einige von ihnen als Fälschung:
+
+Discriminator
+
+Intuition hinter Mode Collapse bei GANs
+Generator lernt daraus...
+
+Generator
+
+Intuition hinter Mode Collapse bei GANs
+und generiert nun folgende Bilder:
+
+Generator
+
+Intuition hinter Mode Collapse bei GANs
+Discriminator erkennt weitere Fälschungen:
+
+Discriminator
+
+Intuition hinter Mode Collapse bei GANs
+Generator lernt wieder daraus und generiert nun
+folgende Bilder:
+
+Generator
+
+Intuition hinter Mode Collapse bei GANs
+• Modi sind Maxima in der Verteilung von Features
+• Modi sind typisch in Datensätzen
+• Mode collapse bei GANs bedeutet, dass der Generator nur noch eine Mode
+generiert (bspw. nur eine Ziffer statt alle zehn)
+
+BCE Loss Schwierigkeiten
+
+• Ist Discriminator zu gut (d.h., 𝑦 = 0 (fake Bilder) à ℎ(𝑥) = 0) werden die Gradienten
+sehr klein und der Generator kann nicht effektiv trainiert werden
+• BCE Loss & GAN Optimierungsziel lässt sich auch schreiben als:
+
+min max − 𝔼 log 𝑑 𝑥
+%
+
+&
+
++ 𝔼 log 1 − 𝑑 𝑔 𝑧
+
+(𝑧: noise Vektor)
+
+• dabei versucht der Discriminator mittels 𝑑(𝑥) die Kosten zu minimieren und der
+Generator selbige mittels 𝑔 𝑧 zu maximieren
+
+Wasserstein Loss
+• Lösung: Wasserstein Loss
+• versucht den Loss darzustellen als Differenz zwischen der echten Datenverteilung und
+der vom Generator generierten Datenverteilung
+• nutzt dafür eine Näherung an die Earth Mover’s Distance:
+• Arbeit um generierte Verteilung
+umzuschaufeln auf echte Verteilung
+• proportional zum Abstand und zur zu
+bewegenden Menge
+deeplearning.AI
+
+Wasserstein Loss
+• Statt Discriminator haben wir einen Critic, der eine reelle Zahl 𝑐 𝑥 ausgibt;
+dieser Score reflektiert wie reell oder fake der Input aussieht
+• Critics Objective: Differenz aus durchschnittlichem Score, den er reellen
+Bildern und fake Bildern zuordnet, zu maximieren:
+max 𝔼 𝑐 𝑥 − 𝔼 𝑐 𝑔 𝑧
+@
+
+– Gewünscht: Hoher Score für echte Bilder, niedriger Score für Fakes
+• Loss des Generators: L* = −𝔼 𝑐 𝑔 𝑧
+– Generator versucht also 𝑐 𝑔 𝑧
+
+zu maximieren
+
+BCE Loss:
+
+Wasserstein Loss
+
+min max − 𝔼 log 𝑑 𝑥
+"
+
+min max 𝔼 𝑐 𝑥
+&
+
+'
+
+#
+
+−𝔼 𝑐 𝑔 𝑧
+
++ 𝔼 log 1 − 𝑑 𝑔 𝑧
+
+(𝑧: noise Vektor)
+
+(𝑧: noise Vektor)
+
+Earth Mover’s Distance (Näherung)
+
+• 𝑐 (“critic”) spielt nun eine ähnliche Rolle wie der Discriminator, aber Output von 𝑐 nicht
+auf das Intervall (0; 1) beschränkt, sondern kann beliebige reelle Zahlen annehmen
+• misst die Unterschiedlichkeit zweier Verteilungen (Generator will gleiche Verteilungen)
+• funktioniert, auch wenn diese keinen Überlapp haben (Gradienten > 0)
+• Der Wasserstein-Loss ist eine Näherung an die Earth Mover’s Distance
+• Bedingung an 𝑐 für Gültigkeit der Näherung: 1-Lipschitz-stetig
+– d.h., |∇𝑐(𝑥)| ≤ 1 überall
+
+Wasserstein Loss
+• Im Fall vom BCE-Loss kann bei stark unterschiedlichen Verteilungen der Discriminator
+die generierten Bilder sehr gut von den echten unterscheiden und die Gradienten
+verschwinden
+• Durch Verwendung der Earth Mover’s Distance ist Wasserstein Loss proportional zur
+Unterschiedlichkeit der Verteilungen (echte vs generierte Daten)
+• Dadurch auch bei stark unterschiedlichen Verteilungen keine verschwindenden
+Gradienten und Generator erhält gutes Feedbacksignal (und kann trainiert werden)
+• Dies verbessert “vanishing gradient” und “mode collapse” Probleme
+• Der “Trick” ist, dass der Diskriminator trainiert wird, die Earth Mover’s Distance zu
+nähern, dadurch, dass er diesen Ausdruck optimiert: max 𝔼 𝑐 𝑥 − 𝔼 𝑐 𝑔 𝑧
+@
+
+– Für 1-Lipschitz-stetige 𝑐 𝑥 ist die Lösung dieser Optimierung die Earth Mover’s Distance
+
+Bedingung für Wasserstein Loss
+• Damit Wasserstein Loss funktioniert muss der Betrag des Gradienten von 𝑐(𝑥)
+überall kleiner oder gleich 1 sein (1-Lipschitz-Stetigkeit)
+• 𝑐(𝑥) ist typischerweise ein neuronales Netzwerk
+• Eingesetzte Methoden, um Gradienten klein zu halten
+– weight clipping
+– gradient penalty (bevorzugt)
+
+Weight Clipping
+• Mit Gradient Descent neue Werte der Gewichte des critics 𝑐(𝑥) berechnen
+• Gewichte „clippen“ auf kleines Intervall 𝜀, −𝜀 , 𝜀 > 0 (z.B. 𝜀 = 0.1)
+• Nachteil: Lernfähigkeit des critics wird eingeschränkt
+
+Gradient Penalty
+min max 𝔼 𝑐 𝑥
+&
+
+•
+
+'
+
+−𝔼 𝑐 𝑔 𝑧
+
++ 𝜆𝔼 ∇𝑐 𝑥B − 1 L
+
+𝑥* ist eine Interpolation von generiertem und echtem Bild:
+
+sorgt dafür, dass auch in
+Bereichen zwischen echten und
+generierten Bildern die
+Gradienten klein bleiben
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Was ist das Problem mit BCE Loss?
+A. Die Funktion ist zu steil
+B. Generator trickst den Diskriminator sehr leicht aus
+C. Distanz zwischen real und fake Verteilungen ist inakkurat aufgrund der SigmoidFunktion
+D. Diskriminator gibt zu kleine Gradienten aus als Feedback für den Generator, wenn
+real/fake Verteilungen zu unterschiedlich sind
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Was misst die Earth Mover’s Distance?
+A. Wie sehr die Verteilung einer Sphäre ähnelt
+B. Wie divers eine Verteilung ist
+C. Wie unterschiedlich zwei Verteilungen sind, basierend auf Entfernung und Menge,
+die bewegt werden muss
+D. Wie ähnlich zwei Verteilungen basierend auf ihrem Überlapp sind
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Was haben Diskriminator und Critic gemeinsam?
+A. Ihre Outputs sind zwischen 0 und 1
+B. Sie versuchen beide die Distanz zwischen real und fake Verteilungen zu
+maximieren
+C. Es sind verschiedene Namen für dasselbe Modell
+D. Beide sind immun gegen Mode Callapse
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Welche Punkte einer Funktion müssen zur Evaluierung der 1-Lipschitz-Stetigkeit
+berücksichtigt werden?
+A. Der Ursprung (0, 0)
+B. Beide Achsen: x-Achse und y-Achse
+C. Alle Punkte der Funktion
+D. Hauptsächlich die x-Achse
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Wann ist eine Funktion 1-Lipschitz stetig?
+A. Wenn die Norm des Gradienten überall 1 beträgt.
+B. Wenn es sich um eine „real“ Klassifikation handelt
+C. Wenn die Norm des Gradienten überall größer oder gleich 1 beträgt
+D. Wenn die Norm des Gradienten überall kleiner oder gleich 1 beträgt
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Warum wird ein interpoliertes Zwischenbild zur Berechnung der Gradient Penalty
+benutzt?
+A. Es hilft dem Generator realistischere Bilder zu erzeugen
+B. Die Gradienten bzgl. des Critics auf einem interpolierten Bild zu berechnen ist
+eine Näherung um die Gradientennorm überall auf 1 zu beschränken
+C. Damit das Modell mehr Arbeit hat
+D. Weil man die Gradientennorm nicht auf real und fake Bildern berechnen kann
+
+Quiz: BCE Loss, EMD, Wasserstein Loss
+• Was ist eine sanfte Art um 1-Lipschitz-Stetigkeit für den Critic sicherzustellen?
+A. Gewichte normalisieren
+B. Gewichte “clippen“ (beschränken)
+C. Regularisierung für die Gewichte hinzufügen, wie bei L2-Regularisierung
+D. Regularisierung zum Loss hinzufügen, die Gradienten bestraft, wenn sie größer als
+1 sind
+
+Übung: Wasserstein GAN
+• Bearbeiten Sie die Übung `Ex03_WGAN_GP.ipynb`
+– Wasserstein GAN mit Gradient Penalty
+• Entscheidene Codezeilen:
+gen_loss = -torch.mean(crit_fake_pred)
+crit_loss = torch.mean(crit_fake_pred) - torch.mean(crit_real_pred) + c_lambda * gp
+max 𝔼 𝑐 𝑥
+$
+
+−𝔼 𝑐 𝑔 𝑧
+
+Und die Funktion gradient_penalty()
+
+⟺ min 𝔼 𝑐 𝑔 𝑧
+$
+
+−𝔼 𝑐 𝑥
+
+Ausblick: Conditional GAN & Controllable Generation
+Lernziele
+• GAN-Output kontrollieren durch Hinzufügen von konditionierenden Inputs
+• GAN-Output kontrollieren durch Manipulation des z-Vektors
+• Disentanglement in einem GAN verstehen
+
+Conditional GAN & Controllable Generation
+• Bisher: GAN produziert “irgendwelche” Bilder, die den Trainingsdaten entsprechen
+– “Unconditional Generation”
+
+• Für ein Bild einer bestimmten Klasse müsste man wiederholt Bilder generieren lassen,
+bis zufällig das gewünschte auftaucht
+• Jetzt: “Wünsch dir was”
+• Wollen Kontrolle, welche Bilder unser GAN produziert
+• à “Conditional Generation”
+
+Conditional vs. Unconditional Generation
+Conditional
+
+Unconditional
+
+Generiert Beispiele von gewünschter
+Klasse
+
+Generiert Beispiele zufälliger Klasse
+
+Trainingdaten müssen gelabelt sein
+
+Trainingdaten brauchen nicht gelabelt
+zu sein
+
+Conditional Generation: Inputs
+
+Noise
+
+Klasse
+
+0.9
+0.7
+0.1
+0
+1
+0
+
+Generator
+
+• Zusätzlich zum Noise-Vektor wird noch die gewünschte
+Klasse als Input an den Generator übergeben
+• Klasse wird one-hot encodet
+
+Output
+
+Conditional Generation: Inputs
+
+Noise
+
+Klasse
+
+0.9
+0.7
+0.1
+0
+0
+1
+
+Generator
+
+• Je nach übergebener Klasse muss der Generator
+lernen ein entsprechendes Bild dieser Klasse zu
+erzeugen
+
+Output
+
+Conditional Generation: Inputs
+
+Noise
+
+Klasse
+
+0.6
+0.3
+0.7
+0
+0
+1
+
+Generator
+
+• Variation des Noise-Inputs soll weiterhin zu
+verschiedenen Beispielen der gewünschten Klasse
+führen
+
+Output
+
+Conditional Generation: Inputs
+
+Output
+Discriminator
+
+0.01
+
+Garfield
+
+• Discriminator erhält beim Training nun auch eine Klassen-Information
+• Muss lernen zu erkennen, ob es sich beim Input um ein echtes Beispiel der entsprechenden
+Klasse handelt oder nicht
+• Also nicht nur zwischen echt und gefälscht unterscheiden
+• Entsprechend muss nun der Generator lernen echt aussehende Beispiele der richtigen
+Klasse zu erzeugen
+
+Conditional Generation: Inputs
+
+Output
+Discriminator
+
+0.99
+
+Garfield
+
+• Discriminator erhält beim Training nun auch eine Klassen-Information
+• Muss lernen zu erkennen, ob es sich beim Input um ein echtes Beispiel der entsprechenden
+Klasse handelt oder nicht
+• Also nicht nur zwischen echt und gefälscht unterscheiden
+• Entsprechend muss nun der Generator lernen echt aussehende Beispiele der richtigen
+Klasse zu erzeugen
+
+Conditional Generation: Inputs
+• Klasseninformation kann im einfachsten Fall
+an den Discriminator in separatem Kanal
+geschickt werden (bei CNNs)
+• aus One-Hot-Vektor werden One-HotMatrizzen
+• sehr verschwenderisch bei vielen Klassen,
+daher auch komplexere Netzwerkarchitektur
+möglich mit separatem Eingang
+
+Quiz: Conditional Generation
+Wie lernt der Generator welche Klasse er zu generieren hat?
+A. Der Diskriminator gibt unkonditioniertes Feedback und der Generator vergleicht es
+zur tatsächlichen Klasse.
+B. Der Generator erhält einen Noise-Vektor, der ein Bild der zu generierenden Klasse
+darstellt.
+C. Der Generator sieht die echten Bilder und trainiert darauf.
+D. Der Diskriminator prüft die Echtheit eines Bildes basierend auf (konditioniert auf)
+einer besteimmten Klasse
+
+Quiz: Conditional Generation
+Wie unterscheidet sich das Hinzufügen der Klasseninformation zwischen Diskriminator
+und Generator?
+A. Für den Diskriminator wird die Klasseninformation als Kanal angehängt oder durch
+eine andere Methode; der Generator erhält die Klasse als One-hot-Encoding Vektor,
+der dem Noise-Vektor angehängt wird
+B. Für den Diskriminator wird die Klasseninformation ans Input-Bild multipliziert; für
+den Generator wird die Klasse zum Noise-Vektor addiert
+C. Für den Diskriminator ist die Klasse nicht Teil des Inputs; für den Generator wird die
+Klasse zum Noise-Vektor addiert
+D. Für den Diskriminator wird die Klasse ans Input-Bild angehängt; der Generator erhält
+keine Klasseninformation
+
+Übung: Conditional GAN
+• Bearbeiten Sie die Übung Ex04_Build_a_Conditional_GAN.ipynb
+
+Controllable Generation
+
+• Ändern bestimmter Eigenschaften des Outputs
+• https://arxiv.org/abs/1907.10786
+
+Controllable Generation: Inputs
+Output
+Haarfarbe
+
+Noise
+
+0.9
+0.7
+0.1
+
+Generator
+
+Controllable Generation: Inputs
+Output
+Haarfarbe
+
+Noise
+
+0.8
+0.7
+0.1
+
+Generator
+
+Anpassen des Input-Noise-Vektors um verschiedene
+Eigenschaften im Output zu steuern
+
+Controllable Generation vs. Conditional Generation
+
+Controllable
+
+Conditional
+
+Beispiele mit gewünschten Eigenschaften
+
+Beispiele der gewünschten Klasse
+
+Trainingsdaten müssen nicht gelabelt sein
+
+Trainingsdaten müssen gelabelt sein
+
+Manipuliere den z-Vektor-Input
+
+Füge einen Klassenvektor zum Input hinzu
+
+Interpolation im 𝑧-Raum
+𝑧-Raum und zwei Noise-Vektoren 𝑣% , 𝑣&
+
+Zwischenbilder durch lineare
+Interpolation im 𝑧-Raum
+
+𝑔(𝑣! )
+
+deeplearning.ai
+
+𝑔(𝑣" )
+
+Interpolation im 𝑧-Raum
+𝑧-Raum und zwei Noise-Vektoren 𝑣% , 𝑣&
+
+𝑔(𝑣! )
+
+Richtung im z-Raum
+zur Änderung der
+Haarfarbe
+
+deeplearning.ai
+
+Generator
+𝑔(𝑣" )
+
+Interpolation im 𝑧-Raum
+Original-Output
+
+𝑧-Raum und Noise-Vektoren
+
+𝑑
+
+𝑔(𝑣! )
+
+Richtung zur Änderung
+der Haarfarbe
+
+Generator
+𝑔(𝑣! + 𝑑)
+
+𝑣Q + 𝑑
+
+deeplearning.ai
+
+Kontrollierter Output
+
+Herausforderungen bei kontrollierbarer Generierung
+
+Feature Correlation: Korrelationen zwischen verschiedenen Eigenschaften macht es
+schwer, diese einzeln zu kontrollieren
+
+z-Raum Entanglement (“Verschränkung”)
+
+• Dieselben Dimensionen im z-Raum können eine Reihe verschiedener Eigenschaften
+beeinflussen
+• Wenn wir in eine Richtung verändern, ändern sich auch andere Eigenschaften, nicht nur die,
+die wir beeinflussen wollten
+• Im Beispiel oben: Wenn wir eine Brille hinzufügen oder entfernen möchten, würde auch ein
+Bart hinzugefügt oder entfernt
+• dies macht es schwierig oder unmöglich einzelne Eigenschaften zu kontrollieren
+• umso schlimmer, je kleiner die Dimensionen von 𝑧
+
+Classifier Gradients
+• nutzen bereits trainierten Classifier:
+
+Richtung um Bilder mit Sonnenbrille zu erzeugen
+
+unabhängig trainiert!
+
+0.97 keine Sonnenbrille
+0.03 Sonnenbrille
+
+Classifier Gradients
+• nutzen bereits trainierten Classifier:
+
+Richtung um Bilder mit Sonnenbrille zu erzeugen
+
+Modifizieren nur den Noise-Vektor
+bis das Feature erscheint
+
+unabhängig trainiert!
+
+0.40 keine Sonnenbrille
+0.60 Sonnenbrille
+
+Classifier Gradients
+• nutzen bereits trainierten Classifier:
+
+Richtung um Bilder mit Sonnenbrille zu erzeugen
+
+unabhängig trainiert!
+
+0.07 keine Sonnenbrille
+0.93 Sonnenbrille
+
+Modifizieren nur den Noise-Vektor
+bis das Feature erscheint
+
+• brauchen bereits trainierten Classifier, der gewünschte Eigenschaft
+detektieren kann
+
+Disentanglement
+entangled 𝒛-Space
+
+disentangled 𝒛-Space
+
+⋮
+Änderungen eines Features wirken
+sich auf andere aus
+
+Änderungen eines Features wirken sich nicht
+auf andere aus
+
+Disentanglement forcieren mit Supervision
+Möglichkeit 1: entsprechend gelabelte Daten
+• Generator wird mit gelabelten Bildern trainiert, wie bei “conditional generation”
+• Input des Discriminators sind jeweils Bilder mit entsprechenden Labels
+• dies sorgt für tendenziell disentangelte 𝑧-Räume
+• sehr aufwendig, besonders bei kontinuierlichen Features (z.B. Haarlänge)
+
+Disentanglement forcieren über Modifikation des Loss
+Möglichkeit 2: Loss anpassen (spezieller Regularisierungsterm)
+• Regularisierungsterm kann von Classifier-Gradienten kommen
+• aber auch viele weitere Methoden verfügbar
+• z.B.
+– StyleGAN: https://arxiv.org/abs/1812.04948v3
+– https://medium.com/codex/an-overview-into-interfacegan-edit-facial-attributes-of-people-using-gans-34f2273d5941
+
+• Vorteil: keine Labels nötig
+
+Zusammenfassung: Controllable Generation
+• Um Eigenschaften des Outputs zu kontrollieren, muss man die entsprechenden
+Richtungen im 𝑧-Raum (Noise-Vektorraum) finden
+• Outputs können modifiziert werden, indem Vektoren im 𝑧-Raum manipuliert werden
+• Wenn man eine Eigenschaft versucht zu ändern, können korrelierte Eigenschaften
+ebenfalls verändert werden
+• z-Raum Entanglement macht Kontrolle einzelner Eigenschaften schwierig, besonders,
+wenn 𝑧 nicht genug Dimensionen hat
+– es gibt Methoden, Disentanglement zu forcieren
+
+• Classifier können genutzt werden um Richtungen im z-Raum zu finden
+– um Eigenschaften zu manipulieren wird lediglich der z-Vektor (Noise-Vektor) manipuliert
+
+Quiz: Controllable Generation
+Was ist ein Hauptunterschied zwischen controllable und conditional Generation?
+A. Mit Controllable Generation lässt sich die zu generierende Klasse wählen während
+Conditional Generation einzelne Features auf einem Bild ändert
+B. Controllable Generation modifiziert den Generator und Diskriminator während
+Conditional Generation den Input aus dem z-Raum modifiziert
+C. Controllable Generation braucht keine Labels während dies für Conditional
+Generation optional ist
+D. Controllable Generation wird nach dem Training durch Modifikation des z-Vektors
+erzielt, während Conditional Generation während des Trainings durchgeführt wird
+und einen gelabelten Datensatz erfordert
+
+Quiz: Controllable Generation
+Wie ähneln sich controllable Generation und Interpolation?
+A. Sie ändern die Farbe von Bildern durch Invertierung der Pixel
+B. Sie erzeugen eine andere Bild-Klasse als im Input
+C. Sie modifizieren Features durch Änderung der Pixel
+D. Beide ändern Features durch Änderung des z-Vektors
+
+Quiz: Controllable Generation
+Wann schlägt controllable Generation typischerweise fehl?
+A. Wenn das Modell kollabiert und der z-Vektor zu groß ist
+B. Wenn die Bilder nicht gelabelt sind und der z-Raum Verschränkt ist
+C. Wenn Features stark miteinander korrelieren und z-Werte keiner klaren Zuordnung
+zu Features auf Bildern zugehören
+D. Wenn der Generator die Features nicht lernen kann und die Features falsch gelabelt
+sind
+
+Quiz: Controllable Generation
+Wie kann Classifier für Controllable Generation genutzt werden?
+A. Durch Training eines Classifiers auf Features um dem Generator zu helfen
+B. Durch Ersetzen des Diskriminators durch einen Classifier
+C. Durch Berechnung des Loss zwischen den Ergebnissen des Classifiers und denen des
+Diskriminators und Weiterreichung an den Generator
+D. Durch Berechnung des Gradienten des z-Vektors entlang bestimmter Features durch
+den Classifier um die Richtung zu finden, in die der z-Vektor geändert werden muss
+
+Quiz: Controllable Generation
+Was ist der Sinn von Disentanglement in Modellen?
+A. Damit Werte im z-Vektor sinnvollen Features entsprechen
+B. Um die Klasse der generierten Bilder zu kontrollieren
+C. Um das Training leichter und schneller zu machen und Mode Collapse zu mitigieren
+D. Um latente Features in einem Bild mit weak supervision zu finden
+
+Übung: Controllable Generation
+• Bearbeiten Sie die Übung `Ex06_Controllable_Generation.ipynb`
+• Nutzt vortrainierten Generator und Klassifikator
+• Schlüsselstelle:
+– Berechnung von fake_classes_score und
+– Aufruf von calculate_updated_noise()
+– Nutzt Output des Klassifikators um Noisevektor in Richtung des gewünschten
+Features zu modifizieren
+• Weiter unten ist dann ein Versuch Features zu ändern, ohne dass parallel andere
+Features geändert werden
+– Loss bekommt Änderungen der anderen Features als zusätzlichen Anteil
+
+GAN EVALUATION
+Metriken zur Qualitätsbewertung von GANs
+
+Ausblick: GAN Evaluation
+• Herausforderungen bei der Bewertung von GANs
+• Vor- und Nachteile verschiedener Performance-Metriken
+Lernziele:
+• Differenzierung zwischen verschiedenen Bewertungsmetriken und deren Vor- und
+Nachteilen.
+• Verwendung von Feature-Embeddings bei der GAN-Bewertung.
+• GANs mit Fréchet Inception Distance (FID) und Inception Score evaluieren.
+
+Evaluation von GANs
+Klassifikationsmodelle können leicht
+ausgewertet werden (z.B. Accuracy, F1Score):
+
+Classifier
+
+Hund / Katze / Hamster
+
+richtig /
+falsch
+
+Welche Metrik bei generativen
+Modellen?
+Noise
+0.9
+0.7
+0.1
+
+realistisch,
+schön?
+
+Generator
+
+Evaluation von GANs: Fidelity & Diversity
+Fidelity
+
+Diversity
+
+Qualität von Bildern
+
+Vielfalt von Bildern
+
+Wie prüfen?
+Fidelity prüfen: Vergleich generierter Daten mit ähnlichen echten Daten
+
+Wie prüfen?
+Diveristy prüfen: Wollen die gesamte Verteilung aus den Trainingsdaten generieren (kein
+“mode collapse”)
+
+Zusammenfassung: Evaluation von GANs
+•
+•
+•
+•
+
+keine Ground Truth à Evaluation nicht so einfach
+Fidelity: Qualität generierter Daten (z.B. Bilder)
+Diversity: Vielfalt generierter Daten (z.B. Bilder)
+Brauchen Metriken um Fidelity & Diversity zu quantifizieren
+
+Bilder vergleichen
+•
+
+Pixel-Distanz: Pixel für Pixel vergleichen und Differenzen aufsummieren:
+
+•
+
+Problem: weitgehend gleiche Bilder würden bei kleinen Unterschieden bereits zu großer Pixel-Distanz führen
+
+Bilder vergleichen
+•
+
+Feature-Distanz: Vergleich verschiedener ”high-level” Eigenschaften
+
+echt
+
+2 Augen,
+2 flauschige Ohren,
+1 Nase, ...
+
+Features vergleichen!
+fake
+
+2 Augen,
+1 flauschiges Ohr,
+1 Nase, ...
+
+Features extrahieren
+•
+
+Im Trainingsprozess lernen Neuronale Netze eigene Features, die dann vom letzten Layer zur
+Vorhersage genutzt werden:
+“Klassifizierer”
+
+𝑥%
+𝑥&
+𝑥'
+Input
+
+•
+
+“Features”
+
+Output/Vorhersage
+
+Diese Modelle können als Feature-Extraktor genutzt werden, indem ein Teil “abgeschnitten” wird
+
+Features extrahieren
+Bei Bilddaten typischerweise eine Convolutional Neural Network basierte Architekur:
+
+Feature-Layer
+
+Es können auch frühere Layer zur Feature-Extraktion genutzt werden (nicht nur das letzte).
+
+Vortrainierte Modelle
+• Zur Feature-Extraktion können vortrainierte Modelle genutzt werden, die auf
+Bilddaten trainiert worden sind, die der Domäne von Interesse ähneln.
+• Oft genutzt: Inception-v3 (von Google)
+Bild-Klassifikatoren oft trainiert auf ImageNet Datenbank
+• ca. 14 Millionen Bilder, 20.000 Kategorien
+– manchmal werden zum Training auch Teilmengen genutzt, z.B. für die ImageNet Large Scale Visual Recognition
+Challenge (ILSVRC) ca. 1 Million Bilder und 1.000 Kategorien
+
+• Viele auf ImageNet trainierte Modelle frei zum Download verfügbar
+• Man kann auch eigene Modelle trainieren, wenn die eigenen Daten speziell sind
+
+Embeddings
+•
+
+Extrahierte Features werden Embeddings genannt
+Input 𝑥
+Embedding von 𝑥
+
+Feature-Extraktor
+
+Φ(𝑥)
+Embedding Φ(𝑥) ist ein Vektor mit Zahlen
+
+•
+•
+
+Embeddings von generierten und echten Daten können verglichen werden um Fidelity zu messen
+Es gibt verschiedene Vergleichsmaße für Embeddings (z.B. Länge der Vektoren, Winkel / CosineDistance)
+
+INCEPTION SCORE UND FRÉCHET INCEPTION DISTANCE
+Metriken für generative Modelle
+
+Inception Score
+• Nutzt auf Imagenet trainiertes Inception-v3 (andere Classifier auch möglich)
+• Idee:
+– hohe Fidelity bei ausgeprägtem Peak in 𝑝(𝑦|𝑥) (geringe Entropie)
+– hohe Diversity bei weitgehend gleichverteiltem 𝑝(𝑦) (hohe Entropie)
+
+Fidelity
+(geringe Entropie)
+
+𝑝(𝑦|𝑥) als auch 𝑝(𝑦) bezieht
+sich auf die generierten
+Daten 𝑥 und die zugehörigen
+Labels 𝑦
+Wird mittels Inception-v3
+Classifier bestimmt
+
+Diversity
+(hohe Entropie)
+
+*
+
+1
+𝑝(𝑦) ≈ ] 𝑝(𝑦|𝑥( )
+𝑁
+
+Inception Score
+
+()%
+
+• Für jedes generierte Bild 𝑥 werden die Verteilungen 𝑝(𝑦|𝑥) und 𝑝(𝑦) mittels KullbackLeibler-Divergenz zueinander in Beziehung gesetzt:
+𝑝 𝑦𝑥
+𝐷UV 𝑝 𝑦 𝑥 | 𝑝 𝑦 = G 𝑝 𝑦 𝑥 log
+𝑝 𝑦
+W
+
+• à Wird größer, wenn 𝑝(𝑦) klein (hohe Diversity) und 𝑝(𝑦|𝑥) groß (hohe Fidelity)
+• Inception Score IS:
+Z
+
+1
+IS = exp
+G 𝐷UV 𝑝 𝑦 𝑥X | 𝑝 𝑦
+𝑁
+XYQ
+
+• Der Exponent wird nur gebildet um menschlich leichter vergleichbare Zahlen zu
+erhalten
+• Große Datenbasis für Evaluation nötig (z.B. 50k generierte Bilder)
+
+Inception Score Nachteile
+• Generierung von je einem guten Beispiel pro Klasse sorgt für hohen IS, trotz geringer
+Diversity innerhalb jeder Klasse
+• Schaut sich lediglich die generierten Bilder an und nicht die zugrundeliegenden
+Trainingsdaten
+• Nutzt auf Imagenet trainiertes Inception-v3 – dadurch können Features, die im
+Imagenet Datensatz nicht vorhanden sind, verpasst werden (bspw. keine Haie)
+• Verlässt sich auf hohen Confidence Score des Classifiers ohne Bildqualität direkt zu
+messen
+– Oft haben Classifier trotz Verzerrungen im Bild hohe Confidence Scores
+
+Inception Score Zusammenfassung
+• Versucht Fidelity & Diversity zu quantifizieren
+• Viele Nachteile
+• Besser geeignet: “Fréchet Inception Distance”
+
+Fréchet Distance
+• Misst Ähnlichkeit zweier Kurven unter Beachtung des Ortes und Ordnung der Punkte
+entlang der Kurven
+• Anschaulich: Kürzeste notwendige Hundeleine:
+
+Fréchet Distance
+• Lässt sich auf Verteilungen verallgemeinern
+• Für Normalverteilung lässt sich eine analytische Lösung finden:
+
+• Wir haben jedoch nicht nur 1-dim Input (jedes Pixel in Bild = 1 Dimension) à
+multivariate (oder: mehrdimensionale) Normalverteilung
+
+Multivariate Normalverteilungen
+• 2-dim Normalverteilung ohne Korrelationen zwischen den Dimensionen:
+
+• bei mehreren Variablen können Korrelationen zwischen ihnen existieren, die ebenfalls
+statistisch erfasst werden müssen
+• Varianz 𝜎 L bei 1-dim à Kovarianzmatrix Σ
+
+Multivariate Normalverteilungen
+• Elemente außerhalb der Diagonalen à Kovarianzen
+
+1
+Σ=
+0
+
+0
+1
+
+Σ=
+
+2
+−1
+
+−1
+2
+
+Multivariate Fréchet Distance für Normalverteilungen
+Univariate Fréchet Distance:
+
+𝜇< − 𝜇= # + 𝜎< − 𝜎= #
+𝜎<# + 𝜎=# − 2𝜎< 𝜎=
+Multivariate Fréchet Distance:
+
+𝜇< − 𝜇= # + Tr Σ^ + Σ_ − 2 Σ^ Σ_
+Bemerkung: Σ ↔ 𝜎 L
+
+Fréchet Inception Distance (FID)
+FID = 𝜇< − 𝜇= # + Tr Σ^ + Σ_ − 2 Σ^ Σ_
+• Erstellen von Embeddings 𝑋, 𝑌 von echten und generierten Daten mit auf Imagenet
+trainiertem Inception-v3
+• echte und generierte Embeddings werden als zwei multivariate Normalverteilungen
+betrachtet (Näherung)
+• Mittelwerte und Kovarianzmatrizzen müssen empirisch geschätzt werden
+(“Stichprobenkovarianz”)
+• Hierfür große Stichprobengröße notwendig um Rauschen zu reduzieren
+
+Nachteile von FID
+• Vortrainiertes Inception-Modell erkennt evtl. nicht alle Features
+• Große Stichprobe notwendig, daher langsam bzw. großer Rechenaufwand
+• Nutzt nur Mittelwert und Kovarianz als statistische Eigenschaften zum Vergleich der
+Verteilungen
+– Annahme einer multivariaten Normalverteilung für die Daten ist eine Näherung
+
+Zusammenfassung: Evaluation von GANs
+•
+•
+•
+•
+
+keine Ground Truth à Evaluation nicht so einfach
+Fidelity: Qualität generierter Daten (z.B. Bilder)
+Diversity: Vielfalt generierter Daten (z.B. Bilder)
+Brauchen Metriken um Fidelity & Diversity zu quantifizieren
+– Inception Score, Frechet Inception Distance
+
+•
+
+Classifier können als Feature-Extraktor genutzt werden
+– Typischerweise Abschneiden des Netzwerks nach dem letzten Pooling-Layer
+
+•
+
+Am besten Classifier, die auf einem großen Datensatz trainiert worden sind, z.B. ImageNet
+
+Quiz: Evaluation von GANs
+• Warum stellt die Evaluation von GANs eine Herausforderung dar?
+A. Man muss sowohl Generator als auch Diskriminator evaluieren.
+B. Es gibt keinen universellen “Gold-Standard” Diskriminator.
+C. GANs nutzen Loss Functions.
+D. Man muss GANs kontinuierlich evaluieren.
+
+Quiz: Evaluation von GANs
+Was ist Fidelity und Diversity?
+A.
+B.
+C.
+D.
+
+Fidelity ist die Qualität oder Realitätsnähe eines Bildes; Diversity ist die Vielfältigkeit von Bildern.
+Fidelity ist die Qualität oder Realitätsnähe eines Bildes; Diversity ist die Ähnlichkeit unter den Bildern.
+Fidelity ist die Farbmenge im Bild; Diversity ist die Ähnlichkeit unter den Bildern.
+Fidelity ist die Farbmenge im Bild; Diversity ist die Vielfältigkeit von Bildern.
+
+Quiz: Evaluation von GANs
+Wie kann man einen Feature-Extraktor erstellen?
+A.
+B.
+C.
+D.
+
+Ein früheres (nicht-letztes) Layer eines Classifiers nutzen.
+Ein StyleGAN erstellen.
+Ein GAN erstellen, das auf jedes Feature konditioniert ist.
+Nutzung eines vortrainierten Classifiers und Fortsetzung seines Trainings.
+
+Quiz: Evaluation von GANs
+Wie misst FID den Unterschied zwischen echten und fake Bildern?
+A. Betrachtung der Embeddings von echten und fake Bildern als zwei Verteilungen und Vergleich ihrer
+statistischen Eigenschaften.
+B. Vergleich der Klassifikation der Features von real und fake Bildern.
+C. Überlappung von real und fake Bildern und Berechnung der Statistiken.
+D. Berechnung der Pixeldistanz zwischen real und fake Bildern.
+
+Quiz: Evaluation von GANs
+Welche Aussagen über Inception Score (IS) und Frechet Inception Distance (FID) treffen zu?
+A. FID und IS nutzen beide das Inception-V3 Netzwerk und betrachten Beispieldaten und nicht die
+Netzwerkparameter.
+B. FID vergleicht reals und fakes, während IS nur fakes betrachtet.
+C. FID nutzt intermediate features des Inception-V3-Netzwerks, während IS die Klassifikation direkt
+nutzt.
+D. A und C.
+E. Alles trifft zu.
+
+Übung: Fréchet Inception Distance (FID)
+• Bearbeiten Sie die Übung `Ex07_FID.ipynb`
+Schlüsselstellen
+• Berechnung der Features für real und fake images:
+for real_example, _ in tqdm(dataloader, total=n_samples // batch_size): …
+
+• Danach Berechnung der Mittelwerte und Kovarianzen:
+mu_fake = torch.mean(fake_features_all, dim=0)
+mu_real = torch.mean(real_features_all, dim=0)
+sigma_fake = get_covariance(fake_features_all)
+sigma_real = get_covariance(real_features_all)
+
+Referenzen
+Generative Adversarial Networks
+• https://www.coursera.org/specializations/generative-adversarial-networks-gans
+• deeplearning.ai
+• https://arxiv.org/abs/1406.2661 (Original GAN Paper von Goodfellow et al)
+• https://junyanz.github.io/CycleGAN/
+• https://arxiv.org/abs/1703.10593 (CycleGAN)
+• https://arxiv.org/abs/1903.07291 (GauGAN)
+• https://arxiv.org/abs/1609.04802 (Super-Resolution)
+• https://lilianweng.github.io/posts/2017-08-20-gan/
+• https://arxiv.org/abs/1701.07875 (Wasserstein GAN, original paper)
+• https://arxiv.org/abs/1704.00028 (Improved Training of Wasserstein GANs)
+• https://arxiv.org/pdf/1904.08994 (From GAN to WGAN)
+• https://arxiv.org/abs/1411.1784 (Conditional GANs)
+• https://arxiv.org/abs/1907.10786 (Controllable Generation)
+• https://pytorch.org/docs/stable/index.html
+
+VARIATIONAL
+AUTOENCODER
+Zentrale Ideen
+
+Autoencoder
+
+ℒ 𝜙, 𝜃 = G 𝑥 − 𝑥 c L ,
+
+𝑥 c = 𝑑d 𝑒e 𝑥
+
+“Reconstruction Loss”
+
+`∈𝒟
+
+D. E. Rumelhart, G. E. Hinton, R. J. Williams, ”Learning representations by back-propagating errors”, 1986
+M. A. Kramer, “Nonlinear principal component analysis using autoassociative neural networks”, 1991
+G. E. Hinton, R. S. Zemel, “Autoencoders, minimum description length and Helmholtz free energy”, 1993
+
+139
+
+Idee: Sampling von trainiertem Autoencoder
+
+𝑧 als Input à Decoder erzeugt 𝑥 (z.B. Bild)
+
+140
+
+Latent Space eines Autoencoders
+
+• Viel leerer Raum im Latent Space
+• Keinerlei Symmetrien zwischen
+Repräsentationen
+• Es ist schwer aus diesem Raum zu sampeln
+Idee: Stelle sicher, dass Encoder Inputs auf
+eine Verteilung abbildet, aus der sich leicht
+sampeln lässt (Gaußverteilung)
+141
+
+Naives Sampling aus latentem Raum funktioniert nicht
+
+142
+
+VAE Versuch 1: Output = Verteilung
+• Encoder sagt lediglich
+Mittelwert und Varianz
+einer Gaußverteilung
+vorher
+• Aus dieser wird
+gesampelt und so der
+Input für den Decoder
+erzeugt
+• Problem: Berechnung der
+Gradienten aufgrund des
+Samplings nicht möglich
+
+143
+
+VAE: Der Reparametrisierungs-Trick
+
+• Gesampelt wird lediglich 𝜖
+• 𝑧 = 𝜇 + 𝜖𝜎 bleibt differenzierbar in den
+Encoderparametern 𝜙
+
+144
+
+VAE: Probabalistischer Decoder
+
+"−𝑑 𝑧
+𝑥
+!
+𝑝! 𝑥 " 𝑧 ~ exp −
+𝜏#
+
+Trainings-Zielfunktion: Log-Likelihood
+
+max 𝔼B~D! 𝑧 𝑥 [log 𝑝A 𝑥 𝑧
+?,A
+
+= min 𝔼B~D! 𝑧 𝑥
+?,A
+
+𝑥 − 𝑑A 𝑧
+
+#
+
+#
+
+Maximierung der Log-Likelihood ist äquivalent zur Minimierung des Reconstruction-Loss, d.h.
+beim Training muss man nicht Sampeln.
+
+145
+
+Latenter Raum
+• Ohne weiteres Zutun ist zunächst die Wahrscheinlichkeitsverteilung für jede InputKlasse eine Gaußverteilung mit eigenem Mittelwert und Standardabweichung:
+𝑧#
+
+𝑧$
+
+• Immer noch große Bereiche im latenten Raum, die keinen validen Inputs entsprechen
+146
+
+Latenter Raum mit Prior-Regularisierung
+• Lösung: Regularisiere alle Verteilungen 𝑞e 𝑧 𝑥 in Richtung einer gemeinsamen
+Verteilung 𝑝 𝑧 (z.B. eine Standardnormalverteilung 𝒩 𝟎, 𝑰 ):
+
+ℒ = 𝔼B~D! 𝑧 𝑥
+
+𝑥 − 𝑑A 𝑧
+
+#
+
++ 𝐷IJ 𝑞? 𝑧 𝑥 ‖𝑝 𝑧
+
+Reconstruction Loss
+
+erzwingt sampelbaren latenten Raum
+
+• 𝑝(𝑧) wird fest vorgegeben (nicht gelernt)
+
+𝜇( , 𝜎(& : Mittelwert und
+Varianz von 𝑧(
+
+– häufig Standardnormalverteilung 𝒩 𝟎, 𝑰
+
+• Mit 𝑞e 𝑧 𝑥 = 𝒩 𝜇 𝑥 , diag 𝜎 L 𝑥
+𝐷UV 𝑞e 𝑧 𝑥 ‖𝑝 𝑧
+
+und 𝑝 𝑧 = 𝒩 𝟎, 𝑰 :
+1
+= G 𝜇XL + 𝜎XL − log 𝜎XL − 1
+2
+X
+
+147
+
+Evidence Lower Bound (ELBO)
+•
+•
+•
+
+Eigentlich interessiert uns die Datenverteilung 𝑝(𝑥), damit wir daraus sampeln können
+𝑝(𝑥) erhält man nach der Maximum-Likelihood-Methode durch Maximierung von 𝑝(𝑥) von allen Daten 𝑥
+Es lässt sich mathematisch zeigen:
+𝑝 𝑥, 𝑧
+log 𝑝 𝑥 ≥ 𝔼+! 𝑧 𝑥 log
+ELBO
+𝑞, 𝑧 𝑥
+
+•
+
+Es gilt:
+
+𝔼%! 𝑧 𝑥 log
+
+𝑝 𝑥, 𝑧
+𝑞& 𝑧 𝑥
+
+= 𝔼%!((|*) log
+
+𝑝! 𝑥 𝑧 𝑝 𝑧
+𝑞& 𝑧 𝑥
+
+= 𝔼%!((|*) log 𝑝! 𝑥 𝑧
+
+𝑝 𝑧
++ 𝔼%! 𝑧 𝑥 log
+𝑞& 𝑧 𝑥
+
+= 𝔼%!((|*) log 𝑝! 𝑥 𝑧
+
+− 𝐷,- 𝑞& 𝑧 𝑥 ‖𝑝 𝑧
+
+VAE maximieren diesen Lower Bound! à Dadurch nähern wir uns 𝑝 𝑥 !
+Sehr gut erklärt hier: Calvin Luo, Understanding Diffusion Models: A Unified Perspective, 2022, https://arxiv.org/abs/2208.11970
+
+148
+
+Beispiele VAE-generierter Bilder
+
+149
+
+Viel besser strukturierter latenter Raum
+• Dimensionen im latenten Raum entsprechen Konzeptem, wie z.B. Sentiment oder
+Orientierung
+
+150
+
+Visualisierung des latenten Raums eines VAE trainiert auf MNIST
+• Die Verteilungen sind zentriert und jede Ziffer hat den gleichen Anteil
+
+151
+
+Größter Nachteil von VAEs: verwaschene Bilder
+Out-of-the-box können Bilder verwaschen sein:
+
+VAE
+
+GAN
+https://arxiv.org/abs/1607.07539
+https://borisburkov.net/2022-12-31-1/
+
+152
+
+Diffusionsmodelle
+
+Grundlagen und zentrale Konzepte
+
+Fortschritt generativer Modelle
+
+154
+
+Text-to-Image Diffusionsmodelle
+
+Daj et al., “Emu: Enhancing Image Generation Models Using Photogenic Needles in a Haystack”, 2023, https://arxiv.org/abs/2309.15807
+
+155
+
+Diffusion-Modelle
+• Diffusion-Modelle bestehen aus zwei Prozessen
+– Vorwärts: Diffusion – Rauschen wird Schritt für Schritt hinzugefügt
+– Umkehrung: Entfernen des Rauschens – dieser Prozess lernt die Generierung von Daten aus Rauschen
+durch Rauschunterdrückung
+
+J. Sohl-Dickstein et al. (2015), https://arxiv.org/abs/1503.03585
+J. Ho, A. Jain, and P. Abbeel, “Denoising Diffusion Probabilistic Models” (2020), https://arxiv.org/abs/2006.11239
+
+156
+
+Diffusion Sampling
+• Unterschiedliches initiales Rauschen produziert diverse Outputs
+
+157
+
+Forwards Process (Diffusion Process)
+• Zerstört ursprüngliches Bild 𝑥k, durch sukzessive Addition von gaußschem Rauschen
+• Gewünschtes Ergebnis: bei Schritt 𝑇 ist 𝑥l reines gaußsches Rauschen
+• Kein Training an dieser Stelle!
+𝑥m = 𝛼m 𝑥mnQ + 1 − 𝛼m 𝜖,
+
+𝜖~𝒩 0, 𝐼 ,
+
+• 𝑥m lässt sich aus 𝑥k in einem Schritt erzeugen:
+𝑥m =
+
+𝛼em 𝑥k + 1 − 𝛼em 𝜖,
+
+𝜖~𝒩 0, 𝐼 ,
+
+𝛼m ∈ (0,1)
+“noise schedule”, monoton fallend in 𝑡
+m
+
+𝛼em ∈ 0,1 ,
+
+𝛼em = f 𝛼o
+oYQ
+
+158
+
+Reverse Process
+
+𝑥m =
+
+𝛼em 𝑥k + 1 − 𝛼em 𝜖
+
+• Lerne umzukehren, was gerade zerstört wurde
+• Möchten 𝑥k wiederherstellen
+• Trainieren hierzu ein neuronales Netzwerk zur Vorhersage des Rauschens 𝜖 in 𝑥m :
+
+ℒ 𝜃 = 𝔼 ∥ 𝜖 − 𝜖! 𝑥" , 𝑡 ∥#
+
+MSE-Loss, Target = Rauschen
+
+159
+
+Training Algorithmus
+𝑥m =
+
+𝛼em 𝑥k + 1 − 𝛼em 𝜖
+
+ß Bild aus den Trainingsdaten sampeln
+ß Uniform zufälligen Zeitschritt sampeln
+ß Gaußverteiltes Rauschen
+ß Vergleich von Modellvorhersage und
+tatsächlichem Rauschen
+
+J. Ho, A. Jain, and P. Abbeel, "Denoising Diffusion Probabilistic Models” (2020), https://arxiv.org/abs/2006.11239
+
+160
+
+Sampling Algorithmus (DDPM)
+𝑥m =
+
+𝛼em 𝑥k + 1 − 𝛼em 𝜖
+
+𝑥m = 𝛼m 𝑥mnQ + 1 − 𝛼m 𝜖
+
+ß Gaußverteiltes Rauschen sampeln
+ß Gaußverteiltes Rauschen
+ß Entferne vorhergesagtes Rauschen, füge
+neues, verringertes Rauschen hinzu
+
+Anteil des Rauschens im Zeitschritt 𝑡
+J. Ho, A. Jain, and P. Abbeel, "Denoising Diffusion Probabilistic Models” (2020), https://arxiv.org/abs/2006.11239
+
+161
+
+Warum nicht direkt 𝑥$ vorhersagen
+
+𝑥m =
+
+𝛼em 𝑥k + 1 − 𝛼em 𝜖
+
+• Modell wird trainiert das gesamte Rauschen 𝜖 in 𝑥' vorherzusagen, nicht nur das inkrementelle
+im Vergleich zu 𝑥'()
+• Man könnte versucht sein, damit direkt das Ursprungsbild zu rekonstruieren:
+𝑥* ~𝑁 𝟎, 𝑰 → 𝜖+ (𝑥* , 𝑇)
+1
+𝑥., =
+𝑥* − 1 − 𝛼1 * 𝜖+ (𝑥* , 𝑇)
+𝛼1 *
+4𝟎 ist kein Sampel aus der Datenverteilung, 𝑥., ist der (genäherte) bedingte
+• Aber 𝒙
+Erwartungswert von 𝑥, gegeben 𝑥* :
+𝑥., ≈ 𝔼 𝑥, 𝑥*
+• Der Erwartungswert mittelt über die verschiedenen Moden der Datenverteilung à Bild wäre
+unscharf
+• Schrittweises Sampling erlaubt es dem Modell zunächst die grobe Struktur vorherzusagen und
+in jedem Schritt mehr und mehr Details
+• Zusätzlich ist die Berechnung von 𝑥., numerisch schlecht konditioniert aufgrund Division durch
+𝛼1 * ≪ 1 à jeglicher Fehler in 𝜖+ (𝑥* , 𝑇) wird enorm verstärkt
+162
+
+Sampling Schritt
+• Netzwerk sagt uns das Gesamte Rauschen vorher
+– Es gibt unendlich viele Wege von 𝑥. zu 𝑥/ mittels Addition von Rauschen
+– Daher kann nur das gesamte Rauschen in 𝑥/ identifiziert werden, nicht das, was im letzten Zeitschritt
+hinzugekommen ist
+
+• Wir möchten aber nur 𝑥m → 𝑥mnQ generieren à die Sampling Formel
+1
+1 − 𝛼m
+𝑥mnQ =
+𝑥m −
+𝜖d (𝑥m , 𝑡) + 𝜎m 𝑧 ,
+𝛼m
+1 − 𝛼em
+
+𝑧 ∈ 𝒩 𝟎, 𝑰
+
+• berechnet den Anteil an Rauschen, der zum letzten Zeitschritt gehört; intuitiv:
+• 1 − 𝛼m : Menge an Rauschen, das zum Zeitpunkt 𝑡 hinzugefügt wurde
+•
+•
+
+1 − 𝛼em : Gesamtes Rausch-Niveau in 𝑥m
+q 𝑥mnQ 𝑥k
+Formal lässt sich das herleiten aus 𝑞 𝑥mnQ 𝑥m , 𝑥k = 𝑞 𝑥m 𝑥mnQ, 𝑥k
+q 𝑥m 𝑥k
+163
+
+DDIM: Eine effizientere Sampling Methode
+• Mehrere Wege führen von 𝑥l zu 𝑥k
+• DDIM schaut eine Familie von Pfaden an, parametrisiert durch 𝜎m :
+𝑥mnQ =
+
+𝛼emnQ
+
+𝑥m − 1 − 𝛼em 𝜖d 𝑥m , 𝑡
+𝛼em
+
++ 1 − 𝛼emnQ − 𝜎mL𝜖d 𝑥m , 𝑡 + 𝜎m 𝑧
+
+“Vorhersage von 𝑥- ”
+
+“Richtung zu 𝑥. ”
+
+Rauschen
+
+• Mit 𝜎m = 0 erhält man deterministische Generierung
+– Erlaubt das Überspringen von Zeitschritten (z. B. 50 statt 1000 Schritte)
+– Gleiches Training wie DDPM, aber schnellere Bildrekonstruktion möglich
+
+• Es gibt ein 𝜎m , das genau DDPM entspricht
+
+J. Song, C. Meng, S. Ermon, “Denoising Diffusion Implicit Models“ (2020), https://arxiv.org/abs/2010.02502
+
+164
+
+DDPM vs DDIM
+
+DDPM
+
+DDIM
+
+Stochastisch, hohe Diversität durch
+Rauschen in jedem Schritt
+
+Deutlich schnelleres Sampling (10 50 Schritte)
+
+Sehr detailreich
+
+Deterministisch (gut für EditingAnwendungen)
+
+Sehr langsam (1000 Schritte)
+
+Bei zu wenigen Schritten weniger
+detailreich als DDPM
+
+165
+
+Trade-offs
+
+166
+
+Conditional Generation
+• Ziel: Kontrolle darüber, was generiert wird
+• Möglichkeit 1: Condition als zusätzlicher Input 𝑐
+– Trainiere Netzwerk: 𝜖! (𝑥/ , 𝑡, 𝑐)
+
+• 𝑐 kann Klasse, Textembedding, Bildembedding und vieles andere sein
+
+– Loss wie zuvor: ℒ = 𝔼 ∥ 𝜖 − 𝜖! 𝑥/ , 𝑡, 𝑐 ∥#
+– Sampling wie zuvor beginnend mit purem Rauschen 𝑥0 ~𝒩 𝟎, 𝑰 und iteratiem Entrauschen mit
+𝜖! (𝑥/ , 𝑡, 𝑐) mit gewünschtem 𝑐
+
+• Möglichkeit 2: Classifier Guidance
+1 (*# ,/)
+$34
+5#
+
+– Score-based Diffusion Target (äquivalent zu DDPM): ∇* log 𝑝/ 𝑥/ ~ − "
+– Mit Klassenlabel:
+
+𝑝 𝑥𝑐 =
+
+6 7|* 6 *
+6 7
+
+(=Netzwerk-Output)
+
+à ∇* log 𝑝 𝑥 𝑐 = ∇* log 𝑝(𝑐|𝑥) + ∇* log 𝑝 𝑥
+
+– Trainiere Klassifikator 𝑝& (𝑐|𝑥/ ) auf verrauschten Bildern 𝑥/
+– Sampling:
+1
+1 − 𝛼/
+𝑥/3$ =
+𝑥/ −
+𝜖! (𝑥/ , 𝑡) + 𝜎/# 𝑠∇*# log 𝑝& (𝑐|𝑥/ , 𝑡) + 𝜎/ 𝑧
+𝛼/
+1 − 𝛼]/
+
+classifier guidance, 𝑠: conditioning strength
+
+167
+
+Conditional Generation
+Möglichkeit 3: Classifier-free Guidance (CFG)
+• Modell lernt während Training zwei Dinge:
+– Bedingte Vorhersage (mit Label):
+𝜖d 𝑥m , 𝑡, 𝑐
+– Unbedingte Vorhersage (ohne Label): 𝜖d 𝑥m , 𝑡, ∅ (∅ hat eigene Repräsentation)
+– Wird erreicht durch zufälliges Weglassen von 𝑐 (bzw. Ersetzen durch ∅)
+
+• Sampling:
+𝜖!̂ 𝑥" , 𝑡, 𝑐 = 𝜖! 𝑥" , 𝑡, ∅ + 𝑤 ⋅ 𝜖! 𝑥" , 𝑡, 𝑐 − 𝜖! 𝑥" , 𝑡, ∅
+– 𝑤: ”Guidance Scale” – steuert, wie stark das Modell auf die Bedingung hören soll
+• Hohes 𝑤: Bilder passen besser zum Prompt, aber weniger divers (“Mode Collapse”)
+
+168
+
+Netzwerk Architektur
+•
+•
+•
+•
+•
+
+Diffusion schreibt keine spezifische Architektur des Netzwerks 𝜖d (𝑥m , 𝑡) vor
+Das Verfahren ist datenagnostisch (nicht auf Bilder beschränkt)
+Für Bilddaten werden oft abgewandelte U-Net-Architekturen verwendet
+U-Net-Architektur ursprünglich für semantische Bildsegmentierung entwickelt
+Mehr und mehr auch Transformer-Architektur
+– Bild-Patches als Tokens
+
+169
+
+U-Net
+•
+•
+
+U-Net macht im Output eine Vorhersage
+pro Output-Pixel
+Ursprüngliches U-Net: Output-Auflösung
+= Input-Auflösung
+– Sagen die Klasses jedes Pixels vorher
+
+•
+•
+
+Linke Hälfte: gewöhnliches
+Convolutional Netzwerk
+Rechte Hälfte: “umgekehrtes ConvNet”
+– Upsampling statt Downsampling mit
+transposed Convolution mit stride 2
+– Skip-connections zwischen DownsamplePfad und entsprechendem Layer im
+Upsampling-Pfad
+– Letzter Schritt: 1x1 Convolutions – so
+viele wie es Klassen gibt
+
+O. Ronneberger, P. Fischer, T. Brox, U-Net: Convolutional Networks for Biomedical Image Segmentation, 2015,
+https://arxiv.org/abs/1505.04597
+
+170
+
+Netzwerk Architektur
+Typische U-Net-Erweiterungen in Diffusionsmodellen
+• Residual Connections
+• Attention in ausgewählten Layern
+• Zeit-Embedding als zusätzlicher Input (analog zu Positional Encoding bei
+Transformer)
+Bei Generierung aus Text-Prompts
+• Text-Input von (meist vortrainiertem) Text-Encoder (z.B. CLIP)
+• Cross-Attention bei Bildgenerierung mit Textprompts
+– U-Net-Featuers: Q
+– Text-Embeddings: K & V)
+
+171
+
+Latent Diffusion
+Motivation: Diffusion auf hochauflösenden Bildern extrem rechenlastig.
+Lösung:
+1. Kompression: Bild à Embedding (mittels vortrainiertem VAE)
+2. Diffusion im Embedding-Raum (“Latent Space”)
+3. Embedding à Bild
+Warum?
+• Latent Space ist viel kleiner (typisch: 64x weniger Pixel) à weniger Compute und VRAM
+• Dadurch hohe Auflösungen möglich
+• Semantik bleibt erhalten – VAE lernt, die wichtigen Merkmale zu behalten
+
+R. Rombach et al., High-Resolution Image Synthesis with Latent Diffusion Models, 2021,
+https://arxiv.org/abs/2112.10752
+
+172
+
+Diffusion für Super-Resolution, Cascaded Diffusion Modelle
+• Diffusion Modell für Super-Resolution (generative Upscaling)
+– Conditional Generation konditioniert mit niedrigaufgelöstem Bild = 𝑐
+
+• Cascaded Diffusion Models (Multi-Stage Generation)
+– Erstes Diffusionmodell DM1 trainiert für Bilderzeugung in niedriger Auflösung
+– Weitere Diffusionmodelle DM2 & DM3 (oder mehr) trainiert für Upscaling
+– Pipeline: DM1 (low-res) à DM2 (mid-res) à DM3 (high-res)
+– DM2 und DM3 können mit weniger komplexen U-Nets arbeiten und oft mit weniger
+Diffusionsschritten auskommen, da sie lediglich Verfeinerungen von Bildern lernen müssen
+– Daher benötigt Gesamtpipeline aus den Modellen weniger Compute als ein einzelnes High-Resolution
+Diffusionmodell
+– Cascaded Diffusion funktioniert sowohl im Pixel-Raum als auch im latenten Raum
+
+Bekannte Latent Diffusion Modelle: Stable Diffusion, Kandinsky
+Pixel Diffusion: Imagen (cascaded diffusion)
+DALL-E 3: unbekannt
+
+173
+
+Übung
+• https://learn.deeplearning.ai/courses/diffusion-models/
+– Kurze Erklärvideos und Code
+
+• https://chenyang.co/diffusion.html
+– Blog-Posts mit Kurzer Erklärung und Code
+
+• Hugging Face
+– https://huggingface.co/learn/diffusion-course
+– https://huggingface.co/learn/computer-vision-course/unit5/generative-models/diffusionmodels/introduction
+– https://huggingface.co/docs/diffusers/
+
+174
+
+Referenzen
+Autoencoder, Variational Autoencoder, Diffusion
+• Vorlesungsunterlagen “Intro to Deep Learning”, von Kilian Q. Weinberger und Jennifer J. Sun, CS 4782, Spring 2025,
+Cornell University (https://www.cs.cornell.edu/courses/cs4782/2025sp/)
+• D. E. Rumelhart, G. E. Hinton, R. J. Williams, ”Learning representations by back-propagating errors”, 1986
+• M. A. Kramer, “Nonlinear principal component analysis using autoassociative neural networks”, 1991
+• G. E. Hinton, R. S. Zemel, “Autoencoders, minimum description length and Helmholtz free energy”, 1993
+• J. Sohl-Dickstein et al. (2015), https://arxiv.org/abs/1503.03585
+• J. Ho, A. Jain, and P. Abbeel, “Denoising Diffusion Probabilistic Models” (2020), https://arxiv.org/abs/2006.11239
+• J. Song, C. Meng, S. Ermon, “Denoising Diffusion Implicit Models“ (2020), https://arxiv.org/abs/2010.02502
+• O. Ronneberger, P. Fischer, T. Brox, U-Net: Convolutional Networks for Biomedical Image Segmentation, 2015,
+https://arxiv.org/abs/1505.04597
+• R. Rombach et al., High-Resolution Image Synthesis with Latent Diffusion Models, 2021,
+https://arxiv.org/abs/2112.10752
+• Calvin Luo, Understanding Diffusion Models: A Unified Perspective, 2022, https://arxiv.org/abs/2208.11970
+
+

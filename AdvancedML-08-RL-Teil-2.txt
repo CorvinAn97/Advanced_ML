@@ -1,0 +1,1273 @@
+Reinforcement
+Learning
+Teil 2
+-
+
+Exploration
+Offline RL
+1
+
+Exploration
+2
+
+Schwierigkeitsgrad aus Sicht eines RL-Agenten
+Extrem schwierige Aufgabe
+
+Eher leichte Aufgabe
+
+Was macht eine
+Aufgabe schwierig für
+einen RL-Agenten?
+Breakout
+
+Montezuma’s revenge
+
+Sichtweise eines menschlichen Spielers kann sich unterscheiden
+3
+
+Montezuma’s revenge
+• Schlüssel aufsammeln à Reward
+• Tür öffnen à Reward
+• Getötet werden von Totenkopf à nichts (gut? Schlecht?)
+• Problem: Das Spiel zu beenden korreliert nur schwach mit
+Reward-Ereignissen
+• Menschliche Spieler wissen was zu tun ist, weil sie die
+Spielelemente verstehen (Schlüssel, Totenkopf, …)
+
+4
+
+Sicht eines RL-Algorithmen verstehen
+• Sie kennen die Regeln nicht
+• Können Regeln nur durch Ausprobieren herausfinden
+• Regeln machen evtl. keinen Sinn aus Ihrer Sicht
+• Zeitlich ausgedehnte Aufgaben wie Montezuma’s
+revenge werden umso schwieriger
+UNO
+
+• Je größer der Zeithorizont ist
+• Wie wenig Sie über die Regeln wissen
+
+• Stellen Sie sich vor, Ihr Lebensziel bestünde daraus,
+42 Spiele UNO zu gewinnen…
+• … und Sie wüssten vorher nichts davon
+
+5
+
+Weitere Beispiele
+• Das beschriebene Problem beschränkt sich nicht nur auf Spiele
+• Es besteht bei sämtlichen Aufgaben eines RL-Agenten
+• Beispiel aus der Robotik:
+• Gegenstände mit einer (Roboter-) Hand bewegen
+• Werkzeuge nutzen
+• Türen oder Schubladen öffnen
+•…
+• Erfordert komplexes Zusammenspiel mehrerer Finger und
+das Erlernen, wie auf die jeweilige Umgebung Einfluss
+genommen werden kann
+6
+
+Exploration und Exploitation
+• Wie kann ein Agent ein Verhalten erlernen, das eine zweitlich ausgedehnte
+Sequenz komplexer Aktionen erfordert, die individuell keinen Reward bringen?
+• Wie kann ein Agent sich entscheiden, ob ein neues Verhalten probiert (mit dem
+Ziel, höhere Rewards zu entdecken) oder weiterhin das bestbekannte Verhalten
+fortgesetzt werden soll
+• Sind beides Sichtweisen desselben Problems
+• Exploitation: Tun, was wir aktuell für das beste halten
+• Exploration: Neue Dinge ausprobieren in der Hoffnung noch höhere Rewards zu erhalten
+
+7
+
+Exploration ist schwer
+• Können wir eine optimale Explorationsstrategie finden?
+• Was bedeutet optimal in dem Kontext?
+• Z.B. Regret im Vergleich zu einer Bayes-optimalen Strategie
+
+Multi-armed Bandits
+(1-step stateless RL
+problems)
+Theoretisch lösbar
+
+Contextual Bandits
+(1-step RL problems)
+
+Kleine, endliche MDPs
+(z.B. berechenbare Planung,
+Modell-basiertes RL)
+
+Große, unendliche MDPs,
+kontinuierliche Räume
+
+Theoretisch unlösbar
+8
+
+Bandits
+• Was sind Banditen?
+
+One-armed Bandit
+𝒜 = {am Arm ziehen}
+𝑟 𝑎 =?
+
+à Einfachstes aller Explorationsprobleme
+
+Multi-armed Bandit
+𝒜 = {Arm! , Arm" , … , Arm# }
+𝑟 𝑎$ = ?
+Nehmen an 𝑟 𝑎$ ~ 𝑝(𝑟|𝑎$ )
+
+9
+
+Wie können wir Bandits definieren?
+• Annahme: 𝑟 𝑎8 ~ 𝑝9! 𝑟8 ,
+• z.B. 𝑝 𝑟8 = 1 = 𝜃8 und 𝑝 𝑟8 = 0 = 1 − 𝜃8
+• Das definiert einen POMDP mit 𝑠 = 𝜃:, … , 𝜃;
+• Wir haben einen “belief state” 𝑝̂ 𝜃:, … , 𝜃;
+• Lösung des POMDP à optimale Explorationsstrategie (“Welche Aktion ist jetzt
+optimal, wenn ich auch berücksichtige, was ich dadurch lerne und wie mir dieses
+Wissen in allen künftigen Schritten hilft?“)
+• Aber: Das ist ein riesiges, nicht allgemein lösbares Problem.
+• Gleichzeitig können wir sehr gute Ergebnisse mit einfachen Strategien erzielen
+• Wie die Qualität eines Explorationsalgorithmus messen?
+• àRegret: Differenz zur optimalen Policy zum Zeitpunkt 𝑇:
+𝑅𝑒𝑔 𝑇 = 𝑇𝐸 𝑟 𝑎∗
+Erwartungswert beste Aktion
+
+%
+
+Tatsächlich durchgeführte
+Aktion
+
+− * 𝑟 𝑎"
+"#$
+
+10
+
+Drei ExplorationsstrategieKlassen
+Optimale Explorationsstrategien für einfache MDPs
+
+11
+
+Bandit-Probelme lösen
+%
+
+𝑅𝑒𝑔 𝑇 = 𝑇𝐸 𝑟 𝑎 ∗ − * 𝑟 𝑎"
+"#$
+
+Erwartungswert beste Aktion
+
+Tatsächlich durchgeführte Aktion
+
+• Viele relativ einfache Strategien
+• Oft theoretische Garantien für Regret
+• Viele optimale Algorithmen (modulo konstantem Faktor)
+• Empirische Performance unterschiedlich
+
+• Explorationsstrategien für komplexere MDP werden durch diese Strategien
+inspiriert
+12
+
+Optimistische Exploration: Upper Confidence Bound (UCB)
+• Durchschnittlichen Reward 𝜇̂ < für jede Aktion 𝑎 tracken
+• Exploitation: wähle 𝑎 = argmax 𝜇<
+• Optimistische Schätzung: 𝑎 = argmax 𝜇< + 𝐶𝜎<
+irgendeine Varianzschätzung
+
+Intuition: Versuche jeden Arm bis es sicher ist, dass er nicht gut ist
+• Beispiel (Auer et al. (2002). Finite-tie analysis of the multiarmed bandit problem.):
+𝑎 = argmax 𝜇< +
+
+= >? @
+A <
+
+à 𝑅𝑒𝑔 𝑇 = 𝑂 log 𝑇 ,
+
+Beweisbar optimal (im Bandit-Setup)
+Bei Unsicherheit à Optimismus
+13
+
+Thompson sampling
+• Annahme: 𝑟 𝑎8 ~ 𝑝9! 𝑟8 ,
+• Das definiert einen POMDP mit 𝑠 = 𝜃:, … , 𝜃;
+• “belief state” ist 𝑝̂ 𝜃:, … , 𝜃; (das ist ein Modell des Bandits)
+Idee:
+• Sample 𝜃:, … , 𝜃; ~ 𝑝̂ 𝜃:, … , 𝜃;
+• Nehme an, 𝜃:, … , 𝜃; sei korrekt
+• Nehme optimale Aktion
+• Update Modell aus Beobachtung
+
+• Bekannt als Thompson sampling,
+posterior sampling oder probability
+matching
+• Schwerer theoretisch zu analysieren
+• Funktioniert gut empirisch
+Siehe Chapelle & Li, “An Empirical Evaluation of
+Thompson Sampling”
+14
+
+Information gain
+• Angenommen, wir möchten eine latente Variable 𝑧 bestimmen
+• 𝑧 könnte bspw. die optimale Aktion oder der Wert einer Aktion sein
+
+• Welche Aktion sollten wir nehmen?
+• Def.: ℋ 𝑝̂ 𝑧
+
+ist die Entropie unserer aktuellen Schätzung von 𝑧
+
+• Def.: ℋ 𝑝̂ 𝑧 |𝑦 ist die Entropie unserer Schätzung von 𝑧 nach Beobachtung 𝑦 (𝑦
+könnte z.B. 𝑟(𝑎) sein)
+• Je geringer die Entropie, desto präziser kennen wir 𝑧
+• 𝐼𝐺 𝑧, 𝑦 = 𝔼B ℋ 𝑝̂ 𝑧
+
+− ℋ 𝑝̂ 𝑧 |𝑦
+
+• Typischerweise hängt das von Aktion a ab, also IG 𝑧, 𝑦 𝑎
+15
+
+Information gain Beispiel
+• IG 𝑧, 𝑦 𝑎 = 𝔼B ℋ 𝑝̂ 𝑧
+
+− ℋ 𝑝̂ 𝑧 |𝑦 |𝑎
+
+• Wie viel lernen wir über 𝑧 aus Aktion 𝑎, gegeben unsere aktuellen Beliefs
+• Beispiel eines Bandit-Algorithmus: Russo & Van Roy “Learning to Optimize via
+Information-Directed Sampling”
+𝑦 = 𝑟< , 𝑧 = 𝜃< (𝜃< sind die Parameter des Modells 𝑝 𝑟< )
+𝑔 𝑎 = 𝐼𝐺 𝜃< , 𝑟< 𝑎 - information gain von 𝑎
+Δ 𝑎 = 𝔼 𝑟 𝑎∗ − 𝑟 𝑎
+Wähle 𝑎 gemäß:
+
+- erwartete Suboptimalität von 𝑎
+
+D< "
+argmin<
+E <
+
+Wähle keine sicher suboptimalen Aktionen
+Wähle keine Aktionen, aus denen du nichts lernst
+16
+
+Leitideen der Exploration
+UCB
+
+Thompson sampling
+
+2 ln 𝑇
+𝑎 = argmax 𝜇& +
+𝑁 𝑎
+
+𝜃$ , … , 𝜃' ~ 𝑝̂ 𝜃$ , … , 𝜃'
+𝑎 = argmax( 𝔼)! 𝑟 𝑎
+
+Information gain
+IG 𝑧, 𝑦 𝑎
+
+• Die meisten Explorationsstrategien benötigen eine Art Unsicherheitsabschätzung
+(auch wenn sie sehr grob ist)
+• Üblicherweise wird angenommen, dass neue Information einen Wert hat:
+• Unbekanntes = potenziell gut (Optimismus)
+• Stichprobe = Wahrheit
+• Informationsgewinn = gut
+
+17
+
+Warum sollten wir uns dafür interessieren?
+• Bandits sind leichter zu analysieren und zu verstehen
+• Sie liefern grundlegende Einsichten für Explorationsmethoden
+• Diese Methoden lassen sich anschließend auf komplexere MDPs anwenden
+Hier nicht behandelt:
+• Kontextuelle Bandits (Bandits mit Zustand, im Grunde 1-Schritt-MDPs)
+• Optimale Exploration in kleinen MDPs
+• Bayesianisches modellbasiertes Reinforcement Learning (ähnlich wie
+Informationsgewinn)
+• Probably Approximately Correct (PAC) Exploration
+18
+
+Exploration in Deep RL
+19
+
+Verschiedene Explorations-Methoden
+• Optimistische Exploration
+• Neuer Zustand = guter Zustand
+• Erfordert Zustandscounter oder Neuigkeit von Zuständen messen
+• Typischerweise realisiert über Explorationsbonus
+• Thompson sampling
+• Lerne Verteilung über Q-Functions oder Policies
+• Sample und agiere gemäß Sample
+• Information gain
+• Erwäge Information gain durch Besuch neuer Zustände
+
+20
+
+Optimistische Exploration in Deep RL
+
+21
+
+Optimistische Exploration in Deep RL
+UCB:
+
+2 ln 𝑇
+𝑎 = argmax 𝜇& +
+𝑁 𝑎
+„Explorationsbonus“
+Viele Funktionen möglich, solange sie mit 𝑁(𝑎) abnehmen
+
+• Können wir das in deep RL verwenden?
+• Count-basierte Exploration: verwende 𝑁(𝑠, 𝑎) oder 𝑁(𝑠) für Explorationsbonus:
+• 𝑟 F 𝑠, 𝑎 = 𝑟 𝑠, 𝑎 + 𝐵(𝑁 𝑠 ), 𝐵 𝑁 𝑠 : Bonus, der mit 𝑁(𝑠) abnimmt
+• Nutze 𝑟 F 𝑠, 𝑎 statt 𝑟 𝑠, 𝑎 mit beliebigem modellfreien Algorithmus
+• à Einfache Ergänzung für jeden RL Algorithus
+• àNachteil: Tuning von Bonusgewichten notwendig
+22
+
+Wie zählen wir Zustände in Deep RL?
+• Nutze 𝑟 F 𝑠, 𝑎 = 𝑟 𝑠, 𝑎 + 𝐵(𝑁 𝑠 )
+• Aber wie zählen wir Zustände in riesigen Zustandsräumen?
+
+• Viele Zustände sehen wir nur ein einziges Mal!
+• Aber einige Zustände ähneln einander mehr als andere…
+23
+
+Können Modelle fitten
+• Idee: Fitte Modell für Zustandsdichte 𝑝9 (𝑠) oder 𝑝9 (𝑠, 𝑎)
+als Näherung für 𝑁(𝑠) bzw. 𝑁(𝑠, 𝑎)
+• 𝑝9 (𝑠) hoch à 𝑠 ist ähnlich zu einem zuvor schon
+gesehenen Zustand
+• Wir können 𝑝9 (𝑠) als “Pseudo-Count” nutzen
+• Für kleine MDPs: 𝑃 𝑠
+
+A H
+= ;
+
+• Wenn wir 𝑠 nochmal sehen: 𝑃I 𝑠
+
+A H F:
+= ;F:
+
+• Idee: Wenn 𝑝9 (𝑠) und 𝑝9# (𝑠) diesen Gleichungen
+gehorchen, können wir daraus 𝑁 𝑠 und 𝑛 bestimmen
+
+24
+
+Exploration mit Pseudo-Counts
+• Fitte Modell 𝑝9 (𝑠) an alle bisher gesehenen Zustände 𝒟
+• Mache einen Schritt 𝑖 und beobachte 𝑠8
+• Fitte neues Modell 𝑝9# (𝑠) an 𝒟 ∪ 𝑠8
+T
+• Nutze 𝑝9 (𝑠) und 𝑝9# (𝑠) zur Schätzung von 𝑁(𝑠)
+T 𝑠 ),
+T 𝑠 : Pseudo-Count
+• 𝑟8F = 𝑟8 + 𝐵(𝑁
+𝑁
+T 𝑠 ? Nutze:
+• Wie erhalten wir 𝑁
+𝑝9 𝑠8
+
+J H!
+A
+= ;K
+
+𝑝9# 𝑠8
+
+J H! F:
+A
+= ;F:
+K
+
+• Zwei Gleichungen mit zwei Unbekannten
+T 𝑠8 = 𝑛U 𝑝9 𝑠8
+à𝑁
+
+𝑛U = M
+
+:LM$# H!
+
+$# H! LM$ H!
+
+Bellemare et al. “Unifying Count-Based Exploration…”
+
+𝑝9 𝑠8
+25
+
+Welchen Bonus nutzen?
+Viele verschiedene Funktionen in der Literatur, inspiriert durch optimale Methoden
+für Bandits oder kleine MDPs
+
+UCB:
+
+MBIE-EB (Strehl & Littmann, 2008):
+
+BEB (Kolter & Ng, 2009):
+
+=
+
+2 ln 𝑛
+𝑁 𝑠
+
+𝐵 𝑁 𝑠
+
+=
+
+1
+𝑁 𝑠
+
+𝐵 𝑁 𝑠
+
+1
+=
+𝑁 𝑠
+
+𝐵 𝑁 𝑠
+
+26
+
+Funktioniert es?
+
+Bellemare et al. “Unifying Count-Based Exploration…”
+
+27
+
+Weitere Neuigkeit-suchende
+Explorationsmethoden
+
+28
+
+Was für ein Modell nutzen?
+
+𝑝! (𝑠)
+• Brauchen Zustandsdichten, aber müssen nicht
+unbedingt gute Samples produzieren können
+• Andere Anforderungen als bei vielen generativen
+Modellen (GANs, Diffusion)
+• Bellemare et al.: ”CTS”-Modell: Konditionierung jedes
+Pixels auf dessen Nachbarschaft links/oben
+• Andere Modelle: Stochastische neuronale
+Netzwerke, Compression Length, EX2
+29
+
+Zählen mit Hashes
+• Idee: Komprimiere 𝑠 in einen 𝑘-bit Code mit 𝜙 𝑠 und Zähle 𝑁 𝜙 𝑠
+• Kürzere Codes = mehr Hashkollisionen
+• Erhalten ähnliche Zustände den selben Hash?
+Kommt drauf an…
+• Beeinflusse dies durch Lernen einer
+Kompression mit Autoencodern
+
+Tang et al. “#Exploration: A Study of Count-Based Exploration”
+
+30
+
+Implizite Dichtemodellierung mit Exemplar-Modellen
+• 𝑝9 (𝑠): Brauchen Zustandsdichten, aber müssen nicht unbedingt gute Samples
+produzieren können
+• Können wir den neuen Zustand explizit mit den alten Zuständen vergleichen?
+• Intuition: der Zustand ist neu, wenn es leicht ist ihn mittels Classifier von allen
+zuvor gesehenen Zuständen zu unterscheiden
+• Für jeden Zustand, fitte Classifier um diesen Zustand gegen alle vorherigen
+Zustände 𝒟 zu klassifizieren; nutze dies, um eine Dichte zu erhalten:
+1 − 𝐷H 𝑠
+𝑝9 𝑠 =
+𝐷H 𝑠
+
+positives: {𝑠}
+negatives: 𝒟
+
+• 𝐷H 𝑠 : Wahrscheinlichkeit, die der Classifier für “𝑠 ist positiv” angibt
+• Task ist nicht trivial, da 𝑠 auch in 𝒟 enthalten sein kann
+Fu et al. “EX2: Exploration with Exemplar Models…”
+
+31
+
+Implizite Dichtemodellierung mit Exemplar-Modellen
+• Task ist nicht trivial, da 𝑠 auch in 𝒟 enthalten sein kann
+• Wenn 𝑠 ∈ 𝒟, ist das optimale 𝐷H 𝑠 ≠ 1, in der Tat:
+• 𝐷H∗ 𝑠
+
+:
+= :FM H
+
+→ 𝑝9 𝑠
+
+:LP% H
+= P H
+%
+
+• In der Realität ist jeder Zustand einzigartig (großer Zustandsraum) à
+Regularisierung gegen Overfitting
+• Ein Classifier pro Zustand ist aufwendig…
+• à Amortisiertes Modell: Einzelnes Netzwerk mit Exemplar als weiterer Input:
+
+32
+
+Heuristische Count-Schätzung via Fehler
+• 𝑝9 (𝑠): Brauchen Zustandsdichten, aber müssen nicht unbedingt gute Samples
+produzieren können
+• … und müssen auch nicht unbedingt gute Dichten produzieren
+• … müssen lediglich erkennen, ob ein Zustand neu ist oder nicht!
+
+• Angenommen, wir haben eine Zielfunktion 𝑓 ∗(𝑠, 𝑎)
+• Fitte 𝑓C) (𝑠, 𝑎) mit Daten aus unserem Buffer 𝒟 = { 𝑠* , 𝑎* }
+• Nutze ℰ 𝑠, 𝑎 = 𝑓C) 𝑠, 𝑎 − 𝑓 ∗ 𝑠, 𝑎
+
++
+
+als Bonus
+
+33
+
+Heuristische Count-Schätzung via Fehler
+• Angenommen, wir haben eine Zielfunktion 𝑓 ∗ (𝑠, 𝑎)
+• Fitte 𝑓'" (𝑠, 𝑎) mit Daten aus unserem Buffer 𝒟 = { 𝑠# , 𝑎# }
+• Nutze ℰ 𝑠, 𝑎 = 𝑓'" 𝑠, 𝑎 − 𝑓 ∗ 𝑠, 𝑎
+
+$
+
+als Bonus
+
+Welche Zielfunktion 𝑓 ∗ 𝑠, 𝑎 wählen?
+• Oft: 𝑓 ∗ 𝑠, 𝑎 = 𝑠′ , also next state prediction
+• Noch einfacher: 𝑓 ∗ 𝑠, 𝑎 = 𝑓Q (𝑠, 𝑎), mit zufälligem Parametervektor 𝜙
+(à beliebiges 𝑓 ∗ 𝑠, 𝑎 )
+
+Bruda et al. (2018), Exploration by random network distillation.
+
+34
+
+Thompson Sampling in Deep RL
+
+35
+
+Thompson Sampling in Deep RL
+• Thompson Sampling:
+• 𝜃:, … , 𝜃; ~ 𝑝(𝜃
+̂ :, … , 𝜃; )
+• 𝑎 = argmaxR 𝔼9& 𝑟 𝑎
+
+Was wird gesampelt?
+Wie wird die Verteilung repräsentiert?
+
+• Bandit Setting: 𝑝(𝜃
+̂ :, … , 𝜃; ) ist die Verteilung über Rewards
+• MDP-Analogon ist die 𝑄-Funktion
+1. Sample 𝑄-Funktion 𝑄 aus 𝑝(𝑄)
+2. Handle gemäß 𝑄 für eine Episode
+3. Update 𝑝(𝑄)
+Wie können wir eine Verteilung über Funktionen (𝑝(𝑄)) repräsentieren?
+Osband et al. “Deep Exploration via Bootstrapped DQN”.
+
+36
+
+Bootstrapping 𝑝(𝑄)
+• Gegeben Datensatz 𝒟, resample 𝑁 mal mit Zurücklegen à𝒟:, … , 𝒟A
+• Trainiere je ein Modell 𝑓9! auf 𝒟8
+• Sampeln aus 𝑝(𝜃) à sample 𝑖 ∈ [1, … , 𝑁] und nutze 𝑓9!
+• Training großer neuronaler Netzwerke ist teuer – können wir es vermeiden?
+(alle auf einem Datensatz trainiert)
+
+Osband et al. “Deep Exploration via Bootstrapped DQN”.
+
+37
+
+Warum funktioniert das?
+• Exploration mit Zufallsaktionen (z.B. 𝜖-greedy): oszillieren hin und her, geht evtl.
+nicht zu interessanten Orten, keine kohärente Policy
+• Exploration mit zufäligen 𝑄-Funktionen: committe zu einer zufälligen, aber intern
+konsistenten Strategie für eine ganze Episode
+
++ keine Änderung der ursprünglichen Rewardfunktion
+- Sehr gute Bonusse funktionieren oft besser
+
+Osband et al. “Deep Exploration via Bootstrapped DQN”.
+
+38
+
+Information Gain in Deep RL
+
+39
+
+Schätzung des Information gain
+• Information gain: IG 𝑧, 𝑦 𝑎
+• Information gain worüber?
+• Information gain über Reward 𝑟(𝑠, 𝑎)?
+nicht nützlich, wenn Rewards selten
+• Information gain über Zustandsdichte 𝑝(𝑠)? - schon besser, macht mehr Sinn
+• Information gain über Dynamik 𝑝(𝑠 I |𝑠, 𝑎)? - guter Proxy um MDP zu lernen
+• Grundsätzlich nicht genau berechenbar, unabhängig davon, was geschätzt wird!
+
+40
+
+Schätzung des Information gain
+• Grundsätzlich nicht genau berechenbar, unabhängig davon, was geschätzt wird!
+Einige Näherungen:
+Prediction gain: log 𝑝9# 𝑠 − log 𝑝9 (𝑠)
+(Schmidhuber ‘91, Bellemare ‘16)
+• Intuition: Wenn Dichte sich stark ändert, war der Zustand neu
+Variational inference (Houthooft et al. ”VIME”)
+• IG kann geschrieben werden als 𝐷ST (𝑝 𝑝 𝑧 𝑦 ∥ 𝑝 𝑧
+• Lernen Transitions 𝑝9 𝑠UF: 𝑠U , 𝑎U : 𝑧 = 𝜃, 𝑦 = 𝑠U , 𝑎U , 𝑠UF:
+• Intuition: Transition ist informativ, wenn es unseren Belief über 𝜃 ändert
+• Schätzen 𝑝 𝜃 ≈ 𝑞Q 𝜃 und nutzen 𝐷ST 𝑞Q# 𝜃 ∥ 𝑞Q 𝜃
+Bonus
+
+als Explorations-
+
+41
+
+Exploration mit Modellfehlern
+• 𝐷ST 𝑞Q# 𝜃 𝑞Q 𝜃 kann auch als Änderung der Netzwerkparameter 𝜙
+aufgefasst werden; unabhängig von IG gibt es viele Wege diese zu messen
+
+Stadie et al 2015
+• Bilder mit auto-encoder codieren
+• Vorhersagemodell auf latentem Raum des Autoencoders
+• Modellfehler als Explorationsbonus nutzen
+Schmidhuber et al (“Formal Theory of Creativity, Fun, and Intrinsic Motivation”)
+• Explorationsbonus für Modellfehler, Modellgradient, und viele andere Varianten
+42
+
+In Kürze:
+Explorationsklassen
+in Deep RL
+
+Optimistische Exploration
+• Exploration mit Pseudecounts basierend auf
+Zustandsdichten
+• Verschiedene Methoden zur Schätzung von
+Zustandsdichten
+Thompson sampling
+• Verteilung über Modelle mittels Bootstrapping
+• Verteilung über Q-Funktionen
+Information gain Algorithmen
+• IG nicht berechenbar, aber diverse Methoden zum
+Schätzen
+
+43
+
+Offline Reinforcement
+Learning
+
+44
+
+Literatur
+• Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open
+Problems, https://arxiv.org/abs/2005.01643
+• A Survey on Offline Reinforcement Learning: Taxonomy, Review, and Open
+Problems, https://arxiv.org/abs/2203.01387
+
+45
+
+Generalization Gap
+• Deep RL funktioniert auf einer großen Breite von Aufgaben
+• Aber: Generalisierung nicht wie bei supervised ML
+• Liegt es an der Verfügbarkeit von großen Datensätzen für RL?
+• Schwierigkeit von RL: Daten werden während des Trainings gesammelt
+• On-policy: Update der Policy nur mit den neusten Daten
+• Off-policy: Update der Policy aus einem Replay-Buffer,
+der aber während des Trainings befüllt und ständig erneuert wird
+
+• Müssen riesige Datenmengen pro Trainingslauf sammeln
+• Idealerweise: Daten einmal sammeln und wiederverwenden, wie bei
+Supervised Learning
+46
+
+Warum funktioniert Deep Learning so gut?
+
+Große Modelle
+Große Datensätze
+
+47
+
+Können wir datenbasierte RL-Algorithmen entwickeln?
+
+Aka: “batch RL”
+
+Levine, 2023
+
+48
+
+Was bringt uns Offline RL? Weitere Gründe…
+Typisches (online) RL Setup: Sammeln von
+Erfahrung durch Interaktion mit der Umgebung
+
+àin vielen Bereichen nicht möglich
+(Sicherheit, Kosten)
+z.B. Gesundheitswesen, autonomes
+Fahren
+Offline RL ermöglicht es aus gesammelten
+Daten gute Policies zu extrahieren ohne
+riskante oder teure Interaktionen.
+49
+
+Offline RL: Formale Definition
+𝒟 = { 𝑠8 , 𝑎8 , 𝑠8I , 𝑟8 }
+𝑠 ~ 𝑑V' (𝑠)
+𝑎 ~ 𝜋W 𝑎 𝑠
+
+unbekannt; keine
+Annahmen an 𝜋%
+
+𝑠 I ~ 𝑝 𝑠 I 𝑠, 𝑎
+Aka: “batch RL”
+
+𝑟 = 𝑟(𝑠, 𝑎)
+RL Zielfunktion:
+%
+
+max $ 𝔼&%~(& & ,*%~! 𝑎 𝑠 𝛾 " 𝑟 𝑠" , 𝑎"
+!
+
+"#$
+50
+
+Verschiedene Offline RL Aufgabenstellungen
+Off-Policy Evaluation (OPE):
+• Gegeben 𝒟, schätze 𝐽 𝜋 = 𝔼V ∑@UYZ 𝑟 𝑠U , 𝑎U
+Offline Reinforcement Learning:
+• Gegeben 𝒟, lerne die bestmögliche Policy 𝜋9
+
+𝒟 = { 𝑠8 , 𝑎8 , 𝑠8I , 𝑟8 }
+𝑠 ~ 𝑑V' (𝑠)
+𝑎 ~ 𝜋W 𝑎 𝑠
+𝑠 I ~ 𝑝 𝑠 I 𝑠, 𝑎
+𝑟 = 𝑟(𝑠, 𝑎)
+
+bestmöglich, gegeben 𝒟 – nicht bestmöglich für den MDP
+
+51
+
+Wie ist das überhaupt möglich?
+• Finde die guten Aktionen im Datensatz voller guter und schlechter Aktionen
+• Nicht einfach Imitation Learning
+
+• Generalisierung: Gutes Verhalten in einer Situation liefert Beispiele für gutes
+Verhalten in anderen Situationen.
+• “Stitching”: Teile guten Verhaltens können kombiniert werden
+
+52
+
+Was erwarten wir von Offline RL Methoden?
+• Schlechte Intuition: es ist wie Imitation Learning
+Unter bestimmten Annahmen kann man zeigen, dass
+Offline RL selbst mit optimalen Daten besser ist als
+Imitation Learning.
+(Kumar et al. Should I run Offline RL or BC?)
+
+• Bessere Intuition: Ordnung aus Chaos
+“Macro-Stitching”
+
+Allgemeiner:
+“Micro-Stitching”:
+
+Optimale Policies aus suboptimalen53Daten
+
+Demo
+
+https://www.youtube.com/watch?v=6sb31PtpI_s
+
+https://github.com/avisingh599/cog
+
+Singh, Yu, Yang, Zhang, Kumar, Levine. COG: Connecting New Skills to Past Experience with Offline Reinforcement Learning. ‘20
+
+54
+
+Funktioniert es?
+
+• Offline Training funktioniert, aber:
+• Reines Offline-Training schnitt deutlich schlechter ab als Offline RL mit Online
+Finetuning
+
+Kalashnikov et al. QT-Opt: Scalable Deep Reinforcement Learning of Vision-Based Robotic Manipulation Skills
+
+55
+
+Was macht Offline RL so schwierig?
+Fundamentales Problem: Counterfactual Queries.
+Ist das gut oder schlecht?
+Woher soll der Agent das
+wissen, wenn er es nicht
+in den Daten gesehen
+hat?
+Online RL Algorithmen haben das Problem nicht: Sie probieren die Aktion und
+schauen was passiert.
+Offline RL Algorithmen müssen mit solchen ungesehenen (“out-of-distribution”)
+Aktionen irgendwie auf sichere Art und Weise umgehen…
+…und dabei dennoch generalisieren und Policies produzieren, die besser sind, als
+alles, was in den Daten enthalten ist.
+Wichtig: out-of-distribution-actions ≠ out-of-sample-actions
+
+56
+
+Distribution shift
+Supervised Learning:
+min 𝔼'~) ' ,+~) 𝑦 𝑥
+"
+
+Egal, neuronale Netzwerke generalisieren sehr gut!?
+𝑓" 𝑥 − 𝑦 $
+
+Problem: Adversarial Examples:
+Wähle 𝑥 ∗ ← argmax' 𝑓" (𝑥)
+
+Gegeben ein 𝑥 ∗ , ist 𝑓(𝑥 ∗ ) korrekt?
+𝔼'~) ' ,+~) 𝑦 𝑥
+
+𝑓" 𝑥 − 𝑦 $ ist klein
+
+𝔼'~)̅ ' ,+~) 𝑦 𝑥
+
+𝑓" 𝑥 − 𝑦 $ nicht klein für beliebige 𝑝̅ 𝑥 ≠ 𝑝(𝑥)
+
+Was, wenn 𝑥 ∗ ~𝑝(𝑥)? nicht unbedingt…
+
+57
+
+Woher kommt der Distribution Shift in RL?
+. .
+𝑄 𝑠, 𝑎 ← 𝑟 𝑠, 𝑎 + max
+𝑄(𝑠
+,𝑎 )
+&
+-
+
+𝑄 𝑠, 𝑎 ← 𝑟 𝑠, 𝑎 + 𝔼-.~/'() 0. 𝑄(𝑠 . , 𝑎. )
+
+𝑦(𝑠, 𝑎)
+
+Offline RL:
+min 𝔼(0,-)~/* 0,1
+
+behavior policy
+
+𝑄 𝑠, 𝑎 − 𝑦 𝑠, 𝑎
+
+$
+
+target
+
+Erwarten guten Fit, wenn 𝜋, 𝑎 𝑠 = 𝜋-./(𝑎|𝑠) – aber wir wollen ja, dass 𝜋-./ besser wird als 𝜋, !
+Sogar: 𝜋-./ = argmax0 𝔼&~0 𝑎 𝑠 𝑄 𝑠, 𝑎
+(“adversarial attack”)
+
+58
+
+Generalisierungsfehler werden nicht korrigiert
+Online RL:
+
+Beste Aktion
+laut 𝑄-Function
+
+Aktion wird ausgeführt und Wert
+korrigiert, wenn nötig
+
+Offline RL:
+
+Keine Möglichkeit Herauszufinden, dass
+das keine optimale Aktion ist.
+
+Herausforderungen mit Fehlern des Function
+Approximators in standard RL sind noch viel
+schlimmer in offline RL.
+59
+
+Offline RL Algorithmen
+
+60
+
+Offline RL mit Policy Gradients
+𝜏 = 𝑠:, 𝑎:, … , 𝑠@ 𝑎 @ , 𝑟 𝜏 = ∑@UY: 𝑟(𝑠U , 𝑎U ) , 𝐽 𝜃 = 𝔼]~V$ 𝑟 𝜏
+@
+
+∇9 𝐽 𝜃 = 𝔼]~V$
+
+n ∇9 log 𝜋9 𝑠U , 𝑎U
+
+𝑄o 𝑠U , 𝑎U
+
+^ Reward to go)
+(𝑄:
+
+UY:
+A
+
+@
+
+1
+≈ n n ∇9 log 𝜋9 𝑠8,U 𝑎8,U 𝑄o 𝑠8,U 𝑎8,U
+𝑁
+8Y: UY:
+
+Müssen mit 𝜋) sampeln - aber wir haben nur Sampels von 𝜋, !
+
+Importance Sampling:
+A
+
+@
+
+@
+
+𝜋9 𝑠8,U # , 𝑎8,U #
+1
+∇9 𝐽 𝜃 ≈ n n p
+𝑁
+𝜋W 𝑠8,U # , 𝑎8,U #
+#
+8Y: UY:
+
+U Y:
+
+Importance Weights, exponentiell in 𝑇!
+Führt zu hoher Varianz in Gradient-Schätzung.
+
+∇9 log 𝜋9 𝑠8,U , 𝑎8,U 𝑄o 𝑠8,U , 𝑎8,U
+61
+
+Policy Constraint Methoden
+
+Problem 1: Kennen 𝜋, nicht, Daten könnten kommen von
+• Demonstrationen von Menschen
+• einer regelbasierten Steuerung
+• Viele frühere RL Läufe
+
+Möglichkeiten für Problem 1:
+• Können ein Modell für 𝜋% fitten (Behavioral Cloning)
+• Methoden, die mit Samples auskommen
+
+• Eine Kombination von allem
+Problem 2: 𝐷23 Constraint ist gleichzeitig zu pessimistisch und nicht pessimistisch genug
+• Nicht pessimistisch genug, weil selbst für 𝐷23 < 𝜖 einzelne Vorhersagen sehr unterschiedlich sein
+können
+• Zu pessimistisch, weil wir eine Policy möchten, die deutlich besser als 𝜋, ist
+• Bsp.: wenn 𝜋" uniforme Zufallspolicy, zwingt 𝐷#$ Constraint die neue Policy ebenfalls nah an uniform zufällig zu sein
+62
+
+Explizite Policy Constraints
+Welche Formen sind möglich?
+• KL-Divergenz: 𝐷ST (𝜋 ∥ 𝜋W )
+• Vorteil: Leicht zu implementieren
+• Nachteil: Nicht unbedingt was wir wollen
+
+• Support Constraint: 𝜋 𝑎 𝑠 ≥ 0 nur, wenn 𝜋W 𝑎 𝑠 ≥ 𝜖
+• Vorteil: viel näher dran an dem, was wir wirklich wollen
+• Nachteil: deutlich aufwendiger zu implementieren
+Beispielalgorithmen / verwandte Verfahren:
+BRAC (Wu et al., 2019) (KL-basierter Constraint)
+BEAR (Kumar et al., 2019) (Support-Constraint)
+BCQ (Fujimoto et al., 2019) (Action-/Support-Constraint)
+TD3+BC (Fujimoto & Gu, 2021) (BC-regularisiertes TD3, minimalistische Baseline mit oft sehr guten Ergebnissen)
+63
+
+Implizite Policy Constraints Methoden
+
+Lagrange-Multiplikatoren
+
+1
+1 /∗
+𝜋 𝑎𝑠 =
+𝜋 𝑎 𝑠 exp 𝐴 𝑠, 𝑎
+𝑍 𝑠 6
+𝜆
+∗
+
+D.h., optimale Lösung ist Behavior-Policy 𝜋% gewichtet mit exp von Advantage-Term 𝐴(𝑠, 𝑎). à Bessere Aktionen
+erhalten in der optimalen Policy exponentiell mehr Gewicht gegenüber als schlechtere Aktionen.
+∗
+Problem: Wir kennen weder 𝜋% 𝑎 𝑠 noch 𝐴, 𝑠, 𝑎 .
+Idee: Nähere die Lösung an durch iteratives Max-Likelihood-Training mit entsprechenden Gewichten:
+𝑤(𝑠, 𝑎)
+1
+1 ,
+𝜋-./ 𝑎 𝑠 = argmax, 𝔼 0,2 ~," log 𝜋 𝑎 𝑠
+𝜋% 𝑎 𝑠 exp 𝐴 #$% 𝑠, 𝑎
+𝑍 𝑠
+𝜆
+Trainingsdaten aus dem Datensatz
+
+“Gewichtetes Behavioral Cloning”
+
+Training eines Critics um 𝐴%!"# zu erhalten
+64
+
+Implizite Policy Constraints Methoden
+Loss von Critic (à 𝑄(𝑠, 𝑎)) und Actor (𝜋(𝑠, 𝑎)):
+
+𝜆: Kontrolliert die Stärke des 𝐷45 Constraints (Hyperparameter)
+𝑍 𝑠 : verschiedene Möglichkeiten, am
+einfachsten: “weglassen” (𝑍 𝑠 = 1)
+
+~
+Algorithmen:
+AWR (Advantage weighted regression), https://arxiv.org/abs/1910.00177
+AWAC (Advantag weighted actor critic), https://arxiv.org/abs/2006.09359
+CRR (Critic Regularized Regression), https://arxiv.org/abs/2006.15134
+
+Hinweis: Herleitung nimmt explizit
+stochastische Policy an.
+65
+
+Können wir auch im Q-Update OOD-Aktionen vermeiden?
+𝑄 𝑠, 𝑎 ← 𝑟 𝑠, 𝑎 + 𝔼<# ~V()* 𝑄 𝑠 I , 𝑎I
+𝑉 𝑠6
+
+(weiteres Netzwerk)
+Erhalten 𝑄(𝑠& , 𝑎& ) für verschiedene 𝑎&
+durch Generalisierung über ähnliche 𝑠&
+
+!
+
+Loss zum Training von 𝑉: 𝐿 = ∑7
+𝑙 𝑉 𝑠$ , 𝑎$ , 𝑄 𝑠$ , 𝑎$
+7 $8!
+Summe über Daten, d.h. Aktionen 𝑎& kommen von 𝜋"
+
+Bsp. MSE-Loss 𝑉 𝑠$ − 𝑄 𝑠$ , 𝑎$
+unter 𝜋% (nicht was wir wollen)
+
+"
+
+gibt uns Erwartungswert von 𝑄
+
+1 − 𝜏 𝑥+
+4
+Expectile-Loss: 𝑙+ 𝑥 = P
++
+𝜏𝑥
+MSE-Loss
+
+(𝑥 > 0)
+(𝑥 ≤ 0)
+
+Wert der besten durch die
+Daten gestützten Policy
+
+Verteilung induziert nur
+durch verschiedene Aktionen
+
+Expectile-Loss
+Negative Fehler werden stärker bestraft als positive; keine
+Overestimation, weil wir 𝑄(𝑠, 𝑎) nur auf 𝑠, 𝑎 ∈ 𝒟 auswerten
+
+Bei 𝑙"9 𝑥 mit 𝜏
+groß genug:
+
+𝔼'~%$ [𝑄 𝑠, 𝑎 ]
+MSE gibt uns das
+
+Expectile-Loss
+liefert das
+
+66
+
+Implicit Q-Learning (IQL)
+
+𝑙"9
+
+“Q-learning with implicit policy improvement”
+$
+7
+
+4
+𝑄 𝑠, 𝑎 ← 𝑟 𝑠, 𝑎 + 𝑉(𝑠 5 ), 𝑉 𝑠 ← argmin6 ∑7
+*#$ 𝑙+ 𝑉 𝑠* , 𝑎* , 𝑄 𝑠* , 𝑎*
+
+Effektives Verhalten:
+Bei 𝑙"9 𝑥 mit 𝜏 groß genug:
+
+𝑄(𝑠, 𝑎) Updates können nun gemacht werden ohne out-of-distribution Aktionen zu riskieren, weil
+nur State-Action-Paare aus dem Datensatz genutzt werden!
+Nach Training von 𝑄(𝑠, 𝑎): Policy-Extraktion mit advantage-weighted Methode der vorletzten Folie
+(ℒ: (𝜃), mit 𝐴 𝑠, 𝑎 = 𝑄 𝑠, 𝑎 − 𝑉(𝑠)). (einfach greedy(𝑄) funktioniert nicht, da dadurch potentiell
+Aktionswerte außerhalb der Datenverteilung abgefragt werden würden).
+Kostrikov, Nair, Levine. Offline Reinforcement Learning with Implicit Q-Learning. ‘21
+
+67
+
+Conservative Q-Learning (CQL)
+𝑄(𝑠, 𝑎)
+
+𝑎
+
+Alternativer Ansatz für das out-of-distribution Problem:
+𝑄Z 0 = argmin max 𝛼𝔼:~𝒟,&~9 &|: 𝑄 𝑠, 𝑎
+8
+
+9
+
+Reduziert zu große 𝑄-Werte
+Es lässt sich zeigen:
+
++ 𝔼 :,&,:) ~𝒟 [(𝑄 𝑠, 𝑎 − 𝑟 𝑠, 𝑎 + 𝔼0 𝑄 𝑠 5 , 𝑎5 ) +
+Regulärer 𝑄-Learning Loss
+
+𝑄^ , ≤ 𝑄, , wenn 𝛼 groß genug
+68
+
+Conservative Q-Learning (CQL)
+Vorige Schranke tendenziell zu pessimistisch – bessere Schranke:
+Reduziert 𝑄-Werte ∀ 𝑠, 𝑎
+
+𝑄o V = argmin { max 𝛼𝔼H~𝒟,<~| <|H 𝑄 𝑠, 𝑎
+{
+
+|
+
+erhöht 𝑄-Werte, wenn 𝑠, 𝑎 ∈ 𝒟
+
+− 𝛼𝔼(H,<)~𝒟 𝑄 𝑠, 𝑎
+
++𝔼 H,<,H# ~𝒟 [(𝑄 𝑠, 𝑎 − 𝑟 𝑠, 𝑎 + 𝔼V 𝑄 𝑠 I , 𝑎I ) = }
+
+ℒ@83 𝑄Z 0
+
+Der Term −𝛼𝔼(:,&)~𝒟 𝑄 𝑠, 𝑎 hebt die Reduktion der 𝑄-Werte für Daten aus dem Datensatz
+wieder auf. So werden effektiv nur Q-Werte für Aktionen außerhalb des Datensatzes reduziert.
+Es gilt nicht mehr:
+Stattdessen gilt:
+
+𝑄^ , ≤ 𝑄, , für alle (𝑠, 𝑎)
+𝔼, 𝑎 𝑠 [𝑄^ , (𝑠, 𝑎)] ≤ 𝔼, 𝑎 𝑠 𝑄, (𝑠, 𝑎) , für alle 𝑠 ∈ 𝒟
+
+Kumar, Zhou, Tucker, Levine. Conservative Q-Learning for Offline Reinforcement Learning. ‘20
+
+69
+
+Conservative Q-Learning (CQL)
+CQL ist ein Actor-Critic Algorithmus, wobei der Critic 𝑄 mit dem modifizierten Loss
+ℒ€{T 𝑄o V trainiert wird:
+1.
+
+Update 𝑄Z 0 durch Minimierung von ℒ@83 𝑄Z 0 und Daten aus 𝒟
+
+2.
+
+Update Policy 𝜋
+Bei deterministischer Policy:
+Z 𝑎)
+𝜋 𝑎 𝑠 = argmax& 𝑄(𝑠,
+Bei stochastischer Policy:
+𝜃 ← 𝜃 + 𝛼∇) ∑:∈𝒟 𝔼&~0* 𝑎 𝑠 𝑄Z 𝑠, 𝑎
+
+(Policy Gradient Update)
+70
+
+Conservative Q-Learning (CQL)
+Wir brauchen noch einen Regularizer ℛ(𝜇) für 𝜇:
+𝑄o V = argmin { max 𝛼𝔼H~𝒟,<~| <|H 𝑄 𝑠, 𝑎
+{
+
+|
+
+− 𝛼𝔼 H,< ~𝒟 𝑄 𝑠, 𝑎
+
+− 𝜏ℛ(𝜇)
+
++𝔼 H,<,H# ~𝒟 [(𝑄 𝑠, 𝑎 − 𝑟 𝑠, 𝑎 + 𝔼V 𝑄 𝑠 I , 𝑎I ) = }
+Ohne ℛ(𝜇):
+max 𝑄 𝑠, 𝑎 → max 𝑄(𝑠, 𝑎) à nur eine Aktion 𝑎 wird betrachtet
+|
+
+<
+
+𝑄 wird nur an dieser Stelle “gefixt”
+Typischerweise (insbesondere bei kontinuierlichen Aktionsräumen): 𝑄(𝑠, 𝑎) ist für
+viele Aktionen außerhalb von 𝒟 zu groß ist
+wir wollen 𝑄(𝑠, 𝑎) überall dort verringern à brauchen eine breite Verteilung über
+alle Aktionen 𝑎, für die 𝑄(𝑠, 𝑎) groß ist
+71
+
+Conservative Q-Learning (CQL)
+Wir brauchen noch einen Regularizer ℛ(𝜇) für 𝜇:
+𝑄o V = argmin { max 𝛼𝔼H~𝒟,<~| <|H 𝑄 𝑠, 𝑎
+{
+
+|
+
+− 𝛼𝔼 H,< ~𝒟 𝑄 𝑠, 𝑎
+
+− 𝜏ℛ(𝜇)
+
++𝔼 H,<,H# ~𝒟 [(𝑄 𝑠, 𝑎 − 𝑟 𝑠, 𝑎 + 𝔼V 𝑄 𝑠 I , 𝑎I ) = }
+Typische Wahl: ℛ 𝜇 = 𝔼0~𝒟 ℋ 𝜇 ⋅ 𝑠
+
+maximum entropy regularization
+
+Resultiert in 𝜇 𝑎 𝑠 ∝ exp 𝑄 𝑠, 𝑎 /𝜏
+𝔼-~? -|0 𝑄 𝑠, 𝑎
+
+𝑄 𝑠, 𝑎
+= log P exp
+𝜏
+-
+
+Für diskrete Aktionen: leicht zu berechnen
+Für kontinuierliche Aktionen: Importance Sampling aus beliebiger Policy
+72
+
+Offline RL als Sequence Modelling
+• Offline-Daten: 𝑠:, 𝑎:, 𝑟:, 𝑠=, 𝑎=, 𝑟=, …
+• à Sequenzmodellierung (wie bei Sprachmodellen): Lerne
+𝑝(next token|history)
+• kein Bootstrapping à keine OOD-Q-Fehler
+• Decision Transformer (DT) (https://arxiv.org/abs/2106.01345):
+• Input-Sequenz: 𝑅$ , 𝑠$ , 𝑎$ , 𝑅+ , 𝑠+ , 𝑎+ , … mit 𝑅" = ∑%B#" 𝑟B (Return to go, also ab Zeit 𝑡)
+• Loss: ℒ = 𝑎" − 𝑎`" + ,
+
+𝑎" : Dataset-Action,
+
+𝑎`" : Modellvorhersage
+
+• Inference: Setze Gewünschten Return 𝑅$ = 𝑅∗
+• Modell-Input: (𝑅 ∗ , 𝑠! ), Modell-Output: 𝑎!
+• Environment à (𝑠" , 𝑟! ), Update gewünschter Return: 𝑅" = 𝑅 ∗ − 𝑟!
+• Nächster Modell-Input: 𝑅 ∗ , 𝑠! , 𝑎! , 𝑅" , 𝑠" , Modell-Output: 𝑎"
+
+• “Return-konditioniertes Behavioral Cloning”
+73
+
+Offline RL als Sequence Modelling
+• Trajectory Transformer (TT) (https://arxiv.org/abs/2106.02039):
+• Input-Sequenz: 𝑠$ , 𝑎$ , 𝑟$ , 𝑠+ , 𝑎+ , 𝑟+ , …
+• Transformer lernt:
+
+𝑝(next token|history)
+
+• à Generatives Weltmodell
+• Policy wird nicht direkt gelernt à müssen Aktionen sampeln
+• Die Folgen vorhersagen
+
+“planning”
+
+• Beste Aktionsfolgen mit Beam Search finden
+
+• Vorteil von Trajectory Transformer:
+• Trajectory Stitching funktioniert (DT kann das meist nicht)
+
+• Vorteil Decision Transformer
+• Einfacher, schneller, kein Beam Search zur Inference-Zeit
+
+74
+
+Frameworks & Daten
+Offline RL Bibliotheken
+• d3rlpy
+• CORL
+• TorchRL (teilweise, Lossfunktionen für CQL, IQL, TD3+BC)
+Offline RL Datensätze
+• D4RL (klassischer Offline-RL Benchmark)
+• Minari, gepflegt von Farama Foundation (à gymnasium u.v.m.)
+• moderner Dataset-Standard für RL
+• enthält viele portierte D4RL Datensätze
+
+• RL Unplugged
+• RoboNet, Bridge (große Robotik-Datensätze mit Daten von echten Robotern)
+Typische Domänen
+• Locomotion, Manipulation
+• Aber auch: Atari, … (“klassisches Online RL”)
+Typischer Workflow: Datensatz laden → Algorithmus wählen → offline trainieren → auf Benchmark-Umgebung
+evaluieren.
+75
+
+Demos
+• Siehe offlinerl.zip in Moodle (Code & Modell-Checkpoints)
+
+76
+
+

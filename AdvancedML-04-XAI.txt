@@ -1,0 +1,1337 @@
+Explainable AI
+Machine Learning Vorhersagen nachvollziehen
+
+Explainable AI – Einführung
+•
+•
+•
+•
+
+•
+
+Einsatz von ML immer weiter verbreitet
+Modelle werden immer komplexer (”Deep
+Learning”)
+Schwer zu verstehen, warum Vorhersagen gemacht
+wurden (“Black Boxes”)
+ML nicht nur bei Instagram, NeClix, Amazon & Co,
+sondern auch zunehmend in sicherheitskri1schen
+Umgebungen (autonomes Fahren,
+Gesundheitswesen, …)
+Insbesondere dort ist es wichKg zu verstehen, was
+im Algorithmus vor sich geht
+
+Explainable AI – Einführung
+
+Google Trends: “explainable ai” Suchanfragen weltweit seit 2004
+
+•
+•
+•
+
+Interesse an XAI hat in den letzten Jahren enorm zugenommen
+Trend weiter steigend
+Wichtig sowohl für Entwickler als auch für (End-)Nutzer der Algorithmen
+
+Explainable AI – Einführung
+Originalbild
+
+•
+•
+•
+•
+
+Originalbild + IG A/ribu1on Mask Overlay
+
+Bild wird korrekt als Feuerlöschboot klassifiziert
+Auf rechtem Bild sieht man die wichtigsten Pixel, die zur Klassifizierung beigetragen haben
+Die Fontäne ist wichtiger als das Boot selbst
+Wie generalisiert das Modell auf andere Feuerlöschboote (z.B. ohne Fontäne)?
+
+Explainable AI – Einführung
+Unassisted
+
+Grades only
+
+Grades + Heatmap
+
+Rory Sayres et al, Using a Deep Learning Algorithm and Integrated Gradients Explanation to Assist Grading for Diabetic Retinopathy (2019)
+
+• XAI kann auch eingesetzt werden, um Vorhersagen anderen Nutzern zu erklären
+• Bsp.: diabetische Retinopathie
+• Unterstützung für Ärzte bei Analyse von Bildern mit geringer Qualität durch Hervorhebung von
+relevanten, oft ungesehenen Features
+
+Explainable AI – Einführung
+
+Interpretable ML/AI:
+Interpre5erbarkeit von Modellvorhersagen, insbesondere für
+Modellentwickler.
+
+Explainable AI:
+Erklärung von Vorhersagen in allgemeinverständlicher Weise,
+inkl. an Personen, die nicht mit ML bewandert sind.
+Explainable AI ist nicht neu, aber seit ca. 2015 besonders hohes Forschungsinteresse, parallel zum stark
+wachsenden Einsatz von immer komplexeren KI-Systemen.
+
+Explainable AI für verschiedene Stakeholder
+
+Entwickler
+
+Nutzer
+
+Regulatoren
+
+• Verständnis erhöhen
+• Performance
+verbessern
+• Bessere Algorithmen
+• Modelle erstellen
+
+• Vertrauen schaffen
+• Bias & Transparenz
+• Auswirkungen
+verstehen
+• Berichte & Analysen
+
+• Vertrauen schaﬀen
+• Bias & Transparenz
+• Compliance
+• Berichte
+
+Modellverhalten zu
+verstehen hat viele
+Anwendungen
+•
+
+Vorhersagen erklären um (menschliche)
+Entscheidungen zu unterstützen
+
+•
+
+Unerwartetes Modellverhalten erklären
+und Korrekturmöglichkeiten finden
+
+•
+
+Prozess der Modellierung und
+Datenaggregierung verfeinern
+
+•
+
+Prüfen, ob Modellverhalten akzeptabel ist
+(z.B. kein unerwünschter Bias)
+
+•
+
+Modellvorhersagen an nicht-technische
+Stakeholder präsentieren
+
+Was ist ML-Interpretierbarkeit?
+
+• Keine allgemein akzeptierte mathematische Definition von Interpretierbarkeit.
+• Definitionsversuch: inwiefern die Entwickler eines Modells verstehen wie sich
+Modellvorhersagen ändern bei Änderung von relevanten Größen, wie z.B. Inputs oder
+Modellparameter.
+• Oben: Bsp. mit Entscheidungsbaum und neuronalem Netzwerk – das sind wichtige
+Methoden zur Modell-Analyse für Entwickler; allerdings nicht geeignet für alle Stakeholder.
+• Brauchen Übersetzung von Modellerklärung in menschenverständliche Erklärung
+
+Komplexität vs. Explainability Tradeoff?
+
+• Entwicklung immer komplexerer Modelle führte auf der einen Seite zu besserer
+Performance auf der anderen Seite zu immer schwieriger Erklärbarkeit der Vorhersagen
+• Dies führte zur Entwicklung von XAI um auch Vorhersagen komplexer Modelle erklären
+zu können
+
+Vollständigkeit:
+Alle Modelloutputs müssen erklärbar sein
+
+Anforderungen
+an eine gute
+Erklärung
+
+Genauigkeit: Gründe einer
+
+Modellvorhersage mit hoher Genauigkeit
+reﬂek:eren
+
+Sinnhaftigkeit: Stakeholder müssen
+
+Erklärung verstehen und sinnvoll nutzen
+können
+
+Konsistenz: Reproduzierbarkeit von
+
+Erklärungen, Stabilität gegenüber kleinen
+Änderungen des Inputs
+
+Interpretierbarkeit – Taxonomie
+
+Post-hoc
+
+Lokal:
+einzelne
+Vorhersagen
+
+Modellspezifisch
+
+Modellunabhängig
+
+intrinsisch
+
+Global:
+Gesamtes
+Modell
+
+modellspezifisch
+
+Modellunabhängig
+
+Lineare
+Modelle
+
+Hybrid (lokale
+
+Erklärungen
+aggregieren, z.B.
+SHAP, IG)
+
+Entscheidungsbäume
+
+Bayesian
+Netzwerke
+
+Übersicht: eXplainable AI-Vorlesung
+1. Interpretierbare Modelle
+2. LIME
+3. SHAP
+4. Counterfactuals
+5. Layerwise Relevance Propagation (LRP)
+6. Integrated Gradients (IG)
+
+Intrinsich interpretierbare
+Machine Learning Modelle
+
+Was sind intrinsisch interpretierbare Modelle?
+• Inhärent transparent
+• Liefern verständliche Vorhersagen ohne Einsatz von speziellen Techniken zur
+Erklärbarkeit
+• Typischerweise weniger komplexe (und daher meist auch weniger
+leistungsstarke) Modelle
+• Für viele Anwendungen ausreichend
+• Beispiele:
+– Lineare Regression
+– Logistische Regression
+– Entscheidungsbäume
+– Regelbasierte Systeme
+
+Charakteristiken interpretierbarer Modelle
+• Einfache und verständliche Struktur
+• Klare Beziehung zwischen Input-Features und Vorhersagen
+• Fähigkeit eine Begründung für Entscheidungen zu liefern
+
+Vor- und Nachteile interpre9erbarer Modelle
+Vorteile
+
+Nachteile
+
+Leichter zu verstehen und
+kommunizieren
+Schaﬀen Vertrauen und Transparenz
+
+Können womöglich komplexe
+Beziehungen nicht so effektiv abbilden
+wie Black-Box Modelle
+
+Vereinfachen Debugging- und
+Validierungsprozesse
+
+Trade-off zwischen Interpretierbarkeit
+und Performance
+
+Lineare Regression & Logistische Regression
+• Lineare Regression:
+𝑦 = 𝑤! + 𝑤" 𝑥" + ⋯ + 𝑤# 𝑥#
+• Parameter 𝑤$ werden anhand Trainingsdaten gelernt
+• Anhand der Parameter 𝑤$ sieht man direkt den Einfluss einer
+Inputänderung auf den Output
+• Bsp.: Änderung von 𝑥" um eine Einheit ändert 𝑦 um 𝑤"
+• Interpretation der Parameter 𝑤$ ist bei Korrelationen zwischen den
+Inputs problematisch
+
+Lineare Regression & Logistische Regression
+• Logis&sche Regression ganz ähnlich:
+1
+𝑝 = sigmoid 𝑧 =
+,
+!"
+1+𝑒
+
+𝑧 = 𝑤# + 𝑤$ 𝑥$ + ⋯ + 𝑤% 𝑥%
+
+𝑝 < 0.5 ↔ 𝑧 < 0.5 → class = 0
+𝑝 ≥ 0.5 ↔ 𝑧 ≥ 0.5 → class = 1
+
+• Sigmoid-Funk&on dient lediglich dazu, den Output in den Wertebereich
+[0,1] zu transformieren
+• Entscheidungsgrenze bei logis&scher Regression linear
+'
+• Einﬂuss einer Änderung von 𝑥& (auf ”Odds”
+= 𝑒 " ) ist exp 𝑤&
+$!'
+
+• Interpreta&on der Parameter 𝑤& ist bei Korrela&onen zwischen den Inputs
+problema&sch
+
+Entscheidungsbäume
+Entscheidungsbäume sind leicht
+interpretierbar durch Verfolgung
+der Knoten von der Wurzel bis
+zum Blatt
+Man kann auch direkt ablesen,
+wie eine Änderung des Inputs
+sich auf die Vorhersage auswirkt
+Voraussetzung: Baum nicht zu tief
+
+Feature Importance bei Entscheidungsbäumen
+Grundidee
+• Ein Entscheidungsbaum teilt die Daten an den Knoten so, dass die Vorhersagegüte steigt.
+• „Wichtig“ ist ein Feature genau dann, wenn es in diesen Splits oft und mit hohem Nutzen
+verwendet wird.
+Messung der Feature Importance
+• Jeder Split reduziert die Unreinheit/Unordnung im Knoten.
+• Feature Importance = Summe aller Verbesserungen, die durch Splits mit diesem Feature erzielt
+wurden.
+Importance 𝑓 =
+
+1
+!"#$%" '($ )
+
+•
+•
+•
+
+𝑛"#*% : Anzahl der Samples im Knoten
+𝑛"#*% : Gesamtzahl der Samples
+Δimpurity: Reduktion der Unreinheit durch den Split
+
+𝑛"#*%
+⋅ ΔImpurity
+𝑛$#$+,
+
+Kapitel zu Feature Importance basierend auf
+Vorlesungsfolien von G. Welsch (DHBW HB)
+
+Feature Importance bei Baumensembles
+Grundidee
+• Jeder Baum liefert seine eigenen Feature Importances
+• Feature Importances werden über Bäume summiert
+Vorgehen
+• Feature Importance für jeden Baum des Ensembles berechnen
+• Normierung wichKg: Summe aller Feature Importances = 1
+
+Beispiel: XGBoost
+
+https://medium.com/@emilykmarsh/xgboost-feature-importance-233ee27c33a4
+
+Feature Importance Schwierigkeiten
+Verzerrung durch viele mögliche Splits
+• Features mit vielen Ausprägungen (z.B. konKnuierliche Werte, viele Kategorien) wirken of künstlich
+„wichKger“, weil sie häuﬁger gute Splits liefern können.
+Abhängigkeit von der Baum1efe
+• Ein Feature, das erst spät im Baum aufaucht, trägt rechnerisch weniger bei (weil dort weniger Daten
+übrig sind). Dadurch kann es unterschätzt werden, auch wenn es eigentlich entscheidend ist.
+Nur globale Werte, keine Richtung
+• Die Importance-Werte zeigen nur, wie stark ein Feature insgesamt genutzt wurde – nicht, in welche
+Richtung es einzelne Vorhersagen beeinﬂusst.
+Vom Trainingsprozess geprägt
+• Die Werte spiegeln nur wider, wie stark Features im Training zum Aufspalten genutzt wurden – sie
+sagen nichts darüber aus, wie sich das Feature auf neuen Daten wirklich auswirkt.
+
+Permutation Feature Importance
+Klassische Feature Importance à starker Bezug zu Baumstruktur, Vorhersagegüte wird nicht direkt betrachtet.
+Permuta(on Feature Importance (PFI) à misst den Einﬂuss eines Features über den Einbruch der
+Vorhersagegenauigkeit.
+Idee
+• Ein Feature ist wich@g, wenn das Modell ohne seine Informa@on deutlich schlechter vorhersagt.
+• PFI testet das direkt, indem es ein Feature „unbrauchbar“ macht.
+Vorgehen
+• Baseline: Miss die Modellgüte (z.B. Accuracy, R²) auf einem Testdatensatz.
+• Permu@eren: Mische die Werte eines Features zufällig durch → das Feature hat keinen Zusammenhang
+mehr mit dem Label.
+• Vergleichen: Berechne die Modellgüte erneut.
+• Wich@gkeit = Unterschied zur Baseline. Je größer der Abfall, desto wich@ger das Feature.
+Besonderheiten
+• Funk@oniert für jedes Modell, nicht nur für Bäume.
+• Misst den Einﬂuss auf die tatsächliche Vorhersageleistung (nicht auf den Trainingsprozess).
+
+PFI Beispiel: Wichtiges Feature
+
+h/ps://scikit-learn.org/stable/modules/permuta1on_importance.html
+
+PFI Beispiel: Unwich9ges Feature
+
+https://scikit-learn.org/stable/modules/permutation_importance.html
+
+PFI Beispiel: Random Forest Classifier
+“The figure […] shows the permutation feature
+importance of a RandomForestClassifier trained on
+an augmented version of the titanic dataset that
+contains a random_cat and
+a random_num features, i.e. a categorical and a
+numerical feature that are not correlated in any
+way with the target variable:”
+
+h/ps://scikit-learn.org/stable/modules/permuta1on_importance.html
+
+Permuta9on Feature Importance Schwierigkeiten
+Probleme bei stark korrelierten Features
+• Wenn zwei Features ähnliche InformaKonen enthalten, „teilen“ sie sich die WichKgkeit.
+• PermutaKon kann sogar unrealisKsche Werte-KombinaKonen erzeugen.
+Zufallsabhängigkeit
+• Die Ergebnisse hängen davon ab, wie die PermutaKon ausgeführt wird.
+• Man muss mehrfach permuKeren und mijeln, um stabile Werte zu erhalten.
+Rechenaufwand
+• Für jedes Feature wird das Modell mehrfach auf dem Testdatensatz ausgewertet à kann bei großen
+Daten oder komplexen Modellen teuer werden.
+Abhängig vom Datensplit
+• Wird PFI auf Trainingsdaten berechnet, können die Werte irreführend sein.
+• Sinnvoll ist die Berechnung nur auf einem separaten Test- oder Validierungsdatensatz.
+
+PFI bei stark korrelierten Features
+Auszug aus sklearn User Guide
+“When two features are correlated and one of
+the features is permuted, the model s9ll has
+access to the la:er through its correlated
+feature. This results in a lower reported
+importance value for both features, though they
+might actually be important.
+The ﬁgure […] shows the permuta9on feature
+importance of a RandomForestClassiﬁer trained
+using the Breast cancer Wisconsin (diagnos9c)
+dataset, which contains strongly correlated
+features. A naive interpreta9on would suggest
+that all features are unimportant:”
+https://scikit-learn.org/stable/modules/permutation_importance.html
+
+PFI bei stark korrelierten Features
+Auszug aus sklearn User Guide
+“One way to handle the issue is to cluster features that are correlated and only keep one feature from each
+cluster.”
+
+https://scikitlearn.org/stable/modules/permutation_importa
+nce.html
+
+Demo: Interpretable Models
+•
+
+Siehe `xai_00_interpretable_models.ipynb`
+
+LIME
+(Local Interpretable
+Model-agnos?c
+Explana?ons)
+Making Machine Learning Models Interpretable
+
+Was ist LIME?
+•
+•
+•
+•
+
+LIME: Local Interpretable Model-agnos5c Explana5ons
+Ziel: Einzelne Vorhersagen eines beliebigen ML-Modells erklären
+Modell-agnos5sch: Auf beliebige Blackbox-Modelle anwendbar
+hTps://arxiv.org/abs/1602.04938
+
+LIME Beispiel (lokale Erklärungen)
+
+• Globale Entscheidungsgrenze sehr komplex
+• Lokale Entscheidungsgrenze leicht zu verstehen
+• In diesem Beispiel kann man sehen wie Feature 2 am wich5gsten für die
+Vorhersage ist, wohingegen der Eﬀekt von Feature 1 sehr klein ist
+
+Warum LIME?
+• Funk5oniert mit jedem Modell (“blackbox”)
+• Modell-Interna sind ”versteckt” (nicht nö5g diese
+zu kennen)
+• Funk5oniert mit verschiedensten Datentypen
+• Erklärungen können mithilfe von Domänenwissen
+überprüc werden und auf diese Weise Vertrauen
+ins Modell und seine Vorhersagen schaﬀen (Bsp.
+Schlaganfallrisiko – Sport)
+• Dies hilc Modelle zu debuggen und zu verbessern
+• “Locally faithfull explana5ons” (“lokal modellgetreue Erklärungen”)
+
+Wie LIME funkOoniert
+
+Güte der Näherung
+
+Zu erklärende
+Vorhersage
+
+Interpretierbares
+Modell
+
+Zu erklärendes
+Modell
+
+Nähe
+
+Komplexitätsmaß
+(“stay simple”)
+
+Training des interpreOerbaren Modells 𝑔
+
+• Trainiere einfaches, interpre5erbares Modell
+(z.B. lineares Modell) auf diesen Trainingsdaten
+• Nuze das einfache Modell um die Vorhersage
+des komplexen Modells zu erklären
+
+Feature 1
+
+• “Störe” den zu erklärenden Datenpunkt (kleine, zufällige Manipulationen der
+Features) und generiere so neue Datenpunkte in dessen Umgebung
+• Erstelle synthetischen Datensatz durch Anwendung des zu erklärenden Modells auf
+die soeben erzeugten Datenpunkte
+
+Neuer Datensatz
+
+Features: Neu erstellte Datenpunkte
+Labels: Vorhersagen des komplexen Modells
+
+Feature 2
+
+Training des interpreOerbaren Modells 𝑔
+• ℒ: Training von surrogate 𝑔 sorgt für Minimierung von ℒ
+• Ω(𝑔): nutze Lasso Linear Regression, um einfaches Modell zu erhalten
+• 𝜋! : Gewichtung der Trainingsdatenpunkte – je näher an zu erklärender Vorhersage,
+desto höheres Gewicht
+Komplexitätsmaß
+(“stay simple”)
+Feature 1
+
+Güte der Näherung
+
+Interpretierbares
+Modell
+
+Zu erklärende
+Vorhersage
+
+Zu erklärendes
+Modell
+
+Nähe
+Feature 2
+
+MathemaOsche Details von LIME
+
+𝑧 " = 𝜙(𝑧)
+
+Ω 𝑔 : modellabhängig, z.B. bei Entscheidungsbäumen: Tiefe; bei
+linearen Modellen: Anzahl an nicht-trivialen Gewichten
+
+LIME Beispiel 1
+
+Einzelne Vorhersagen erklären.
+• Modellvorhersage: PaKent hat Grippe
+• LIME hebt die Symptome hervor, die zu dieser Vorhersage geführt haben: Niesen und
+Kopfschmerzen werden als Beitrag zur „Grippe“-Vorhersage dargestellt, während „keine
+Müdigkeit“ dagegen spricht.
+• Mit diesen InformaKonen kann ein Arzt eine fundierte Entscheidung darüber treﬀen, ob er der
+Vorhersage des Modells vertrauen soll.
+
+LIME Beispiel 2 (Vergleich von Modellen)
+Erklärungen als Entscheidungskriterium
+zwischen Modellen.
+• Höhere Genauigkeit im
+Validierungsdatensatz bedeutet nicht
+immer besseres Modell.
+• Erklärungen zeigen oZ Mängel auf, die
+ohne Erklärungen schwer zu erkennen
+sind.
+• Menschliches Vorwissen spielt eine
+wich1ge Rolle bei der Bewertung der
+Erklärungen.
+
+LIME Beispiel 3 (Anwendung auf Bilder)
+
+Erklärung einer Bildklassiﬁzierungsvorhersage, die vom Incep5on-Modell von
+Google gemacht wurde. Die Top-3 vorhergesagten Klassen sind „E-Gitarre“ (p =
+0,32), „Akus5kgitarre“ (p = 0,24) und „Labrador“ (p = 0,21).
+
+Globale Erklärungen mit LIME
+• Aggregiere Erklärungen von Subset
+• Subset sollte divers and repräsentativ sein
+• Möglichkeit 1:
+– aggregiere Erklärungen von zufällig gewähltem Subset
+• Möglichkeit 2: “SP-LIME” (SubmodularPick Klasse des lime Moduls)
+– Erstelle repräsentatives und diverses Subset und aggregiere Erklärungen
+• Bei beiden Methoden müssen die Erklärungen (feature importance) separat pro
+Klasse aggregiert werden
+
+LIME – Vorteile
+
+•
+•
+•
+•
+
+Modellunabhängig
+Lokale Erklärungen
+Einfach zu implemen5eren und zu verstehen
+Hilc, Schwächen und Bias des Modells zu iden5ﬁzieren
+
+Beschränkungen von LIME
+
+•
+•
+•
+•
+
+Rechenintensiv
+Empﬁndlichkeit gegenüber Perturba5onseinstellungen
+Lokale Treue spiegelt möglicherweise nicht immer das globale Verhalten wider
+Interpre5erbarkeit des Ersatzmodells (surrogate model) hängt vom gewählten
+interpre5erbaren Modell ab
+
+Demo: LIME
+
+• Siehe ` xai_01_lime_demo.ipynb`
+
+Übung: LIME
+• Trainieren Sie ein anderes Modell als in der
+Demo und analysieren Sie einige
+Vorhersagen mit LIME
+
+LIME Referenzen
+•
+•
+•
+•
+•
+•
+
+hTps://arxiv.org/abs/1602.04938
+hTps://interpretable-ml-class.github.io/ (week 4 & 5)
+hTps://www.youtube.com/watch?v=g2WtL45-PFQ
+hTps://www.youtube.com/playlist?list=PLV8yxwGOxvvovp-j6ztxhF3QcKXT6vORU
+hTps://github.com/interpretml/interpret
+hTps://arxiv.org/pdf/1909.09223 (Publika5on zur InterpretML Bibliothek)
+
+SHAP (SHapley Additive exPlanations)
+
+Was ist SHAP?
+• SHAP: SHapley Addi5ve exPlana5ons
+• Basiert auf Shapley-Werten aus koopera5ver
+Spieltheorie
+• Erklärt individuelle Vorhersagen
+• Können aggregiert werden, um globale Wich5gkeit
+von Features zu erhalten
+• hTps://arxiv.org/abs/1705.07874
+
+Warum SHAP?
+• Liefert konsistente und akkurate Erklärungen
+• Funk5oniert mit verschiedenen Modelltypen
+• Unterstützt beim Verständnis des Modellverhaltens
+
+Kooperative Spieltheorie und Shapley Werte
+
+Jeder Spieler leistet einen individuellen Beitrag à was ist eine faire Verteilung des
+Gewinns? à Shapley Values (Lloyd Shapley, 1951)
+
+KooperaOve Spieltheorie und Shapley Werte
+Zusammenhang mit Machine Learning?
+à Jedes Feature entspricht einem Spieler!
+
+Alter
+
+Geschlecht
+
+BMI
+
+ML Modell
+
+…
+
+Vorhersage
+
+Shapley Values berechnen: Naive Idee
+• Naive Idee: jeweils einen der Spieler weglassen und Performance des Teams
+messen
+• Differenz des Gewinns mit und ohne jeweiligem Spieler ist der Beitrag des Spielers
+• Dies mit jedem der Spieler wiederholen
+Problem: Naives Vorgehen
+ignoriert Wechselwirkungen
+zwischen den Spielern!
+Beispiel: Blauer Spieler performt
+nur in Zusammenarbeit mit
+orangem Spieler
+
+Shapley Values berechnen
+Korrektes Vorgehen:
+• Berücksich5gung des Beitrags eines Spielers zu jeder möglichen Teilmenge von
+Spielern (“marginal contribu5on”)
+• MiTeln über alle so berechneten Beiträge ergibt Shapley Value eines Spielers
+• MiTelung muss Größe der Teilmenge berücksich5gen
+
+Shapley Values berechnen
+
+Shapley value für
+Feature 𝑖 (z.B.
+Alter=70)
+
+•
+•
+•
+•
+
+Teilmenge von
+Features (Subset),
+aber ohne 𝑖
+
+𝑣(𝑆): Modellvorhersage mit
+Features aus Teilmenge 𝑆
+(enthält nicht Feature 𝑖)
+
+𝑣(𝑆 ∪ {𝑖}): Modellvorhersage mit
+Features aus Teilmenge 𝑆 und
+Feature 𝑖
+
+𝑁: Menge aller Features
+𝑆: Teilmenge von 𝑁 ohne Feature 𝑖
+𝑣(𝑆) ist die Modellvorhersage mit Features aus Teilmenge 𝑆
+𝑣(𝑆 ∪ {𝑖}) ist die Modellvorhersage mit Features aus Teilmenge 𝑆 und Feature 𝑖
+
+Shapley Values berechnen
+
+Shapley value für
+Feature 𝑖 (z.B.
+Alter=70)
+
+𝑣(𝑆 ∪ {𝑖}): Modellvorhersage mit
+Features aus Teilmenge 𝑆 und
+Feature 𝑖
+
+Teilmenge von
+Features (Subset),
+aber ohne 𝑖
+
+𝑆
+
+𝑁
+Feature 𝑖
+
+𝑣(𝑆): Modellvorhersage mit
+Features aus Teilmenge 𝑆
+(enthält nicht Feature 𝑖)
+
+𝑆 ∪ {𝑖}
+
+Shapley Values berechnen
+Wie kann man Features ”weglassen”?
+• Ein Modell benötigt normalerweise alle Features um eine Vorhersage zu machen –
+wie kann man also 𝑣(𝑆) berechnen?
+• Für die “fehlenden” Features in 𝑆 werden zur Berechnung der Modellvorhersage
+einfach zufällig gewählte Werte aus den Trainingsdaten benutzt (“Background
+Dataset”)
+
+Shapley Values berechnen – Komplexität und Optimierungen
+• In Menge mit 𝑁 Elementen gibt es 2# verschiedene Teilmengen
+• Man muss also 2# verschiedene Berechnungen durchführen L
+à Näherungen:
+• Sampling-basiert (einige zufällige Teilmengen, staT alle möglichen)
+• KernelSHAP: modellunabhängige Methode
+• Modellspeziﬁsche Näherungen
+– TreeSHAP für Baum-basierte Modelle wie Random Forest
+– DeepSHAP in Verbindung mit DeepLIFT für neuronale Netzwerke
+
+SHAP Values Eigenschaften
+
+Addi5ve Natur:
+• Summe der Shap-Werte aller Features plus Baseline-Wert ist gleich der
+Modellvorhersage für einen gegebenen Input
+Globale Übersicht:
+• Um globale Feature Importance zu erhalten, lassen sich die Shapley-Werte über den
+gesamten Datensatz aggregieren
+• Dies gibt einen Überblick darüber, welche Features den größten Einﬂuss auf die
+Modellvorhersagen auf dem jeweiligen Datensatz haben
+
+SHAP Plot Typen
+Summary Plots
+Dependence Plot
+Waterfall Plot
+Force Plot
+Deep Learning & Image Plot
+Natural Language
+
+Summary Plots (1): shap.plots.beeswarm
+• ploget SHAP-Werte jedes Merkmals für
+jede Sichprobe
+• Überblick, welche Merkmale für ein Modell
+am wichigsten sind
+• soriert die Merkmale nach der Summe der
+SHAP-Wert-Beträge über alle Sichproben
+• verwendet die SHAP-Werte, um die
+Verteilung der Auswirkungen jedes
+Features auf das Modellergebnis
+darzustellen
+• Farbe repräseniert Feature-Wert (nicht
+SHAP-Wert!)
+
+Summary Plots (2): shap.plots.bar
+Wir können auch einfach die durchschniTlichen Absolutbeträge der SHAP-Werte
+für jedes Feature nehmen und einen einfachen Bar-Plot erhalten:
+
+Dependence Plot: shap.plots.scatter
+• Zeigt die Auswirkung eines einzelnen Features
+im gesamten Datensatz
+• Das Diagramm stellt die Änderung des
+prognostizierten Immobilienpreises dar, wenn
+sich der Breitengrad ändert
+• Die vertikale Streuung bei einem einzelnen
+Breitengradwert stellt Interaktionen mit
+anderen Features dar. Um diese
+Wechselwirkungen besser sichtbar zu machen,
+können wir ein anderes Feature einfärben.
+Wenn wir den gesamten “explanation tensor“
+an das Farbargument übergeben, wählt das
+Streudiagramm das beste Merkmal zum Färben
+aus. In diesem Fall der Längengrad.
+
+Waterfall Plot: shap.plots.waterfall
+• Zerlegt die Vorhersage in die Beiträge
+der einzelnen Features
+• Visualisiert die additive Natur der
+SHAP-Werte
+• Hebt hervor, wie jedes Merkmal Schritt
+für Schritt die Vorhersage beeinflusst
+
+Force Plot: shap.plots.force
+Ähnliche Darstellung wie Waterfall Plot:
+
+Mit Force Plots kann man den gesamten Datensatz (oder Teil davon) auf einmal anzeigen:
+
+Deep Learning & Image Plot: shap.image_plot
+Modell-Output-ID:
+(Klasse, one-hot)
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+7
+
+8
+
+9
+
+• Modell hat 10 Outputs (Ziffern 0-9); Plot erklärt die jeweiligen Outputs für vier
+verschiedene Input-Bilder (Ziffern 2, 1, 0, 4)
+• Input-Bilder sind links in schwarz sowie als hellgraue Bilder den Erklärungen hinterlegt
+• bei der Null ist der freie Bereich in der Mitte wichtig, während bei der vier das Fehlen einer
+Verbindung oben eine vier von einer neun unterscheidet
+
+Natural Language Beispiel (transformers)
+“SHAP has speciﬁc support for natural language models like those in the Hugging Face transformers
+library.”
+shap_values = explainer(["What a great movie! ...if you have no taste."])
+
+Zusammenfassung:
+SHAP
+• Anwendbar auf verschiedene
+Modelltypen
+• lokale und globale Erklärungen
+• Modellvorhersage wird in die Beiträge
+einzelner Features aufgeschlüsselt
+• Die Berechnung umfasst die
+Berücksich5gung aller möglichen
+Teilmengen von Features
+• Bibliothek liefert zahlreiche PlotTypen
+
+Demo: SHAP
+
+Siehe Datei `xai_02_shap_demo.ipynb`
+oder https://github.com/shap/shap
+
+Übung: SHAP
+• Trainieren Sie ein anderes Modell als in der
+Demo und analysieren Sie einige
+Vorhersagen mit SHAP
+
+Referenzen
+•
+•
+•
+•
+•
+
+hjps://arxiv.org/abs/1705.07874
+hjps://github.com/shap/shap
+hjps://shap.readthedocs.io/
+hjps://interpretable-ml-class.github.io/ (week 4 & 5)
+hjps://www.youtube.com/watch?v=9haIOplEIGM
+
+Counterfactual
+Explana0ons
+
+Was sind Counterfactual ExplanaOons (“kontrafakOsche
+Erklärungen”)?
+• Definition:
+Counterfactual Explanations beschreiben, wie ein Eingabewert geändert
+werden muss, um ein anderes Ergebnis zu erzielen.
+• Beispiel:
+'Wenn Eingabe X auf diese Weise anders gewesen wäre, dann wäre das
+Ergebnis Y anders gewesen.’
+• Bedeutung:
+Bietet intuitive, umsetzbare Einblicke zum Verständnis und zur Verbesserung
+von Modellen.
+
+Beispiel (1)
+Originalszenario:
+• Der Kreditantrag eines Antragstellers wird abgelehnt.
+• Eingabemerkmale: Alter, Einkommen, Beschärigungsstatus, Kreditscore.
+• Modellvorhersage: Ablehnung.
+Kontrafakische Erklärung:
+• 'Wenn der Kreditscore des Antragstellers um 20 Punkte höher gewesen wäre, wäre
+der Kredit genehmigt worden.'
+• Eingabemerkmale:
+– Alter: 35 Jahre
+– Einkommen: $50,000 pro Jahr
+– Beschärigungsstatus: Vollzeit
+– Kreditscore: 650 (original) -> 670 (kontrafakisch)
+• Neue Modellvorhersage: Genehmigung.
+
+Noch ein Beispiel
+Original Szenario:
+• Für John wird von ML-Modell 90% Schlaganfallrisiko vorhergesagt.
+Counterfactual Explana5on:
+• Wenn John seinen BMI auf 25 reduziert, wird sich die Vorhersage auf 70%
+kein Schlaganfall ändern.
+
+Counterfactual ExplanaOons ﬁnden
+Vorgehen:
+1. Zielvorhersage iden5ﬁzieren: Instanz und gewünschtes Ergebnis wählen.
+2. Perturbierte S5chproben erzeugen: Varia5onen der Instanz erstellen.
+3. Ergebnisse bewerten: Welche Varia5onen erzielen das gewünschte Ergebnis?
+Kriterien:
+• Nähe: Counterfactual sollte nahe an der ursprünglichen Instanz liegen (die
+geringste Änderung der Eingabemerkmale, die die Vorhersage zum
+gewünschten Ergebnis ändert).
+• Plausibilität: Der Counterfactual sollte realis5sch und möglich sein.
+• Umsetzbarkeit: Die vorgeschlagenen Änderungen sollten durchführbar sein.
+
+Counterfactual ExplanaOons ﬁnden (2)
+White-Box Ansatz:
+1. Haben Zugriff aufs Modell.
+2. Können modellspezifischen Ansatz wählen.
+3. Bspw. Gradienten der Gewichte bei neuronalem Netzwerk nutzen
+Black-Box Ansatz:
+1. Haben keinen Zugriff aufs Modell (nur auf Vorhersagen).
+2. Müssen modellunabhängigen Ansatz wählen.
+3. Bspw. zufälliges Variieren der Inputs.
+
+(Un-)Eindeutigkeit der Counterfactuals
+Es kann mehrere valide Counterfactuals geben:
+
+https://medium.com/@bijil.subhash/explainable-ai-diverse-counterfactual-explanations-dice-315f058c0364
+
+Counterfactuals und Adversarial Acacks
+
+In beiden Fällen wird ein Input gesucht, der die Vorhersage ändert.
+
+Bezug zu Adversarial Acacks
+Adversarial ATacks:
+• Kleine Änderungen der Inputdaten sorgen für signiﬁkante Änderungen des Outputs.
+• Oc eingesetzt um Modell-Robustheit zu testen.
+Unterschiede und Gemeinsamkeiten:
+• Beide ändern Inputs um Outputs zu ändern.
+• Counterfactuals streben nach realis5schen, umsetzbaren Änderungen
+wohingegegen Adversarial ATacks oc den Fokus auf minimale, unbemerkbare
+Änderungen legen.
+
+Counterfactuals vs. Adversarial Examples
+Zweck:
+• Counterfactuals: Erhöhen die Interpretierbarkeit und bieten umsetzbare
+Einblicke.
+• Adversarial Examples: Testen die Robustheit und identifizieren Schwachstellen.
+Erzeugung:
+• Counterfactuals: Konzentrieren sich auf realistische und machbare Änderungen.
+• Adversarial Examples: Konzentrieren sich auf minimale Änderungen, die
+Schwächen des Modells ausnutzen.
+
+Anwendungen von Counterfactual ExplanaOons
+• Modell-Debugging: Schwachstellen und Bias im Modell identifizieren.
+• Transparenz für End-Nutzer: Unterstütze Nutzer beim Verständnis von
+Modellentscheidungen.
+• Entscheidungsunterstützung: Liefere umsetzbare Einblicke um Änderungen
+vorzunehmen und gewünschte Ergebnisse zu erzielen.
+
+Counterfactual ExplanaOons in PracOce
+Real-World Beispiele:
+• Finanzen: Kreditantrag modiﬁzieren, damit dieser genehmigt wird.
+• Medizin: Behandlung anpassen um bessere Ergebnisse zu erzielen.
+Tools und Libraries:
+• DiCE (Diverse Counterfactual Explana5ons)
+• Alibi
+
+Vorteile von Counterfactual ExplanaOons
+• Interpre5erbarkeit: Macht Modellentscheidungen transparent und
+verständlich.
+• Iden5ﬁzierung von Modellschwächen: Hilc, Bias und Fehler zu ﬁnden und zu
+beheben.
+• Benutzervertrauen und Zufriedenheit: Bietet klare Erklärungen, die Benutzer
+verstehen und umsetzen können.
+
+Herausforderungen und Einschränkungen
+• Rechenkomplexität: Die Generierung von Counterfactuals kann ressourcenintensiv
+sein.
+• Plausibilität und Umsetzbarkeit: Sicherstellen, dass die Counterfactuals realistisch und
+umsetzbar sind.
+– z.B. mittels Domain Constraints oder statistischen Methoden oder durch
+“möglichst kleine” Änderungen
+• Modelltreue vs. Interpretierbarkeit: Genaue Darstellungen mit verständlichen
+Erklärungen in Einklang bringen.
+
+Zusammenfassung: Counterfactuals
+• Counterfactuals erklären wie die Inputs geändert werden müssen, damit sich die
+Modellvorhersage ändert.
+• Erhöhen die Interpretierbarkeit und Vertrauen in Modelle.
+• Bieten Ratschläge, wie gewünschte Resultate erzielt warden können.
+• Helfen Modell-Bias zu identifizieren und mitigieren.
+• Plausibilität und Umsetzbarkeit sind Herausforderungen.
+
+Demo: Counterfactuals
+
+• Siehe
+`xai_03_counterfactuals_demo.ipynb`
+• Interessantes Feature: Setzen von
+Randbedingungen
+
+Übung: Counterfactuals
+• Experimen5eren Sie mit Counterfactuals
+• Versuchen Sie verschiedene
+Randbedingungen zu setzen und schauen
+Sie, welche Lösungen gefunden werden
+
+Referenzen
+•
+•
+•
+•
+•
+•
+
+https://arxiv.org/abs/1711.00399
+https://arxiv.org/abs/1905.07697
+https://www.youtube.com/watch?v=UUZxRct8rIk&list=
+PLV8yxwGOxvvovp-j6ztxhF3QcKXT6vORU
+https://interpretable-ml-class.github.io/ (week 6)
+https://github.com/interpretml/DiCE
+https://medium.com/@bijil.subhash/explainable-aidiverse-counterfactual-explanations-dice315f058c0364
+
+Layer-wise Relevance
+Propaga?on (LRP)
+
+Layer-wise Relevance Propagation (LRP)
+• Modellspeziﬁsche Methode: relevant bei mul5layer neuronalen Netzwerken
+• Typischerweise angewendet auf Bilder um zu
+sehen, welche Bildregionen für die Vorhersage
+relevant sind
+
+LRP Übersicht
+
+Visualisierung des pixelweisen Zerlegungsprozesses.
+
+•
+•
+•
+•
+
+Klassiﬁzierungsschrij: Bild à Feature-Vektor-RepräsentaKon à Klassiﬁkator à Kategorie, z. B. "Katze"
+oder "keine Katze".
+Berechnung des Feature-Vektors in der Regel über mehrere ZwischenrepräsentaKonen.
+LRP zerlegt das Klassiﬁzierungsergebnis f(x) in Summen von Feature- und Pixelrelevanzwerten.
+Die ﬁnalen Relevanzwerte visualisieren die Beiträge einzelner Pixel zur Vorhersage.
+hRps://journals.plos.org/plosone/arScle?id=10.1371/journal.pone.0130140
+
+Berechnung der Relevanz-Werte
+
+C
+
+•
+
+C,CG"
+𝑅$ = ( 𝑅$←D
+D
+0,023
+IntuiKv: 𝑅-←/ ist “Nachricht” von Neuron 𝑘 in Layer 𝑙 + 1 an Neuron 𝑖 in Layer 𝑙 (“rückwärts”)
+
+•
+•
+
+𝑅- ist Relevanz des Neurons 𝑖 in Layer 𝑙 (Summe der eingehenden Nachrichten aus Folgelayern)
+Relevanz der Neuronen im Outputlayer ist deﬁniert als Netzwerk-Output 𝑓(𝑥)
+
+0
+
+Berechnung der Relevanz-Werte
+
+𝑅$
+
+C
+
+C,CG"
+= ( 𝑅$←D
+D
+
+• Relevanzen werden Layer für Layer bis zu den Input-Pixeln propagiert
+• Funk5oniert auch für andere Anwendungen (nicht nur Bild)
+
+LRP Beispiel
+
+Mithilfe von LRP lassen sich die Bereiche im Bild anzeigen, die für die Vorhersage relevant waren.
+Im konkreten Beispiel lässt sich so auch der Ort des Tumors identifizieren.
+
+LRP Details
+• In den R-Formeln kann es zu Division durch Null kommen
+• Dies muss verhindert werden (sogenannte z-Rules)
+– Dies führt zu im Detail verschiedenen Algorithmen-Varianten
+• Libs
+– iNNves5gate (TensorFlow): hTps://github.com/albermax/innves5gate
+– Captum (PyTorch): hTps://captum.ai
+– Beide Libs unterstützen auch viele weitere XAI-Methoden, z.B. Integrated
+Gradients (nächstes Thema)
+
+Demo: LRP
+
+• Siehe `xai_04_lrp_demo.ipynb`
+• Siehe auch
+hTps://github.com/albermax/innves5gate
+
+Übung: LRP
+• Wenden Sie LRP auf unterschiedliche Bilder
+an
+• Vergleichen Sie unterschiedliche LRP-Rules
+– Die von iNNvesKgate unterstützten Rules ﬁnden
+Sie in
+hjps://github.com/albermax/innvesKgate/blob/
+master/src/innvesKgate/analyzer/__init__.py
+
+• Siehe auch
+hTps://github.com/albermax/innves5gate
+
+Referenzen
+•
+•
+•
+•
+•
+
+https://journals.plos.org/plosone/article?id=10.1371/j
+ournal.pone.0130140
+https://arxiv.org/abs/1604.00825
+https://github.com/deepfindr/xai-series
+https://www.youtube.com/watch?v=PDRewtcqmaI&lis
+t=PLV8yxwGOxvvovp-j6ztxhF3QcKXT6vORU&index=6
+https://github.com/albermax/innvestigate
+
+Integrated
+Gradients (IG)
+
+Integrated Gradients – Kurzüberblick
+• Nutzt Gradienten in Bezug auf die Inputs
+• Funktioniert daher nur, wenn Gradienten existieren,
+hauptsächlich für neuronale Netzwerke gedacht
+(insofern modellspezifische Methode)
+• Lokale post-hoc Erklärungen
+
+Warum nicht einfache Gradienten?
+
+• Während des Lernprozesses saturieren wich5ge Features die Vorhersagefunk5on
+• Infolgedessen verschwinden die Gradienten
+
+Wie “Integrated Gradients (IG)” das Säegungs-Problem löst
+
+•
+•
+•
+
+links: Gradienten > 0 für 0 ≤ 𝑥 < ~0.8, aber Gradienten = 0 für 𝑥 > ~0.8
+Pixel 𝑥 hat einen deutlichen Einﬂuss auf die Modellvorhersage 𝐹(𝑥), aber Gradient am Pixelwert verschwindet
+Idee von IG: ausgehend von Baseline ändere Pixelwert schrijweise zu seinem tatsächlichen Wert; berechne
+und summiere entlang des Weges die Gradienten
+– MathemaKsch: Wegintegral von Baseline zum tatsächlichen Wert von 𝑥
+
+Integrated Gradients: Mathematische Details
+
+1. Generiere Wegstücke 𝛼 =
+
+$
+%
+$
+
+2. Generiere interpolierte Bilder 𝑥 " + % × 𝑥 − 𝑥 "
+3.
+4.
+5.
+
+&' ()*+,-./. 2(/3
+Berechne Gradienten bei interpolierten Bildern aus Punkt 2:
+&!"
+5
+%
+∑
+Approximiere Wegintegral als Mittelwert der Summen: $45 Gradienten × %
+Skaliere integrierte Gradienten: 𝑥6 − 𝑥6" × integrated gradients (Taylor-Reihe)
+
+Integrated Gradients: MathemaOsche Details veranschaulicht
+
+Baseline
+
+Interpoliertes Bild 𝑘 von 𝑚
+
+Integrated Gradients: Exakte Form
+
+Näherung zur
+numerischen Berechnung
+
+Gradienten-Säegung während der InterpolaOon
+
+Modellvorhersage als Fkt. von 𝛼
+(interpol. Bild) sättigt bei 𝛼 ≈ 0.4
+
+• Entsprechend sind die Gradienten für 𝛼 > 0.4 sehr klein
+• Gradienten-Peak bereits bei deutlich kleineren Werten
+von 𝛼
+
+Integrated Gradients nicht nur bei Bilddaten
+Aufgabe: Vorhersage des Typs der gesuchten Antwort (numerisch, Zeichenkette, Datum, Ja/Nein)
+
+red = posi*ve a-ribu*on, blue = nega*ve a-ribu*on, gray = neutral a-ribu*on
+
+Baseline SelecOon Problem von Integrated Gradients
+• Integrated Gradients benö5gt eine Baseline
+• Bei Bildern typischerweise ein kompleT schwarzes Bild
+• Implika5on dieser Baseline-Wahl?
+
+Input Bildpixel
+
+Baseline Bildpixel
+
+à Schwarze Pixel haben nie einen Beitrag!
+
+Baseline-SelecOon-Problem von Integrated Gradients
+“random noise” Baseline
+zerstört IG-Attribution bei
+Feuerlöschboot-Beispiel
+
+schwarze Baseline (links) führt zu falschen
+IG-ATribu5ons bei Vorhersage des
+schwarzen Käfers
+Verwendung einer weißen Baseline (rechts)
+löst das Problem
+
+Einschränkungen von Integrated Gradients
+•
+•
+•
+•
+
+Lokale, nicht globale Interpre5erbarkeit (Aggrega5on prinzipiell möglich)
+Einzelne Features, nicht Wechselwirkungen oder Kombina5onen von Features
+Nur diﬀerenzierbare, mehrschich5ge Modelle
+Wahl einer guten Baseline notwendig
+
+Zusammenfassung Integrated Gradients
+• Wähle Baseline Input
+• Berechne Gradienten entlang des Weges von
+Baseline zum zu erklärenden Input
+• Integriere (oder summiere) die Gradienten um
+Feature-Wichtigkeiten zu erhalten
+• Baselines können Interpretierbarkeit beeinflussen
+• Anwendbar auf neuronale Netzwerke
+
+Demo: Integrated Gradients
+
+• Siehe `xai_05_ig_demo.ipynb`
+
+Übung: Integrated Gradients
+• Wenden Sie IG auf unterschiedliche Bilder
+an
+• Vergleichen Sie die IG-ATribu5ons mit
+denen von LRP
+– Die von iNNvesKgate unterstützten Rules ﬁnden
+Sie in
+hjps://github.com/albermax/innvesKgate/blob/
+master/src/innvesKgate/analyzer/__init__.py
+
+• Siehe auch
+hTps://github.com/albermax/innves5gate
+
+Referenzen
+•
+•
+•
+•
+•
+•
+•
+
+hjps://arxiv.org/abs/1703.01365
+hjps://interpretable-ml-class.github.io/ (week 4)
+hjps://www.youtube.com/watch?v=6xePkn3-LME
+hjps://www.tensorﬂow.org/tutorials/interpretability/
+integrated_gradients
+hjps://github.com/GoogleCloudPlaCorm/trainingdata-analyst/tree/master/blogs/integrated_gradients
+hjps://github.com/jphall663/awesome-machinelearning-interpretability
+hjps://christophm.github.io/interpretable-ml-book
+
+Zusammenfassung:
+Explainable AI
+
+• XAI hilft sowohl Entwicklern als auch Nutzern
+• Angeschaut
+– Interpretierbare Modelle
+– Feature Importance
+– LIME
+– SHAP
+– Counterfactuals
+– Layer-wise relevance propagation
+– Integrated Gradients
+
+Zusammenfassung:
+Explainable AI
+
+• Bibliotheken
+– interpret (z.B. interpre5erbare Modelle, LIME)
+– shap
+– dice_ml (Counterfactuals)
+– iNNves5gate (für neuronale Netzwerke, z.B. LRP
+oder Integrated Gradients)
+• Es gibt noch sehr viele andere Methoden und
+Bibliotheken
+• verschiedene Bibliotheken unterstützen teils sehr
+viele unterschiedliche Methoden
+
+Übung: XAI
+• Verwenden Sie den Titanic Datensatz von
+Kaggle
+• Trainieren Sie mehrere Modelle
+• Wenden Sie verschiedene XAI-Methoden
+auf einzelne Vorhersagen der Modelle an
+• Vergleichen Sie
+
+

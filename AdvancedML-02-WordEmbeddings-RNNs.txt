@@ -1,0 +1,1065 @@
+Advanced Machine
+Learning
+Prof. Dr. Alexander Dück
+alexander.dueck@dhbw.de
+
+Distributed Semantics
+
+Motivation
+• Suchen Repräsentation für Text, die algorithmisch verarbeitet werden
+kann
+
+Bag of Words, TF-IDF
+
+Bag of Words
+• Jedes Wort wird durch One-hot-vector repräsentiert
+• Dimension = Größe des Vokabulars
+input1: “Language technology is awesome”
+• Bsp.:
+Wort
+
+Index
+
+awesome
+
+0
+
+[1, 0, 0, 0, 0, 0]
+
+technology
+
+1
+
+[0, 1, 0, 0, 0, 0]
+
+is
+
+2
+
+[0, 0, 1, 0, 0, 0]
+
+hello
+
+3
+
+[0, 0, 0, 1, 0, 0]
+
+world
+
+4
+
+[0, 0, 0, 0, 1, 0]
+
+language
+
+5
+
+[0, 0, 0, 0, 0, 1]
+
+Input2: “Hello Hello world”
+
+Vektor
+
+Tokenization
+input &' = Language | technology | is | awesome
+input &( = Hello | Hello | world
+Bag of words:
+“technology”
+is
+
+technology
+awesome
+Language
+
+x! = 1, 1, 1, 0, 0, 1
+x" = 0, 0, 0, 2, 1, 0
+
+“language”
+
+2x “Hello”
+
+World
+
+Hello
+
+Hello
+
+TF-IDF: Motivation
+• Bag-of-Words zählt Wörter, aber:
+– häufige Wörter dominieren (z. B. und, der)
+– Nicht jedes häufige Wort ist informativ
+
+• Wörter sind wichtig, wenn sie
+– im Dokument häufig
+– im Gesamtkorpus selten sind
+
+à gewichtete BoW-Repräsentation
+
+TF-IDF: Formeln
+• Für ein Wort 𝑤 in Dokument 𝑑 aus einem Korpus 𝐷:
+• Term Frequency (TF):
+#𝑤 in 𝑑
+tf 𝑤, 𝑑 =
+#Wörter in d
+• Inverse Document Frequency (IDF):
+Anzahl an Dokumenten in 𝐷
+𝐷
+idf 𝑤, 𝐷 = log
+Anzahl an Dokumenten in
+#
+#
+𝑑 ∈𝐷𝑤∈𝑑
+𝐷, die 𝑤 enthalten
+• TF: lokale Wichtigkeit im Dokument
+• IDF: globale Seltenheit im Korpus
+• TF-IDF:
+t9idf 𝑤, 𝑑, 𝐷 = tf 𝑤, 𝑑 ⋅ idf(𝑤, 𝐷)
+• Hoher Wert à charakteristisches Wort für dieses Dokument
+
+TF-IDF: Verwendung
+• Für jedes Dokument 𝑑 lässt sich ein TF-IDF-Vektor 𝑣! ∈ ℝ " erzeugen,
+der das Dokument repräsentiert ( 𝑉 : Größe des Vokabulars)
+– Ein Eintrag im TF-IDF-Vektor pro Wort im Vokabular
+
+Mit diesen Vektoren kann man weiterarbeiten, z.B.
+• Dokumente vergleichen (information retrieval):
+– Cosine Similarity: cos 𝑣$ , 𝑣% =
+
+&! ⋅&"
+&! |&" |
+
+(𝑑: Dokument, 𝑞: Query)
+
+• Als Input für ML-Modelle nutzen (logistische Regression, SVM, …), z.B. für
+Textklassifikation
+
+Bag of Words, TF-IDF
+• Reihenfolge der Wörter wird nicht berücksichtigt, was für Aufgaben der
+natürlichen Sprachverarbeitung sehr wichtig sein kann.
+• Nützlich bei der Dokumentenklassifizierung oder Information-retrieval, in
+Kombination mit der TF-IDF Gewichtung.
+• BoW wurde häufig in „klassischen“ ML Methoden in Kombination mit
+Feature Engineering eingesetzt
+– Wort- und Character-N-grams (z.B. nicht gut à “nicht_gut”)
+– Part of Speech
+– Satzlänge
+–…
+à Semantik wird nicht gelernt, sondern manuell als Features eingebaut.
+
+Word Embeddings & Distributed Semantics
+
+Motivation I: Wozu Word Embeddings?
+• Wörter müssen für Maschinen numerisch repräsentiert werden
+• Klassische Repräsentationen (One-Hot):
+– sehr hochdimensional (30.000 – über 100.000 verschiedene Wörter)
+– keine Semantik (alle Wörter gleich weit voneinander entfernt)
+
+• Sprache ist kontinuierlich, nicht diskret
+• Ziel: ähnliche Wörter → ähnliche Vektoren
+
+Motivation II: Distributionelle Semantik
+• Bedeutung eines Wortes ergibt sich aus seinem Kontext
+– „You shall know a word by the company it keeps“
+
+• Wörter mit ähnlicher Bedeutung treten in ähnlichen Kontexten auf
+• Semantik als geometrische Struktur im Vektorraum
+• Ermöglicht Vergleiche, Analogien und Generalisierung
+
+Embeddings
+• Diskrete Variable (z.B. Wort) soll in einen kontinuierlichen Wertebereich
+(Vektor in ℝ! ) übersetzt werden
+• Idee und Methoden für Embeddings gibt es schon lange
+• Viele Methoden
+– Word2Vec
+– FastText
+– GloVe
+– BERT, Elmo, …
+
+• Unterschiedliche Ebenen für Embeddings
+– Character, Word, Paragraph, Dokument
+
+Embeddings
+• Idee: Bedeutung eines Wortes ergibt sich aus seinem Kontext, also aus
+Wörtern, die häufig in der Nähe vorkommen
+– „You shall know a word by the company it keeps“ (Firth, J. R. 1957:11)
+
+• Eigenschaften: Wörter mit ähnlicher Bedeutung sollen ähnliche Vektoren
+haben
+– Tiger und Löwe sind sich ähnlich, weil sie häufig mit ähnlichen Wörtern genannt
+werden (z.B. Dschungel, Raubkatze, …)
+
+Distributed Semantics – Intuition
+• Tun wir so, als würden wir das Wort ongchoi nicht kennen
+• Wir beobachten das Wort im folgenden Kontext:
+– “Ongchoi schmeckt am besten mit Reis”
+– “Anschließend Ongchoi mit Knoblauch sautieren”
+
+• Viele Wörter, die mit Ongchoi auftreten(Knoblauch, Reis, sautieren,
+schmeckt), kennen wir aus dem Bereich Kochen
+
+Word2Vec
+• Zwei Varianten: CBOW (continous bag-of-words) und skip gram
+• Trainingsdaten: Großer Textkorpus (z.B. Wikipedia, Common Crawl,
+Twitter…)
+• Jedes Wort aus festem Vokabular wird durch einen Vektor repräsentiert
+• Für jede Position 𝑖 im Text betrachten wir
+– Das zentrale Wort 𝑤)
+– Die Kontextwörter 𝑐 (𝑤)*" , 𝑤)*! , 𝑤)+! , 𝑤)+" )
+
+• Trainieren ein Modell zur Vorhersage von 𝑤# aus 𝑐 (CBOW) oder
+umgekehrt (skip gram) anhand der Wortvektoren
+• Wortvektoren werden angepasst um die Vorhersage von
+Wahrscheinlichkeiten für die tatsächlichen Wörter zu maximieren
+
+Word2Vec – CBOW
+• CBOW: Sage zentrales Wort (hier: “Berlin”) basierend auf Kontextwörtern vorher
+• Vorhersage basierend auf Mittelwert der Kontextwörter
+𝑝 𝑤! 𝑤!"#
+𝑝 𝑤! 𝑤!"$
+
+𝑝 𝑤! 𝑤!"&
+
+𝑝 𝑤! 𝑤!%#
+
+𝑝 𝑤! 𝑤!%&
+
+𝑝 𝑤! 𝑤!%$
+
+Word2Vec – Skip Gram
+• Skip Gram: Sage die Kontextwörter basierend auf zentralem Wort vorher
+(Alternative Sichtweise: Sage das zentrale Wort basierend auf einem
+einzelnen Kontextwort vorher)
+
+Word2Vec – CBOW vs Skip Gram
+• CBOW: Sage zentrales Wort (hier:
+“visual”) basierend auf
+Kontextwörtern vorher
+• Skip Gram: Sage die Kontextwörter
+basierend auf zentralem Wort vorher
+(Alternative Sichtweise: Sage das
+zentrale Wort basierend auf einem
+einzelnen Kontextwort vorher)
+• Das Training erfolgt in jedem Fall mit
+einem MLP mit einem hidden layer
+• Die Parameter des MLP sind die
+gesuchten Embeddings
+
+Word2Vec – Embeddings
+• Technisch: Wörter 𝑤) sind one-hot-encoded
+• Input des Netzwerks ist bei
+!
+"
+
+– CBOW Mittelung über alle Kontextwörter: 𝑥 = ∑"#$! 𝑤#
+– Skip Gram das zentrale Wort 𝑤# (one-hot vector)
+
+• 𝑀 ∈ ℝ*×, ist die Parametermatrix des hidden layers
+• 𝑉: Vokabulargröße, 𝑑: Embedding-Dimension
+• ℎ = 𝑀𝑥 à wählt Spalte 𝑖 (Skip Gram) oder eine Mittelung der
+Spalten von 𝑀 zu den Kontextwörtern (CBOW) aus
+• à jede Spalte von 𝑀 entspricht dem Word-Embedding eines Wortes
+Output des Netzwerks: 𝑦 = 𝑀- ℎ
+
+𝑀 ∈ ℝ,×.
+
+•
+• à die Zeilen von 𝑀′ können ebenfalls als Embeddings dienen
+Hinweis: Es gibt Darstellungen, bei denen die Zeilen von 𝑀 den
+Embeddingvektoren entsprechen; das hängt von der Konvention ab.
+
+https://huggingface.co/spaces/hesamation/primer-llmembedding?section=word2vec
+
+Word2Vec Parameter
+• Größe des Kontextfensters
+• Minimale Termhäufigkeit
+• Dimension der Embeddings
+• CBOW vs Skip Gram
+• Anzahl an Epochen
+
+Embeddings erfassen Beziehungen zwischen Wörtern
+• Vektoren eigenen sich zur Beantwortung von Analogiefragen der Form A
+ist zu B wie C zu ???
+à Siehe Übung
+
+https://blog.acolyer.org/2016/04/21/the-amazing-power-of-word-vectors/
+
+Bias in Embeddings
+• Word-Embeddings verstärken Bias
+– Bekanntestes Beispiel Man is to Doctor as Woman is to …
+
+• Caliskan et al. (2017) haben 200 Sentiment Analyse Systeme untersucht
+und festgestellt, dass afroamerikanische Vornamen zu einem negativen
+Sentimentführen.
+• Analysen im Bereich hatespeechdetectionhaben ergeben, dass nur die
+Nennung von Minderheiten (Blind, Frau, Homosexuell, …) zu einer
+Klassifikation als Hate Speech führen.
+
+Aylin Caliskan, Joanna J. Bryson, & Arvind Narayanan (2016). Semantics derived automatically from language corpora
+necessarily contain human biases. CoRR, abs/1608.07187.
+
+Visualisierung von Embeddings
+
+https://jalammar.github.io/illustrated-word2vec/
+
+gensim: Word Embedding Bibliothek
+• Enthält Vielzahl von Embedding-Methoden
+– Word2Vec
+– Doc2Vec
+– FastText
+–…
+
+• Lookup, Ähnlichkeitsberechnung, …
+• Verschiedene vortrainierte Embeddings lassen sich herunterladen
+
+Subword-based Word Vectors: Motivation
+Wortverteilung aus deutscher Wikipedia:
+• 2.328.761 Artikel
+• 10.116.714 Token mit 687.524.490 Nennungen
+• Token mit Häufigkeit < 5: 7.959.628 (78.6%)
+• Token mit Häufigkeit < 1: 5.640.211 (55.75%)
+à Die meisten Token sind sehr selten! à Kriegen kein oder kein gutes
+Embedding dafür!
+
+FastText Embeddings
+• Erweiterung von Word2Vec
+• Wörter werden als char-n-grams und dem Wort repräsentiert
+– where = <wh, whe, her, ere, re>, <where>
+
+• Embedding berechnet sich aus der Summe der einzelnen
+Repräsentationen (N-Gramm und Wort)
+• N-Grams der Länge 3-6
+à Generiert bessere Embeddings für seltene Wörter
+à Ermöglicht es mit Out-of-vocabulary umzugehen
+
+Enriching Word Vectors with Subword Information, Bojanowski, Grave, Joulin and Mikolov. FAIR. 2016. https://arxiv.org/abs/1607.04606
+
+Character Embedding
+• Motivation:
+• Word Embeddings:
+– Out-of-vocabulary Problem
+– Keine Morphologie (verschiedene Embeddings für Katze und Katzen)
+
+• FastText: feste n-Gramme
+• Keine Embeddings für seltene Wörter und Rechtschreibfehler
+• Character Embeddings
+– Vollständig OOV-fähig
+– Keine Tokenisierung notwendig
+– Robust gegenüber Rechtschreibfehlern
+Ling, W., Luís, et al. (2015). Finding Function in Form: Compositional Character Models for Open Vocabulary Word Representation. EMNLP.
+Zhang X., et al. (2015). Character-level convolutional networks for text classification. In Proceedings NIPS
+
+Character Embedding
+• Repräsentieren einzelne Zeichen als Vektoren
+• Wort ist eine Sequenz aus Zeichen-Embeddings
+• Wort-Vektor entsteht durch Weiterverarbeitung von Char Embeddings
+– CNNs
+– RNNs, LSTMs, GRUs
+– Pooling
+
+Ling, W., Luís, et al. (2015). Finding Function in Form: Compositional Character Models for Open Vocabulary Word Representation. EMNLP.
+Zhang X., et al. (2015). Character-level convolutional networks for text classification. In Proceedings NIPS
+
+Byte Pair Encoding
+• Subword-Tokenisierungsverfahren
+• Ursprünglich aus der Datenkompression, später für NLP adaptiert
+• Ziel:
+– Kompromiss zwischen Word-Level und Character-Level
+– Offenes Vokabular ohne echtes OOV-Problem
+
+• Word-Level:
+– OOV-Wörter
+– großes Vokabular
+
+• Character-Level:
+– sehr lange Sequenzen
+– Semantik schwer zu lernen
+
+• Byte Pair Encoding:
+– kontrollierte Vokabulargröße
+– produktive Morphologie
+– robuste Repräsentationen
+– Einsatz als unsupervised Text-Tokenizer
+Rico Sennrich, Barry Haddow, and Alexandra Birch. Neural MachineTranslation of Rare Words with Subword Units. ACL 2016.
+
+Byte Pair Encoding
+1. Initialisiere Vokabular mit allen Zeichen aus dem Text
+2. Füge dem Vokabular das häufigste N-Gramm hinzu
+3. Wiederhole 2, bis Vokabulargröße erreicht wurde
+
+BPE lernt, welche Wortteile ”sich lohnen”, eigene Tokens zu werden.
+Google WordPiece Modell ist eine Erweiterung
+
+Byte Pair Encoding – Beispiel
+1. Initialisiere Vokabular mit allen Zeichen aus dem Text
+
+Byte Pair Encoding – Beispiel
+1. Initialisiere Vokabular mit allen Zeichen aus dem Text
+2. Füge dem Vokabular das häufigste N-Gramm hinzu
+
+(1)
+
+Byte Pair Encoding – Beispiel
+1. Initialisiere Vokabular mit allen Zeichen aus dem Text
+2. Füge dem Vokabular das häufigste N-Gramm hinzu
+
+(2)
+
+Byte Pair Encoding – Beispiel
+1. Initialisiere Vokabular mit allen Zeichen aus dem Text
+2. Füge dem Vokabular das häufigste N-Gramm hinzu
+
+(3)
+
+Übung: Word-Embeddings
+• Notebook: 00_word_embeddings.ipynb
+• Word-Embeddings (Vektoren) eignen sich zur Beantwortung von
+Analogiefragen der Form A ist zu B wie C zu ???
+
+https://blog.acolyer.org/2016/04/21/the-amazing-power-of-word-vectors/
+
+Recurrent Neural Networks
+𝑦1
+
+ℎ$
+𝑥1
+
+Warum rekurrente Netze?
+Beispiel – Text:
+Wenn wir einen Satz in einem Text lesen, wird mit jedem neuen Wort unser
+aktueller Informationsstand aktualisiert, und er hängt nicht nur von dem
+neubeobachteten Wort ab, sondern auch von den vorhergehenden
+Wörtern.
+Allgemein:
+• Viele Daten sind sequenziell strukturiert
+• Reihenfolge trägt semantische Information
+• Klassische Netze ignorieren Zeitabhängigkeiten
+• Weiteres Beispiel: Zeitreihen
+• Ziel: Modellierung von Abhängigkeiten über Zeit
+
+RNN-Architektur
+• Ein Teil des Outputs ist gleichzeitig Teil des Inputs:
+𝑦$
+
+ℎ!
+𝑥$
+
+Intuition: Ein Netz mit Gedächtnis
+• Gleiche Transformation bei jedem Zeitschritt
+• Interner Zustand speichert Vergangenheit
+• Eingabe beeinflusst aktuellen Zustand
+• Zustand beeinflusst zukünftige Ausgaben
+• „Gedächtnis“ ist Teil des Modells
+
+𝑦$
+
+ℎ!
+𝑥$
+
+(Vanilla) RNN-Architektur
+• Tatsächliche Implementierung durch ”Ausrollen”:
+𝑦1
+
+ℎ$
+
+𝑦!
+
+=
+
+ℎ6
+
+𝑊)
+
+𝑦"
+
+𝑊+
+ℎ%
+
+𝑊)
+
+𝑊*
+𝑥1
+
+𝑥!
+
+𝑊+
+ℎ&
+𝑊*
+𝑥"
+
+𝑦4
+
+𝑊)
+
+𝑊+
+𝑊)
+
+ℎ'
+
+𝑦5
+
+𝑊+
+ℎ(
+𝑊*
+
+𝑊*
+𝑥4
+
+𝑊)
+
+𝑥5
+
+ℎ! = tanh 𝑊" ⋅ 𝑥! + 𝑊# ⋅ ℎ!$% + 𝑏#
+𝑦! = g 𝑊& ⋅ ℎ! + 𝑏&
+
+𝑔: Aktivierungsfunktion für Output (z.B. Softmax oder linear)
+
+…
+
+(Vanilla) RNN-Architektur
+• ℎ$ = tanh 𝑊* ⋅ 𝑥$ + 𝑊) ⋅ ℎ$,% + 𝑏)
+– tanh, weil Wertebereich (−1; 1)
+
+• 𝑦$ = g 𝑊+ ⋅ ℎ$ + 𝑏+ , 𝑔: Aktivierungsfunktion für Output (z.B. Softmax
+oder linear)
+• 𝑥$ : Eingabe zum Zeitpunkt t
+𝑦$
+• ℎ$ : Hidden State
+𝑊+
+• 𝑊* , 𝑊) , 𝑏) , 𝑏+ : lernbare Parameter
+𝑊)
+
+ℎ!
+
+𝑊*
+𝑥$
+
+(Vanilla) RNN Animation
+
+https://medium.com/data-science/animated-rnn-lstm-and-gru-ef124d06cf45
+
+Vergleich: Vanilla RNN und MLP
+• (Vanilla) RNN-Zelle entspricht einem normalen MLP-Layer mit den Inputs
+𝑥$ , ℎ$,% und zwei Outputs 𝑦$ , ℎ$
+• Allerdings werden für 𝑦$ und ℎ$ unterschiedliche Aktivierungsfunktionen
+verwendet (𝑦$ : linear oder Softmax, ℎ$ : meist tanh)
+• Das zeitliche Ausrollen entspricht einem tiefen MLP mit Weight Sharing
+(also gleiche Gewichte in allen Layern)
+
+Initialer hidden state vector (𝒉𝟎 )
+Möglichkeiten:
+• Typischerweise: ℎ- = Null-Vektor
+• Lernbare Parameter – insbesondere, wenn die Anwendung sehr kurze
+Sequenzen hat
+• Beim Training auf sehr langen Sequenzen (z.B. ganzes Buch, lange
+Zeitreihe), die in viele kurze Sequenzen unterteilt worden sind, kann der
+Endzustand des vorherigen Batches genutzt werden – so kann das RNN
+sich an diesen Teil “erinnern” (Keras: stateful=True)
+
+RNN-Eigenschaften
+• Verarbeitet beliebig lange Sequenzen
+• Parameterzahl unabhängig von Inputlänge
+• Berechnung langsam, schlecht parallelisierbar aufgrund sequentieller
+Struktur
+• Ermöglicht vielfältigen Einsatz
+– Tagging (POS, NER)
+– Klassifikation (Sentiment)
+– Question Answering durch
+Encoding
+– Machine Translation
+
+Backpropagation through time
+• Jeder Zeitschritt einer RNN-Sequenz kann zum Loss beitragen:
+$
+∑
+Lossfunktion: 𝐿 = !"# 𝑙 𝑦! 𝑦'!
+• 𝐿: loss, 𝑦$ : Label zum Zeitpunkt 𝑡, 𝑦;$ : Vorhersage
+• Die Parameter sind in jedem Zeitschritt gleich
+– “weight sharing through time”
+
+• Durch Abhängigkeit von ℎ!%# beeinflussen die Parameter
+sämtliche Zeitschritte
+• Die Berechnung der Gradienten in verschiedenen Zeitschritten
+und Update der Parameter bezeichnet man als “Backpropagation
+through time”
+
+Truncated backpropagation through time
+• Lange Sequenzen à Gradienten über sehr viele Zeitschritte
+– Berechnung rechenintensiv
+– Zeitschritte sehr weit hinten tragen oft wenig bei (geringe Gradienten)
+
+• Daher wird beim Training oft die Länge der Sequenzen begrenzt
+• Backprop in Frameworks (TensorFlow, PyTorch) läuft über
+gesamte Sequenzlänge – Sequenzen manuell kürzen, wenn
+gewünscht
+
+RNN und Language Models
+
+ß Gelernte Word Embeddings
+
+https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/slides/cs224n-spr2024-lecture05-rnnlm.pdf (S. 32)
+
+RNN mit Keras
+Keras:
+• SimpleRNN: 𝑦$ = ℎ$
+• Vanilla-RNN mit separatem Output lässt sich über Einfügen eines
+expliziten Dense-Layers realisieren
+
+Stacked RNN
+• Analog zum Hinzufügen weiterer Layer in einem MLP
+• Erhöht Modellkapazität
+ℎ!1 = tanh(𝑊8! ⋅ 𝑥1 + 𝑊9 ⋅ ℎ!1*! + 𝑏9! )
+ℎ"$
+
+𝑦!
+
+𝑦#
+
+𝑦$
+
+𝑦%
+
+ℎ!&
+
+ℎ%&
+
+ℎ&&
+
+ℎ'&
+
+ℎ!#
+ℎ"#
+
+ℎ!%
+ℎ!!
+
+ℎ!"
+
+ℎ##
+
+ℎ%%
+ℎ!#
+
+ℎ$#
+
+ℎ&%
+ℎ!$
+
+ℎ%#
+
+ℎ'%
+ℎ!%
+
+ℎ!!
+
+ℎ!%
+
+ℎ!&
+
+ℎ!'
+
+𝑥!
+
+𝑥#
+
+𝑥$
+
+𝑥%
+
+"
+ℎ1" = tanh(𝑊8" ⋅ ℎ!1 + 𝑊9 ⋅ ℎ1*!
++ 𝑏9" )
+…
+
+…
+
+Anzahl an Layern abhängig von Anwendung
+• Zeitreihen: 1-2
+• Sentiment Analysis: 2-3
+• Spracherkennung: bis 8
+• Machine Translation: bis 8
+
+RNN – Probleme
+• Informationen vor ”vielen” Zeitschritten schwer zugänglich
+– Vanishing Gradient
+– Exploding Gradient
+– Dadurch “vergisst” das Netzwerk den Beginn langer Sequenzen und kann keine
+langfristigen Abhängigkeiten lernen
+
+• Beschränktes Gedächtnis (“Information Bottleneck”)
+– Hidden state ℎ! dient sowohl als Output Repräsentation als auch als gesamtes Memory
+– neue Information überschreibt oft die alte: ℎ! = tanh 𝑊" 𝑥 + 𝑊# ℎ!$% + 𝑏#
+– Kein Mechanismus zum gezielten Behalten oder Vergessen von Information
+
+• Berechnung langsam, da kaum parallelisierbar
+– ℎ%&& kann erst berechnet werden, wenn Berechnungen für 𝑡 = 99 fertig sind usw.
+– Daher nur langsam trainierbar und wenig Speedup durch moderne GPUs, die für
+massive Parallelität ausgelegt sind
+
+LSTM: Long short-term memory
+• Fortgeschrittene RNNs unterscheiden sich vor allem dadurch, wie
+der hidden state aktualisiert wird
+• RNN-Erweiterung zur Reduktion des ”vanishing Gradient”
+Problems
+• LSTM hat einen expliziten ”Memory Mechanismus”
+– Erlaubt es Informationen über mehr Schritte zu behalten
+
+• Modell lernt, welche Informationen
+
+Sepp Hochreiter, Jürgen Schmidhuber; Long Short-Term
+Memory. Neural Comput 1997; 9 (8): 1735–1780.
+doi: https://doi.org/10.1162/neco.1997.9.8.1735
+
+– Gespeichert
+– Gelöscht
+– Ausgelesen und für das Update genutzt werden
+
+LSTM
+Vanilla RNN
+
+LSTM
+
+https://colah.github.io/posts/2015-08-Understanding-LSTMs/
+
+LSTM – Kernidee: Cell State
+• LSTM-Kern: Zellzustand 𝑐$ (horizontale Linie
+oben im Diagramm)
+• Förderband entlang der gesamten LSTMKette
+• Information kann leicht unverändert
+transportiert werden
+• LSTM kann Informationen hinzufügen oder
+entfernen
+• Reguliert durch sog. “Gates”
+
+𝑐$,%
+
+𝑐$
+
+ℎ$,%
+
+ℎ$
+
+Funktionsweise Gates
+• Gates können ausgewählte Informationen durchlassen oder entfernen
+• Mathematische Operation: Multiplikation mit
+Sigmoid 𝜎 ∈ (0; 1)
+– Wertebereich geeignet zum Durchlassen (1) oder Löschen (0) durch
+Multiplikation
+
+• Input und Parameter der Sigmoid-Funktion bestimmen, welche
+Informationen behalten und welche gelöscht werden
+
+LSTM Schritt für Schritt (1)
+
+• Schritt 1: Welche Information wird behalten (“forget gate”)?
+
+LSTM Schritt für Schritt (2)
+
+• Schritt 2: Welche neuen Informationen hinzufügen (“input gate”)?
+• Tanh berechnet potentiell hinzuzufügende Informationen
+• Sigmoid 𝜎 bestimmt, welche davon zum Zellzustand 𝑐$ hinzugefügt
+werden
+
+LSTM Schritt für Schritt (3)
+
+• Schritt 3: Update des alten Zellzustands 𝐶1*!
+• Multiplikation von 𝐶1*! mit 𝑓1 bestimmt, was vergessen wird
+• 𝐶P1 enthält neue Informationen, Multiplikation von 𝐶P1 mit 𝑖1 entscheidet, welche
+davon durch Addition zum neuen Zellzustand 𝐶1 hinzugefügt werden
+
+LSTM Schritt für Schritt (4)
+
+• Schritt 4: Bestimmung des Outputs bzw. neuen hidden states ℎ1
+• Output (neuer hidden state ℎ1 ) basiert auf Cell State 𝐶1 - es wird aber gefiltert
+• Filter 𝑜1 berechnet sich aus bisherigem hidden state ℎ1*! und aktuellem Input 𝑥1
+• Cell state wird noch durch tanh transformiert, damit alle Werte in (-1;1) sind
+
+LSTM-Komponenten
+Wertebereiche
+𝜎: (Sigmoid) ∈ (0; 1)
+tanh: ∈ (−1; 1)
+
+Berechne forget gate
+aus 𝑥1 und ℎ1*!
+Welche der
+Informationskandidaten
+wie stark hinzufügen
+input
+
+hidden state
+
+input gate
+forget gate
+
+𝑐!%#
+ℎ!%#
+
+𝑐!
+ℎ!
+
+Informationskanditaten
+zum Hinzufügen
+
+tanh transformiert
+cell state in (-1;1) vor
+dessen Verwendung als
+hidden state
+Steuert abhängig von 𝑥1
+und ℎ1*! , welche Infos
+aus cell state 𝑐1 in den
+hidden state ℎ1 fließen
+
+LSTM-Animation
+
+https://medium.com/data-science/animated-rnn-lstm-and-gru-ef124d06cf45
+
+LSTM-Parameter zählen
+
+params_per_gate
+
+• 𝑥: Input-Dimension
+• ℎ: Hidden-Dimension
+• params_per_gate = 𝑥 + ℎ ∗ ℎ + ℎ
+• 4 Gates à #params$.$/0 = 4 ∗
+
+𝑥+ℎ ∗ℎ+ℎ
+
+LSTM-Varianten (1)
+• Es gibt zahlreiche LSTM-Varianten
+• Variante 1: “Peephole Connections” (Gate Layer hängen
+ebenfalls von Cell State ab):
+
+Hier: Peepholes in allen Gates; aber auch Auswahl möglich
+
+Engl. Peephole: Guckloch
+
+LSTM-Varianten (2)
+• Variante 2: gekoppelte Forget- und Input-Gates (“Update Gate”)
+• Was vergessen wird, wird durch neue Informationen ersetzt und
+umgekehrt werden nur neue Informationen an Stellen eingefügt,
+die vergessen wurden:
+
+GRU: Gated Recurrent Unit
+• Kann man auch als (populäre) LSTM-Variante betrachten
+• Update Gate statt separater Forget- und Input-Gates
+• Reset Gate
+• Kein separater Cell State
+• Schneller trainierbar, weniger Parameter
+Update Gate
+Reset Gate
+
+Cho et al. 2014. Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation. In Proceedings of the 2014
+Conference on Empirical Methods in Natural Language Processing (EMNLP), pages 1724–1734, Doha, Qatar. Association for Computational
+Linguistics. https://arxiv.org/abs/1406.1078
+
+GRU-Animation
+
+https://medium.com/data-science/animated-rnn-lstm-and-gru-ef124d06cf45
+
+Erweiterung: Bi-directional LSTM (oder GRU)
+• Bisher: LSTM kennt nur den linken Kontext
+• Können zweites LSTM (GRU) einfügen,
+welches die Sequenz von rechts nach links
+verarbeitet
+• Konkatenieren Output beider LSTMs (GRUs)
+
+https://stanford.edu/~shervine/teaching/cs-230/cheatsheet-recurrent-neural-networks
+
+Vanishing/Exploding Gradients
+• Häufiges Problem bei sehr langen Sequenzen (oder tiefen Netzen)
+• Gradienten werden immer kleiner à kein Parameter-Update
+• Gradienten können auch immer größer werden à sehr große Updates,
+Loss divergiert
+• Kein reines RNN Problem
+– Auch tiefe CNNs und MLPs betroffen
+– Bei RNNs besonders schlimm, da Gradient je nach Sequenzlänge sehr weit
+zurückpropagiert werden muss (>100)
+
+Vanishing/Exploding Gradients – Lösungen
+• Glorot und Bengio (2010) zeigten, dass Initialisierung und
+Aktivierungsfunktion relevant sind
+– “Glorot-Initialisierung”
+– Keine logistische Aktivierungsfunktion in den hidden layern
+
+• Batch-Normalisierung
+• Gradienten-Clipping: Updates-Größe manuell begrenzen
+• Spezialisierte Architekturen
+– Residual, Skip, Identity, Highway connections
+
+• Langsames Erweitern des Netzwerks um weitere Schichten und
+Parameter einzelner Schichten nicht anpassen
+Glorot, Xavier & Yere, Yere. (2010). Understanding the difficulty of training deep feedforward neural networks.
+
+Übung 2
+• Notebook: 01_VanillaRNN_timeSeries.ipynb
+• Künstlich erzeugte Daten zu Demozwecken
+• 10,000 Zeitreihen mit je 51 Zeitschritten
+• 7.000 train, 2.000 dev (validation), 1.000 test
+• X(t): zwei überlagerte Sinuskurven + Rauschen
+• Y: Wert der Kurve an Position 51
+
+Übung 3
+• Notebook: 02a_VanillaRNN_timeSeries-future.ipynb &
+02b_VanillaRNN_timeSeries-future.ipynb)
+
+• Möchten die nächsten 10 Datenpunkte vorhersagen (statt nur
+einen)
+– Zwei Varianten in Notebooks
+
+Übung 4 – Language Modelling
+• Language Model auf Shakespeare: shakespeare.ipynb
+– Trainingsziel: Vorhersage des nächsten Buchstabens
+– Nach dem Training können Texte im Shakespeare-Stil gesampelt werden
+
+• ”The Unreasonable Effectiveness of Recurrent Neural Networks”, Andrej
+Karpathy, https://karpathy.github.io/2015/05/21/rnn-effectiveness/
+– Lesen und ausprobieren, hat Code auf Github (leider in LUA) und einen
+interessanten alternativen Datensatz
+
+Übung 5
+• Mehr als nur 10 Datenpunkte vorhersagen mit Modell, das für 10
+Datenpunkte trainiert worden ist
+• Mit anderen Modellarchitekturen (z.B. MLP) vergleichen
+• Länger trainieren und optimieren
+• Trainieren bis Overfitting einsetzt
+• Training auf GPU (Zugangsdaten: Moodle)
+• Implementieren Sie ein RNN mit PyTorch
+• Sequence2Sequence/Encoder-Decoder implementieren
+
+Seq2Seq & Encoder-Decoder-Architektur
+• Problemstellung: Machine Translation
+– Input: Satz in Englisch.
+– Target: Satz in Französisch.
+
+Sequence to Sequence Learning with Neural Networks,
+Sutskever et al, https://arxiv.org/abs/1409.3215
+
+• Encoder verarbeitet Input variabler Länge und transformiert ihn in Vektor definierter Größe.
+– Information steckt nun in diesem hidden state vector, ein Vektor fester Länge
+– Dieser dient als “previous hidden state” ℎ!"# des “Decoders”
+
+• Decoder muss Sequenz variabler Länge vorhersagen
+– Basierend auf dem hidden state vector des Encoders
+– Input ist jeweils das zuvor generierte Wort des Decoders (zu Beginn: Start-Token oder letzter Encoder-Output)
+
+Encoder: LSTM1
+
+Decoder: LSTM2
+
+Encoder-Decoder Visualisierung
+• Sehr gutes Tutorial mit vielen Animationen:
+https://jalammar.github.io/visualizing-neural-machine-translationmechanics-of-seq2seq-models-with-attention/
+• Visualisierung: https://jalammar.github.io/images/seq2seq_6.mp4
+
+Einschub: Suchstrategien während Inferenz
+• Greedy: Wähle bei jedem Zeitschritt das Token mit der höchsten
+Wahrscheinlichkeit bis <EOS> vorhergesagt wird.
+• Beispiel: 4 Token, 4 Zeitschritte
+• Vorhersage:
+– A, B, C, <EOS>
+– 𝑃 = 0.5×0.4×0.4×0.6 = 0.048
+
+Einschub: Suchstrategien während Inferenz
+• Eigenschaften von Greedy Search:
+– Schnell
+– Einfach zu implementieren
+– Optimiert nur Wahrscheinlichkeit für nächsten Token und nicht für die
+Gesamtsequenz
+
+𝑃 = 0.5×0.4×0.4×0.6 = 0.048
+
+𝑃 = 0.5×0.3×0.6×0.6 = 0.054
+
+Einschub: Suchstrategien während Inferenz
+• Vollständige Suche (alle Kombinationen durchprobieren)
+– Zeitkomplexität: 𝑂 𝑉 : (𝑉: Vokabular, 𝑛: Sequenzlänge) à nicht praktikabel
+
+• Beam Search
+
+https://d2l.ai/chapter_recurrent-modern/beam-search.html
+
+Problem der Encoder-Decoder Architektur
+• Bottleneck: Gesamter Inhalt einer Sequenz (z.B. eines Satzes) wird im
+finalen Tensor des Encoders abgebildet
+• Dieser hat eine feste Größe und muss Inhalte beliebiger Länge
+repräsentieren können
+
+Bottleneck
+
+Problem der Encoder-Decoder Architektur
+
+• RNNenc-*: Sequence2Sequence Modelle
+• RNNsearch-*: Seq2Seq mit Attention (sie folgende Folien)
+Bahdanau, Dzmitry & Cho, Kyunghyun & Yere, Yere. (2014). Neural Machine Translation by Jointly Learning to Align and Translate. https://arxiv.org/abs/1409.0473
+
+Attention – Idee
+• Decoder wird so erweitert, so dass er zu jedem Zeitschritt den gesamten
+Input sieht und die Relevanz für den nächsten Zeitschritt bewertet.
+• Umsetzung: Anstelle nur des letzten „hidden state“ des Encoders
+bekommt der Decoder Zugriff auf alle „hidden states“ des Encoders
+– Zu jedem Zeitschritt entscheidet der Decoder, wie relevant ein bestimmter
+„hidden state“ ist.
+
+• ”Bahdanau”-Attention
+Bahdanau, Dzmitry & Cho, Kyunghyun & Yere, Yere. (2014). Neural Machine
+Translation by Jointly Learning to Align and Translate.
+https://arxiv.org/abs/1409.0473
+
+Attention Umsetzung (1)
+
+https://medium.com/swlh/a-simple-overview-of-rnn-lstm-and-attention-mechanism-9e844763d07b
+
+Attention Umsetzung (2)
+
+Neuronales Netzwerk
+(d.h. Gewichte 𝛼
+werden gelernt)
+
+Mit Hilfe der Gewichte 𝛼!,% kann der Decoder
+lernen, welcher Teil des Inputs zu einem
+gegebenen Zeitpunkt, also für die Vorhersage
+des nächsten Tokens, am wichtigsten ist.
+Der Decoder kann sozusagen seine
+Aufmerksamkeit (”Attention”) auf die
+relevanten Teile des Inputs lernen.
+
+https://medium.com/swlh/a-simple-overview-of-rnn-lstm-and-attention-mechanism-9e844763d07b
+
+(Bahdanau-) Attention: Original-Formulierung
+Bahdanau, Dzmitry & Cho, Kyunghyun & Yere, Yere.
+(2014). Neural Machine Translation by Jointly
+Learning to Align and Translate.
+https://arxiv.org/abs/1409.0473
+
+(6)
+
+“… is an alignment model which scores how well the inputs around position 𝑗
+and the output at position 𝑖 match. The score is based on the RNN hidden state
+𝑠&'! (just before emitting 𝑦& , Eq. (4)) and the 𝑗-th annotation ℎ( of the input
+sentence. We parametrize the alignment model a as a feedforward neural
+network which is jointly trained with all the other components of the
+proposed system.”
+
+Encoder-Decoder Architektur mit und ohne Attention
+Attention Mechanismus verbessert die
+Leistung bei Langen Sequenzen deutlich.
+
+• RNNenc-*: Sequence2Sequence Modelle
+• RNNsearch-*: Seq2Seq mit Attention
+Bahdanau, Dzmitry & Cho, Kyunghyun & Yere, Yere. (2014). Neural Machine Translation by Jointly Learning to Align and Translate. https://arxiv.org/abs/1409.0473
+
+Attention – Visualisierung
+• Bild zeigt die Attention-Gewichte
+• “The x-axis and y-axis of each plot
+correspond to the words in the
+source sentence (English) and the
+generated translation (French),
+respectively. Each pixel shows the
+weight 𝛼#1 of the annotation of the
+𝑗-th source word for the 𝑖-th target
+word (see Eq. (6)), in grayscale (0:
+black, 1: white).”
+Bahdanau, Dzmitry & Cho, Kyunghyun & Yere, Yere. (2014). Neural Machine
+Translation by Jointly Learning to Align and Translate.
+https://arxiv.org/abs/1409.0473
+
+
