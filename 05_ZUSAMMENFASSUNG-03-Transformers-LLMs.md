@@ -31,14 +31,14 @@
 #### Grundidee
 - Jedes Wort interagiert mit jedem anderen Wort des Inputs
 - Query, Key, Value aus Input-Embeddings berechnet:
-```
+```math
 q_i = W_Q · x_i
 k_i = W_K · x_i
 v_i = W_V · x_i
 ```
 
 #### Attention Scores berechnen
-```
+```math
 Attention(Q, K, V) = softmax(QK^T / √d_k) · V
 ```
 - **QK^T:** Skalarprodukt zwischen Query und allen Keys
@@ -59,7 +59,7 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) · V
 - Jeder Head kann sich auf verschiedene Aspekte/Beziehungen fokussieren
 
 #### Implementierung
-```
+```math
 MultiHeadAtt = Concat(head_1, ..., head_h) · W_O
 head_i = Attention(Q·W_i^Q, K·W_i^K, V·W_i^V)
 ```
@@ -78,12 +78,12 @@ head_i = Attention(Q·W_i^Q, K·W_i^K, V·W_i^V)
 
 #### Varianten
 **Klassisch (ReLU/GELU):**
-```
+```math
 FFN(x) = W_2 · GELU(x·W_1 + b_1) + b_2
 ```
 
 **SwiGLU (State-of-the-Art bei LLMs):**
-```
+```math
 SwiGLU(x) = W_2 · (Swish(x·W + b) ⊙ (x·V + c))
 ```
 - Gate-Mechanismus: Situationsabhängiges Durchlassen von Features
@@ -91,7 +91,7 @@ SwiGLU(x) = W_2 · (Swish(x·W + b) ⊙ (x·V + c))
 - Zwei Projektionen im Hidden Layer
 
 **GELU (Gaussian Error Linear Unit):**
-```
+```math
 GELU(x) = x · Φ(x)  (Φ = CDF der Standardnormalverteilung)
 ```
 - Approximation: x · 0.5 · (1 + tanh(√(2/π) · (x + 0.044715·x³)))
@@ -151,7 +151,7 @@ PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
 ### 7. Residual Connections und Layer Normalization
 
 #### Residual Connections
-```
+```math
 a_l = F(a_{l-1}) + a_{l-1}
 ```
 - Hilft bei Informations- und Gradientenfluss
@@ -159,7 +159,7 @@ a_l = F(a_{l-1}) + a_{l-1}
 - "Shortcut" um Layer herum
 
 #### Layer Normalization
-```
+```math
 LN(x) = γ ⊙ (x - μ) / √(σ² + ε) + β
 ```
 - Normalisiert Aktivierungen pro Datenpunkt über alle Features
@@ -182,13 +182,13 @@ LN(x) = γ ⊙ (x - μ) / √(σ² + ε) + β
 - **Typische Vokabulargröße:** 30k-100k Tokens
 
 #### Tokenizer Beispiel
-```
+```math
 Text → Tokens → Token IDs → Embeddings
 "Hello world" → ["Hello", " world"] → [15496, 995] → E[15496], E[995]
 ```
 
 #### Embedding Layer
-```
+```math
 E ∈ ℝ^(V×d)  (V = Vokabulargröße, d = Embedding-Dimension)
 ```
 - Jede Zeile = Embedding eines Tokens
@@ -260,7 +260,7 @@ E ∈ ℝ^(V×d)  (V = Vokabulargröße, d = Embedding-Dimension)
 
 #### LoRA (Low-Rank Adaptation)
 **Idee:**
-```
+```math
 W' = W + ΔW = W + B·A
 ```
 - W wird eingefroren
@@ -316,7 +316,7 @@ W' = W + ΔW = W + B·A
 - Optimiere LLM direkt auf Präferenzen
 
 #### Formel
-```
+```math
 L_DPO(π_θ; π_ref) = -E[log σ(β · log(π_θ(y_w|x)/π_ref(y_w|x)) - β · log(π_θ(y_l|x)/π_ref(y_l|x)))]
 ```
 - π_θ: Aktuelles Modell
@@ -404,38 +404,38 @@ L_DPO(π_θ; π_ref) = -E[log σ(β · log(π_θ(y_w|x)/π_ref(y_w|x)) - β · l
 ## Formeln/Algorithmen (wichtig)
 
 ### Self-Attention
-```
+```math
 Attention(Q, K, V) = softmax(QK^T / √d_k) · V
 ```
 
 ### Multi-Head Attention
-```
+```math
 MultiHead(Q, K, V) = Concat(head_1, ..., head_h) · W_O
 ```
 
 ### Positional Encoding
-```
+```math
 PE(pos, 2i) = sin(pos / 10000^(2i/d))
 PE(pos, 2i+1) = cos(pos / 10000^(2i/d))
 ```
 
 ### Layer Normalization
-```
+```math
 LN(x) = γ ⊙ (x - μ) / √(σ² + ε) + β
 ```
 
 ### GELU
-```
+```math
 GELU(x) = x · Φ(x) ≈ x · 0.5 · (1 + tanh(√(2/π) · (x + 0.044715·x³)))
 ```
 
 ### LoRA Update
-```
+```math
 W' = W + B·A,  wobei B ∈ ℝ^(d×r), A ∈ ℝ^(r×k), r << min(d,k)
 ```
 
 ### Reward Modell Loss
-```
+```math
 L = -E[log σ(R(x, y_w) - R(x, y_l))]
 ```
 
