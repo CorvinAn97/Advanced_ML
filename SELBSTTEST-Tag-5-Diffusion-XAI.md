@@ -254,7 +254,7 @@ L = ||ε - ε_θ(x_t, t)||²
 ε̂_θ(x_t, t, c) = ε_θ(x_t, t, ∅) + w·(ε_θ(x_t, t, c) - ε_θ(x_t, t, ∅))
 ```
 
-**A20:** ᾱ₁₀₀ = 0.99¹⁰⁰ ≈ 0.366. Nach 100 Schritten ist noch ~37% des Originalbilds vorhanden.
+**A20:** ᾱ₁₀₀ = 0.99¹⁰⁰ ≈ 0.366. Der Signalanteil beträgt √0.366 ≈ 60.5%, der Rauschanteil √0.634 ≈ 79.6%. (Hinweis: Das Bild ist eine Mischung aus Signal und Rauschen, nicht nur "37% Originalbild".)
 
 **A21:** Der Noise Schedule definiert α_t für jeden Zeitschritt. α_t sollten monoton fallen, um zunehmend mehr Rauschen hinzuzufügen. Typisch linear oder cosinus-förmig.
 

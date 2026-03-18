@@ -246,7 +246,14 @@ Was ist Teacher Forcing beim Training von Seq2Seq-Modellen? Was ist das Exposure
 
 **A11:** BPE ist Subword-Tokenisierung. Vorteile: Kontrollierbare Vokabulargröße, OOV-Behandlung durch Zerlegung, produktive Morphologie ("unbelievable" → ["un", "believ", "able"]).
 
-**A12:** "ChatGPT" mit n=3: <Ch, Cha, hat, atG, tGP, GPT, PT>
+**A12:** FastText verwendet n-grams der Länge 3-6. Für "ChatGPT":
+- n=3: <Cha, Chat, hatG, atGP, tGPT, GPT>, PT>
+- n=4: <Chat, hatGP, atGPT, tGPT>
+- n=5: <ChatG, hatGPT, atGPT>
+- n=6: <ChatGP, hatGPT>
+- Plus ganzes Wort: <ChatGPT>
+
+Das Embedding ist die Summe aller n-gram Embeddings: v("ChatGPT") = Σ v(n-grams). Dadurch kann FastText auch unbekannte Wörter verarbeiten, die Teile mit bekannten Wörtern teilen.
 
 ### Teil B Antworten
 
@@ -261,6 +268,12 @@ Was ist Teacher Forcing beim Training von Seq2Seq-Modellen? Was ist das Exposure
 **A14:** h_t hängt von h_{t-1} ab, h_{t-1} von h_{t-2}, usw. Datenabhängigkeitskette: x_0 → h_0 → h_1 → h_2 → ... → h_T. h_{t+1} kann nicht vor h_t berechnet werden.
 
 **A15:** N = d_h × (d_x + d_h + 1) = 256 × (100 + 256 + 1) = 256 × 357 = 91.392 Parameter
+
+Aufschlüsselung:
+- W_x: 256 × 100 = 25.600 (Input-to-Hidden)
+- W_h: 256 × 256 = 65.536 (Hidden-to-Hidden, rekurrent)
+- Bias: 256
+- Gesamt: 25.600 + 65.536 + 256 = 91.392 Parameter
 
 **A16:**
 - Forget Gate (f_t): Bestimmt was aus Cell State vergessen wird. σ-Ausgabe ∈ (0,1). 0=vergessen, 1=behalten.
@@ -278,6 +291,13 @@ Was ist Teacher Forcing beim Training von Seq2Seq-Modellen? Was ist das Exposure
 **A18:** Cell State hat additive Updates (C_t = f_t ⊙ C_{t-1} + i_t ⊙ C̃_t). Wenn f_t ≈ 1 und i_t ≈ 0, fließt Gradient unverändert durch (keine Multiplikation mit W_h bei jedem Schritt). "Constant Error Carousel".
 
 **A19:** N = 4 × d_h × (d_x + d_h + 1) = 4 × 128 × (64 + 128 + 1) = 4 × 128 × 193 = 98.816 Parameter
+
+Aufschlüsselung pro Gate (f, i, C̃, o):
+- W_x: 128 × 64 = 8.192
+- W_h: 128 × 128 = 16.384
+- Bias: 128
+- Pro Gate: 8.192 + 16.384 + 128 = 24.704
+- Gesamt (× 4 Gates): 24.704 × 4 = 98.816 Parameter
 
 **A20:** Cell State (C_t): Langzeitgedächtnis, speichert Information über viele Schritte. Hidden State (h_t): Kurzzeitgedächtnis, Output des LSTM.
 
@@ -338,14 +358,14 @@ Diagonale Struktur bei gutem Alignment.
 | Lange Abhängigkeiten | Schlecht | Gut | Gut |
 | Training | Schnell | Langsam | Mittel |
 
-**A37:** LSTM hat 4 Gates (f, i, C̃, o), jeder mit W_x und W_h. RNN hat nur 1 Berechnung. Formel: LSTM = 4 × RNN Parameter (ungefähr).
+**A37:** LSTM hat 4 separate Berechnungen (Forget Gate, Input Gate, Cell Candidate, Output Gate), jede mit eigenen W_x und W_h. RNN hat nur eine Berechnung (h_t = tanh(...)). Daher: LSTM ≈ 4× RNN Parameter.
 
 **A38:**
 - OOV: Word2Vec=Fehler, FastText=n-grams, BPE=Subword-Zerlegung
 - Morphologie: FastText (am besten durch n-grams)
 - Kleinste Vokabulargröße: BPE (kontrollierbar, typisch 4K-60K)
 
-**A39:** Transformer: O(1) Pfadlänge zwischen allen Token-Paaren (direkte Attention-Verbindung). LSTM: O(n) Pfadlänge (Information muss durch alle Zwischenschritte fließen). Trotz LSTM's Lösung für Vanishing Gradient: Langsame Informationsausbreitung.
+**A39:** Transformer: O(1) Pfadlänge durch direkte Attention-Verbindungen (jeder Token sieht jeden anderen direkt). LSTM: O(n) Pfadlänge - Information muss sequentiell durch alle Zeitpunkte fließen. Trotz LSTM's Lösung für Vanishing Gradient (Constant Error Carousel) bleibt die sequenzielle Informationsausbreitung ein limitierender Faktor.
 
 **A40:** Teacher Forcing: Beim Training wird das echte nächste Token als Input verwendet, nicht die eigene Vorhersage. Exposure Bias: Modell wird nur mit echten Daten trainiert, aber bei Inferenz mit eigenen Fehlern konfrontiert → Distributional Shift.
 
