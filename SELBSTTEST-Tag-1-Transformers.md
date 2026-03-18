@@ -261,14 +261,14 @@ Was ist "Mixture of Experts" (MoE) und wie unterscheidet es sich von Standard-Tr
 
 **A17:** QK^T: (4 × 4). Softmax-Output: (4 × 4). Finaler Output: (4 × 64).
 
-**A18:** Q = X · W_Q, K = X · W_K, V = X · W_V. W_Q, W_K, W_V sind pro Layer verschieden, aber von allen Heads im Layer geteilt (durch verschiedene Projektionen).
+**A18:** Q = X · W_Q, K = X · W_K, V = X · W_V. Wichtig: Jeder Head i hat EIGENE Projektionsmatrizen W_Q^i, W_K^i, W_V^i ∈ ℝ^(d_model × d_k). Die Matrizen sind NICHT von allen Heads geteilt - jeder Head lernt seine eigenen Projektionen. Nach der Attention-Berechnung werden die Heads konkateniert und mit W_O ∈ ℝ^(d_model × d_model) projiziert.
 
 **A19:** Skalierungsfaktor = 1 / sqrt(64) = 1/8 = 0.125
 
 **A20:** 
-1. Q_i = X · W_Q^i, K_i = X · W_K^i, V_i = X · W_V^i für jeden Head i
-2. Jeder Head berechnet eigene Attention: head_i = Attention(Q_i, K_i, V_i)
-3. Concat(head_1, ..., head_h) · W_O
+1. Lineare Projektionen: Für jeden Head i: Q_i = X · W_Q^i, K_i = X · W_K^i, V_i = X · W_V^i, wobei X ∈ ℝ^(n × d_model) der Input ist und W_Q^i, W_K^i, W_V^i ∈ ℝ^(d_model × d_k) die Projektionsmatrizen für Head i. Ergebnis: Q_i, K_i, V_i ∈ ℝ^(n × d_k).
+2. Parallele Attention: Jeder Head berechnet unabhängig: head_i = Attention(Q_i, K_i, V_i) ∈ ℝ^(n × d_k). Alle h Heads laufen parallel.
+3. Concatenation & finale Projektion: Concat(head_1, ..., head_h) ∈ ℝ^(n × d_model) (da h × d_k = d_model), dann Multiplikation mit W_O ∈ ℝ^(d_model × d_model) für finale Ausgabe.
 
 **A21:** Um die Dimension wieder auf d_model zu bringen und die Information aller Heads zu kombinieren.
 
