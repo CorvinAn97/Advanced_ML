@@ -22,13 +22,14 @@
   https://www.youtube.com/watch?v=TQQlZhbC5ps
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 5 Selbsttestfragen beantworten:
-  - Was ist Self-Attention? Erklären Sie Q, K, V!
-  - Warum braucht man Positional Encoding?
-  - Was ist der Unterschied zwischen Encoder und Decoder?
-  - Wie funktioniert Multi-Head Attention?
-  - Was ist Masked Attention?
-- [ ] Encoder-Only vs Decoder-Only Unterschiede notieren
+- [ ] **SELBSTTEST-Tag-1-Transformers.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
+
+### Abends (1 Stunde)
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
+- [ ] Offene Fragen für morgen notieren
 
 ### Abends (1 Stunde)
 - [ ] Kurze Wiederholung der 3 Kernpunkte
@@ -56,18 +57,15 @@
   https://www.youtube.com/watch?v=QciIc0qJ6Xs
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 5 Selbsttestfragen:
-  - Erklären Sie die 3 Gates im LSTM!
-  - Was ist der Unterschied zwischen CBOW und Skip-gram?
-  - Was ist die Distributional Hypothesis?
-  - Wie funktioniert Bahdanau-Attention?
-  - Vanishing Gradients Problem bei RNNs?
+- [ ] **SELBSTTEST-Tag-2-LSTM-RNNs-Embeddings.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
 - [ ] 📺 Video: "Attention Mechanism in Neural Networks" - StatQuest (15 Min)  
   https://www.youtube.com/watch?v=PSs6nxcdjaQ
 
 ### Abends (1 Stunde)
-- [ ] Transformer vs LSTM Vergleich schreiben
-- [ ] Bidirektionale RNNs/LSTMs verstehen
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
 - [ ] 📺 Video: "Seq2Seq Models - EXPLAINED!" - CodeEmporium (12 Min)  
   https://www.youtube.com/watch?v=DejHQYAGb7Q
 
@@ -93,18 +91,15 @@
   https://www.youtube.com/watch?v=__t2EVm7-wo
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 5 Selbsttestfragen:
-  - Was ist der Unterschied zwischen Q-Learning und SARSA?
-  - Was ist das Overestimation Problem?
-  - Wie löst Double DQN das Problem?
-  - Unterschied Value-Based vs Policy-Based Methods?
-  - Was ist der Vorteil von Actor-Critic?
+- [ ] **SELBSTTEST-Tag-3-RL-Teil-1.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
 - [ ] 📺 Video: "Double DQN - EXPLAINED!" - CodeEmporium (10 Min)  
   https://www.youtube.com/watch?v=0cF4q-x6Q4Y
 
 ### Abends (1 Stunde)
-- [ ] Kurze Formel-Wiederholung
-- [ ] On-Policy vs Off-Policy Unterschiede
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
 - [ ] 📺 Video: "Policy Gradient Methods - EXPLAINED!" - CodeEmporium (16 Min)  
   https://www.youtube.com/watch?v=5P7I-xPqHRU
 
@@ -131,18 +126,15 @@
   https://www.youtube.com/watch?v=fcvY9YGv9y4
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 5 Selbsttestfragen:
-  - Was ist Mode Collapse bei GANs?
-  - Erklären Sie Generator vs Discriminator!
-  - Was unterscheidet Conditional GAN vom Standard-GAN?
-  - Was ist der Fidelity vs Diversity Trade-off?
-  - Was ist die ELBO beim VAE?
+- [ ] **SELBSTTEST-Tag-4-GANs-VAEs.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
 - [ ] 📺 Video: "Mode Collapse in GANs - EXPLAINED!" - CodeEmporium (10 Min)  
   https://www.youtube.com/watch?v=2lZTMD8u1eE
 
 ### Abends (1 Stunde)
-- [ ] GAN vs VAE vs Conditional GAN Vergleich (Tabelle)
-- [ ] Leichte Wiederholung der Loss-Funktionen
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
 - [ ] 📺 Video: "VAE Reparameterization Trick - EXPLAINED!" - CodeEmporium (8 Min)  
   https://www.youtube.com/watch?v=9j8T2WNIx2Q
 
@@ -171,18 +163,15 @@
   https://www.youtube.com/watch?v=0YLJNq9OY_I
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 5 Selbsttestfragen:
-  - Erklären Sie Forward und Reverse Process bei Diffusion!
-  - Was ist Latent Diffusion und warum ist es effizienter?
-  - Was ist Classifier-Free Guidance?
-  - Wie funktioniert LIME?
-  - Was sind Counterfactual Explanations?
+- [ ] **SELBSTTEST-Tag-5-Diffusion-XAI.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
 - [ ] 📺 Video: "LIME (Local Interpretable Model-agnostic Explanations) - EXPLAINED!" (15 Min)  
   https://www.youtube.com/watch?v=8D08Z_lA2Xw
 
 ### Abends (1 Stunde)
-- [ ] Diffusion vs GAN vs VAE vs Latent Diffusion Vergleich
-- [ ] XAI Methoden Liste durchgehen
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
 - [ ] 📺 Video: "SHAP (SHapley Additive exPlanations) - EXPLAINED!" - CodeEmporium (18 Min)  
   https://www.youtube.com/watch?v=9haUOq4qRQc
 
@@ -210,23 +199,15 @@
   https://www.youtube.com/watch?v=8NSKZ4KeO4A
 
 ### Nachmittags (1.5 Stunden)
-- [ ] 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md (Seiten zu RLHF/DPO)
-- [ ] RLHF (Reward-Modell, PPO-Training)
-- [ ] DPO (Direct Preference Optimization) - Unterschied zu RLHF
-- [ ] Constitutional AI (Grundidee)
-- [ ] 5 Selbsttestfragen:
-  - Wie funktioniert UCB?
-  - Was ist Thompson Sampling?
-  - Was ist Distributional Shift beim Imitation Learning?
-  - Was sind die Schritte bei RLHF?
-  - Was ist der Unterschied zwischen RLHF und DPO?
+- [ ] **SELBSTTEST-Tag-6-Exploration-IL-RLHF.md** durcharbeiten (40 Fragen)
+- [ ] Fehler markieren und korrigieren
+- [ ] Unsichere Themen in Zusammenfassung nachlesen
 - [ ] 📺 Video: "DAgger (Dataset Aggregation) - EXPLAINED!" - CodeEmporium (10 Min)  
   https://www.youtube.com/watch?v=gffZio5UmQc
 
 ### Abends (1 Stunde)
-- [ ] On-Policy vs Off-Policy Wiederholung
-- [ ] Reasoning in LLMs (Chain-of-Thought, Tree of Thoughts) - kurz überblicken
-- [ ] RAG (Retrieval-Augmented Generation) - Grundkonzept
+- [ ] Selbsttest-Ergebnisse auswerten
+- [ ] Schwache Bereiche identifizieren
 - [ ] 📺 Video: "RLHF (Reinforcement Learning from Human Feedback) - EXPLAINED!" (15 Min)  
   https://www.youtube.com/watch?v=2MBJou9X46o
 
@@ -239,14 +220,14 @@
 **Ziel:** Alle Themen überblicken, offene Fragen klären
 
 ### Morgens (2 Stunden)
-- [ ] ALLE Zusammenfassungen überfliegen (03-10)
-- [ ] Eigene Notizen durchgehen
+- [ ] **SELBSTTEST-Tag-7-Wiederholung-Gesamt.md** durcharbeiten (50 Fragen)
+- [ ] Fehler markieren und korrigieren
 - [ ] Schwache Themen identifizieren
-- [ ] 32 Selbsttest-Fragen aus ANTWORTEN-Alle-32-Klausurfragen.md durchgehen
 - [ ] Offene Fragen klären
 
 ### Nachmittags (2 Stunden)
-- [ ] Schwache Themen gezielt wiederholen
+- [ ] Schwache Themen gezielt wiederholen (Zusammenfassungen)
+- [ ] **ANTWORTEN-Alle-32-Klausurfragen.md** durchgehen
 - [ ] Wichtige Formeln wiederholen:
   - Self-Attention: Attention(Q,K,V) = softmax(QK^T/√d_k)V
   - Q-Learning: Q(s,a) ← Q(s,a) + α[r + γ·max_a' Q(s',a') - Q(s,a)]
@@ -254,6 +235,7 @@
 - [ ] CHEAT-SHEET durchgehen
 
 ### Abends (1 Stunde)
+- [ ] Letzter Selbsttest-Check: Alle 7 Tests überfliegen
 - [ ] LEICHTER Überblick - nicht mehr neu lernen!
 - [ ] Früh ins Bett gehen!
 - [ ] Materialien für morgen bereitlegen
