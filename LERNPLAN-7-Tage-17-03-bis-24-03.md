@@ -37,35 +37,35 @@
 
 ---
 
-## TAG 2 - MITTWOCH 18.03. (HEUTE)
+## TAG 2 - MITTWOCH 18.03. ✅ ABGESCHLOSSEN
 **Fokus:** LSTM & Word Embeddings (🔴 SEHR WICHTIG)  
 **Ziel:** LSTM Gates, Word2Vec, Bahdanau-Attention verstehen
 
-### Morgens (2.5 Stunden)
-- [ ] 04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md lesen
-- [ ] LSTM 3 Gates zeichnen (Forget, Input, Output)
-- [ ] Cell State Update nachvollziehen
-- [ ] Word2Vec (CBOW vs Skip-gram) Unterschiede notieren
-- [ ] Bahdanau-Attention für Seq2Seq verstehen
-- [ ] 📺 Video: "Word Embedding and Word2Vec, Clearly Explained!!!" - StatQuest (17 Min)  
+### Morgens (2.5 Stunden) ✅
+- [x] 04_ZUSAMMENFASSUNG-02-WordEmbeddings-RNNs.md lesen
+- [x] LSTM 3 Gates zeichnen (Forget, Input, Output)
+- [x] Cell State Update nachvollziehen
+- [x] Word2Vec (CBOW vs Skip-gram) Unterschiede notieren
+- [x] Bahdanau-Attention für Seq2Seq verstehen
+- [x] 📺 Video: "Word Embedding and Word2Vec, Clearly Explained!!!" - StatQuest (17 Min)  
   https://www.youtube.com/watch?v=viZrOnJclY0
-- [ ] 📺 Video: "LSTM - EXPLAINED!" - CodeEmporium (18 Min)  
+- [x] 📺 Video: "LSTM - EXPLAINED!" - CodeEmporium (18 Min)  
   https://www.youtube.com/watch?v=QciIc0qJ6Xs
 
-### Nachmittags (1.5 Stunden)
-- [ ] **SELBSTTEST-Tag-2-LSTM-RNNs-Embeddings.md** durcharbeiten (40 Fragen)
-- [ ] Fehler markieren und korrigieren
-- [ ] Unsichere Themen in Zusammenfassung nachlesen
-- [ ] 📺 Video: "Attention Mechanism in Neural Networks" - StatQuest (15 Min)  
+### Nachmittags (1.5 Stunden) ✅
+- [x] **SELBSTTEST-Tag-2-LSTM-RNNs-Embeddings.md** durcharbeiten (40 Fragen)
+- [x] Fehler markieren und korrigieren
+- [x] Unsichere Themen in Zusammenfassung nachlesen
+- [x] 📺 Video: "Attention Mechanism in Neural Networks" - StatQuest (15 Min)  
   https://www.youtube.com/watch?v=PSs6nxcdjaQ
 
-### Abends (1 Stunde)
-- [ ] Selbsttest-Ergebnisse auswerten
-- [ ] Schwache Bereiche identifizieren
-- [ ] 📺 Video: "Seq2Seq Models - EXPLAINED!" - CodeEmporium (12 Min)  
+### Abends (1 Stunde) ✅
+- [x] Selbsttest-Ergebnisse auswerten
+- [x] Schwache Bereiche identifizieren
+- [x] 📺 Video: "Seq2Seq Models - EXPLAINED!" - CodeEmporium (12 Min)  
   https://www.youtube.com/watch?v=DejHQYAGb7Q
 
-**Selbsttest:** Kannst du LSTM-Gates aufzeichnen und erklären?
+**Selbsttest:** Kannst du LSTM-Gates aufzeichnen und erklären? ✅
 
 ---
 
