@@ -1,43 +1,39 @@
 # 7-Tage-Lernplan: Advanced ML (17.03. - 24.03.2026)
 
 **Klausurdatum:** 24.03.2026  
-**Heute:** Mittwoch, 18.03.2026  
-**Verbleibend:** 6 Tage
+**Heute:** Donnerstag, 19.03.2026  
+**Verbleibend:** 5 Tage
 
 ---
 
-## TAG 1 - DIENSTAG 17.03.
+## TAG 1 - DIENSTAG 17.03. ✅ ABGESCHLOSSEN
 **Fokus:** Transformers & Self-Attention (🔴 SEHR WICHTIG)  
 **Ziel:** Grundkonzept von Self-Attention, Q/K/V, Multi-Head verstehen
 
-### Morgens (2.5 Stunden)
-- [ ] 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md lesen (Seiten 1-30)
-- [ ] Self-Attention Formel verstehen: Attention(Q,K,V) = softmax(QK^T/√d_k)V
-- [ ] Encoder vs Decoder Architektur skizzieren
-- [ ] Positional Encoding Zweck notieren (nicht Formel auswendig!)
-- [ ] Multi-Head Attention Konzept verstehen
-- [ ] 📺 Video: "Attention in transformers, visually explained" - 3Blue1Brown (20 Min)  
+### Morgens (2.5 Stunden) ✅
+- [x] 05_ZUSAMMENFASSUNG-03-Transformers-LLMs.md lesen (Seiten 1-30)
+- [x] Self-Attention Formel verstehen: Attention(Q,K,V) = softmax(QK^T/√d_k)V
+- [x] Encoder vs Decoder Architektur skizzieren
+- [x] Positional Encoding Zweck notieren (nicht Formel auswendig!)
+- [x] Multi-Head Attention Konzept verstehen
+- [x] 📺 Video: "Attention in transformers, visually explained" - 3Blue1Brown (20 Min)  
   https://www.youtube.com/watch?v=eMlx5fFNoYc
-- [ ] 📺 Video: "Transformer Neural Networks - EXPLAINED!" - CodeEmporium (15 Min)  
+- [x] 📺 Video: "Transformer Neural Networks - EXPLAINED!" - CodeEmporium (15 Min)  
   https://www.youtube.com/watch?v=TQQlZhbC5ps
 
-### Nachmittags (1.5 Stunden)
-- [ ] **SELBSTTEST-Tag-1-Transformers.md** durcharbeiten (40 Fragen)
-- [ ] Fehler markieren und korrigieren
-- [ ] Unsichere Themen in Zusammenfassung nachlesen
+### Nachmittags (1.5 Stunden) ✅
+- [x] **SELBSTTEST-Tag-1-Transformers.md** durcharbeiten (40 Fragen)
+- [x] Fehler markieren und korrigieren
+- [x] Unsichere Themen in Zusammenfassung nachlesen
 
-### Abends (1 Stunde)
-- [ ] Selbsttest-Ergebnisse auswerten
-- [ ] Schwache Bereiche identifizieren
-- [ ] Offene Fragen für morgen notieren
-
-### Abends (1 Stunde)
-- [ ] Kurze Wiederholung der 3 Kernpunkte
-- [ ] Offene Fragen für morgen notieren
-- [ ] 📺 Video: "BERT vs GPT" - AI Explained (10 Min)  
+### Abends (1 Stunde) ✅
+- [x] Selbsttest-Ergebnisse auswerten
+- [x] Schwache Bereiche identifizieren
+- [x] Offene Fragen für morgen notieren
+- [x] 📺 Video: "BERT vs GPT" - AI Explained (10 Min)  
   https://www.youtube.com/watch?v=9Ou9ReO9cew
 
-**Selbsttest:** Kannst du Self-Attention mit eigenen Worten erklären?
+**Selbsttest:** Kannst du Self-Attention mit eigenen Worten erklären? ✅
 
 ---
 
