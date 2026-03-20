@@ -69,37 +69,37 @@
 
 ---
 
-## TAG 3 - DONNERSTAG 19.03.
+## TAG 3 - DONNERSTAG 19.03. ✅ ABGESCHLOSSEN
 **Fokus:** Q-Learning, Double DQN, Policy Gradients & Actor-Critic (🔴 SEHR WICHTIG)  
 **Ziel:** RL-Grundlagen verstehen, Policy-Methoden kennen
 
-### Morgens (2.5 Stunden)
-- [ ] 09_ZUSAMMENFASSUNG-07-RL-Teil-1.md lesen (Seiten 1-50)
-- [ ] Q-Learning Update-Formel auswendig: Q(s,a) ← Q(s,a) + α[r + γ·max_a' Q(s',a') - Q(s,a)]
-- [ ] Bellman-Optimalitätsgleichung verstehen
-- [ ] Double DQN: Overestimation Problem notieren
-- [ ] Experience Replay & Target Networks Zweck
-- [ ] Policy Gradients Grundkonzept (REINFORCE)
-- [ ] Actor-Critic Architektur (Vorteil: lower variance)
-- [ ] 📺 Video: "Bellman Equation - Explained!" - CodeEmporium (15 Min)  
+### Morgens (2.5 Stunden) ✅
+- [x] 09_ZUSAMMENFASSUNG-07-RL-Teil-1.md lesen (Seiten 1-50)
+- [x] Q-Learning Update-Formel auswendig: Q(s,a) ← Q(s,a) + α[r + γ·max_a' Q(s',a') - Q(s,a)]
+- [x] Bellman-Optimalitätsgleichung verstehen
+- [x] Double DQN: Overestimation Problem notieren
+- [x] Experience Replay & Target Networks Zweck
+- [x] Policy Gradients Grundkonzept (REINFORCE)
+- [x] Actor-Critic Architektur (Vorteil: lower variance)
+- [x] 📺 Video: "Bellman Equation - Explained!" - CodeEmporium (15 Min)  
   https://www.youtube.com/watch?v=9JZID-h6ZJ0
-- [ ] 📺 Video: "Q-Learning Explained" - CodeEmporium (18 Min)  
+- [x] 📺 Video: "Q-Learning Explained" - CodeEmporium (18 Min)  
   https://www.youtube.com/watch?v=__t2EVm7-wo
 
-### Nachmittags (1.5 Stunden)
-- [ ] **SELBSTTEST-Tag-3-RL-Teil-1.md** durcharbeiten (40 Fragen)
-- [ ] Fehler markieren und korrigieren
-- [ ] Unsichere Themen in Zusammenfassung nachlesen
-- [ ] 📺 Video: "Double DQN - EXPLAINED!" - CodeEmporium (10 Min)  
+### Nachmittags (1.5 Stunden) ✅
+- [x] **SELBSTTEST-Tag-3-RL-Teil-1.md** durcharbeiten (40 Fragen)
+- [x] Fehler markieren und korrigieren
+- [x] Unsichere Themen in Zusammenfassung nachlesen
+- [x] 📺 Video: "Double DQN - EXPLAINED!" - CodeEmporium (10 Min)  
   https://www.youtube.com/watch?v=0cF4q-x6Q4Y
 
-### Abends (1 Stunde)
-- [ ] Selbsttest-Ergebnisse auswerten
-- [ ] Schwache Bereiche identifizieren
-- [ ] 📺 Video: "Policy Gradient Methods - EXPLAINED!" - CodeEmporium (16 Min)  
+### Abends (1 Stunde) ✅
+- [x] Selbsttest-Ergebnisse auswerten
+- [x] Schwache Bereiche identifizieren
+- [x] 📺 Video: "Policy Gradient Methods - EXPLAINED!" - CodeEmporium (16 Min)  
   https://www.youtube.com/watch?v=5P7I-xPqHRU
 
-**Selbsttest:** Kannst du Q-Learning Update ohne Nachschauen schreiben?
+**Selbsttest:** Kannst du Q-Learning Update ohne Nachschauen schreiben? ✅
 
 ---
 
