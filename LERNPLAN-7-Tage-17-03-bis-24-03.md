@@ -1,8 +1,8 @@
 # 7-Tage-Lernplan: Advanced ML (17.03. - 24.03.2026)
 
 **Klausurdatum:** 24.03.2026  
-**Heute:** Samstag, 21.03.2026  
-**Verbleibend:** 3 Tage
+**Heute:** Sonntag, 22.03.2026  
+**Verbleibend:** 2 Tage
 
 ---
 
@@ -138,40 +138,40 @@
 
 ---
 
-## TAG 5 - SAMSTAG 21.03.
+## TAG 5 - SAMSTAG 21.03. ✅ ABGESCHLOSSEN
 **Fokus:** Diffusion, Latent Diffusion & XAI - VERTIEFT (🟡 WICHTIG)  
 **Ziel:** Forward/Reverse Process, Latent Diffusion, Counterfactuals
 
-### Morgens (2.5 Stunden)
-- [ ] 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md (Seiten 31-60)
-- [ ] Diffusion: Forward Process (Noise hinzufügen)
-- [ ] Reverse Process (Denoising)
-- [ ] Training Loss Konzept
-- [ ] Latent Diffusion (Stable Diffusion) - Warum im Latent Space?
-- [ ] Classifier-Free Guidance
-- [ ] 06_ZUSAMMENFASSUNG-04-XAI.md lesen (Seiten 1-30)
-- [ ] LIME: lokale Approximation
-- [ ] SHAP: Shapley Values Grundidee
-- [ ] Counterfactual Explanations (Was müsste sich ändern?)
-- [ ] 📺 Video: "Diffusion Models - EXPLAINED!" - CodeEmporium (20 Min)  
+### Morgens (2.5 Stunden) ✅
+- [x] 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md (Seiten 31-60)
+- [x] Diffusion: Forward Process (Noise hinzufügen)
+- [x] Reverse Process (Denoising)
+- [x] Training Loss Konzept
+- [x] Latent Diffusion (Stable Diffusion) - Warum im Latent Space?
+- [x] Classifier-Free Guidance
+- [x] 06_ZUSAMMENFASSUNG-04-XAI.md lesen (Seiten 1-30)
+- [x] LIME: lokale Approximation
+- [x] SHAP: Shapley Values Grundidee
+- [x] Counterfactual Explanations (Was müsste sich ändern?)
+- [x] 📺 Video: "Diffusion Models - EXPLAINED!" - CodeEmporium (20 Min)  
   https://www.youtube.com/watch?v=HoKDTa5jHVA
-- [ ] 📺 Video: "Latent Diffusion Models - EXPLAINED!" - CodeEmporium (12 Min)  
+- [x] 📺 Video: "Latent Diffusion Models - EXPLAINED!" - CodeEmporium (12 Min)  
   https://www.youtube.com/watch?v=0YLJNq9OY_I
 
-### Nachmittags (1.5 Stunden)
-- [ ] **SELBSTTEST-Tag-5-Diffusion-XAI.md** durcharbeiten (40 Fragen)
-- [ ] Fehler markieren und korrigieren
-- [ ] Unsichere Themen in Zusammenfassung nachlesen
-- [ ] 📺 Video: "LIME (Local Interpretable Model-agnostic Explanations) - EXPLAINED!" (15 Min)  
+### Nachmittags (1.5 Stunden) ✅
+- [x] **SELBSTTEST-Tag-5-Diffusion-XAI.md** durcharbeiten (40 Fragen)
+- [x] Fehler markieren und korrigieren
+- [x] Unsichere Themen in Zusammenfassung nachlesen
+- [x] 📺 Video: "LIME (Local Interpretable Model-agnostic Explanations) - EXPLAINED!" (15 Min)  
   https://www.youtube.com/watch?v=8D08Z_lA2Xw
 
-### Abends (1 Stunde)
-- [ ] Selbsttest-Ergebnisse auswerten
-- [ ] Schwache Bereiche identifizieren
-- [ ] 📺 Video: "SHAP (SHapley Additive exPlanations) - EXPLAINED!" - CodeEmporium (18 Min)  
+### Abends (1 Stunde) ✅
+- [x] Selbsttest-Ergebnisse auswerten
+- [x] Schwache Bereiche identifizieren
+- [x] 📺 Video: "SHAP (SHapley Additive exPlanations) - EXPLAINED!" - CodeEmporium (18 Min)  
   https://www.youtube.com/watch?v=9haUOq4qRQc
 
-**Selbsttest:** Kannst du den Diffusion-Prozess in 3 Sätzen erklären?
+**Selbsttest:** Kannst du den Diffusion-Prozess in 3 Sätzen erklären? ✅
 
 ---
 
