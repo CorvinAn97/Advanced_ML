@@ -1,8 +1,8 @@
 # 7-Tage-Lernplan: Advanced ML (17.03. - 24.03.2026)
 
 **Klausurdatum:** 24.03.2026  
-**Heute:** Donnerstag, 19.03.2026  
-**Verbleibend:** 5 Tage
+**Heute:** Samstag, 21.03.2026  
+**Verbleibend:** 3 Tage
 
 ---
 
@@ -103,38 +103,38 @@
 
 ---
 
-## TAG 4 - FREITAG 20.03.
+## TAG 4 - FREITAG 20.03. ✅ ABGESCHLOSSEN
 **Fokus:** GANs & VAEs - VERTIEFT (🔴 WICHTIG)  
 **Ziel:** Generator/Discriminator, Conditional GAN, Controllable Generation
 
-### Morgens (2.5 Stunden)
-- [ ] 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md lesen (Seiten 1-40)
-- [ ] GAN Grundkonzept: Generator & Discriminator
-- [ ] Minimax Loss verstehen
-- [ ] Mode Collapse Problem notieren
-- [ ] Conditional GAN (cGAN) - Konditionierung auf Labels
-- [ ] Controllable Generation (Attribute manipulation)
-- [ ] Fidelity vs Diversity Trade-off
-- [ ] VAE: Reparametrisierungs-Trick, ELBO Loss
-- [ ] 📺 Video: "Generative Adversarial Networks (GANs) - EXPLAINED!" - CodeEmporium (18 Min)  
+### Morgens (2.5 Stunden) ✅
+- [x] 07_ZUSAMMENFASSUNG-05-GANs-VAEs-Diffusion.md lesen (Seiten 1-40)
+- [x] GAN Grundkonzept: Generator & Discriminator
+- [x] Minimax Loss verstehen
+- [x] Mode Collapse Problem notieren
+- [x] Conditional GAN (cGAN) - Konditionierung auf Labels
+- [x] Controllable Generation (Attribute manipulation)
+- [x] Fidelity vs Diversity Trade-off
+- [x] VAE: Reparametrisierungs-Trick, ELBO Loss
+- [x] 📺 Video: "Generative Adversarial Networks (GANs) - EXPLAINED!" - CodeEmporium (18 Min)  
   https://www.youtube.com/watch?v=8LlnWUXe1P8
-- [ ] 📺 Video: "Variational Autoencoders (VAEs) - EXPLAINED!" - CodeEmporium (16 Min)  
+- [x] 📺 Video: "Variational Autoencoders (VAEs) - EXPLAINED!" - CodeEmporium (16 Min)  
   https://www.youtube.com/watch?v=fcvY9YGv9y4
 
-### Nachmittags (1.5 Stunden)
-- [ ] **SELBSTTEST-Tag-4-GANs-VAEs.md** durcharbeiten (40 Fragen)
-- [ ] Fehler markieren und korrigieren
-- [ ] Unsichere Themen in Zusammenfassung nachlesen
-- [ ] 📺 Video: "Mode Collapse in GANs - EXPLAINED!" - CodeEmporium (10 Min)  
+### Nachmittags (1.5 Stunden) ✅
+- [x] **SELBSTTEST-Tag-4-GANs-VAEs.md** durcharbeiten (40 Fragen)
+- [x] Fehler markieren und korrigieren
+- [x] Unsichere Themen in Zusammenfassung nachlesen
+- [x] 📺 Video: "Mode Collapse in GANs - EXPLAINED!" - CodeEmporium (10 Min)  
   https://www.youtube.com/watch?v=2lZTMD8u1eE
 
-### Abends (1 Stunde)
-- [ ] Selbsttest-Ergebnisse auswerten
-- [ ] Schwache Bereiche identifizieren
-- [ ] 📺 Video: "VAE Reparameterization Trick - EXPLAINED!" - CodeEmporium (8 Min)  
+### Abends (1 Stunde) ✅
+- [x] Selbsttest-Ergebnisse auswerten
+- [x] Schwache Bereiche identifizieren
+- [x] 📺 Video: "VAE Reparameterization Trick - EXPLAINED!" - CodeEmporium (8 Min)  
   https://www.youtube.com/watch?v=9j8T2WNIx2Q
 
-**Selbsttest:** Kannst du den VAE Reparametrisierungs-Trick erklären?
+**Selbsttest:** Kannst du den VAE Reparametrisierungs-Trick erklären? ✅
 
 ---
 
